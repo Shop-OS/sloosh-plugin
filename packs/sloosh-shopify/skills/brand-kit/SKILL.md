@@ -1,6 +1,6 @@
 ---
 name: brand-kit
-description: Build or update a brand kit file, sloosh-brand.md, for a Shopify store from its storefront, logo and existing product images, with its colours, fonts, voice and target channels, so later Sloosh work stays on brand. Use when the user wants to set up a brand kit for their store, wants brand guidelines or a style guide for their store, wants to save the store's look for later product shoots or ads, wants to change the brand kit's logo, colours, fonts or hero products, or says the store's look has changed, and the Sloosh tools are connected.
+description: Build or update a brand kit file, sloosh-brand.md, for a Shopify store from its storefront, logo and existing product images, with its colours, fonts, voice and target channels, so later Sloosh work stays on brand. Use when the user wants to set up a brand kit for their store, wants brand guidelines or a style guide for their store, wants to save the store's look for later product shoots or ads, wants to change the brand kit's logo, colours, fonts or hero products, or says the store's look has changed, and the Sloosh tools are connected. Not for a brand kit built from a website, PDF guide or logo files outside Shopify (use the sloosh-brand brand-kit-extract skill if it is installed) or a visual brand board image (use the sloosh-brand brand-board skill if it is installed).
 ---
 
 # Brand kit

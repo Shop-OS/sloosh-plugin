@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-dot-matrix-particles
+description: A product film rebuilt in LED dots and halftone that assembles into a wordmark loads dot-matrix-particles.
+tags: [trigger]
+runs: 2

@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-amazon-listing-pack
+description: A full set of marketplace listing images for one product from one photo loads amazon-listing-pack.
+tags: [trigger]
+runs: 2

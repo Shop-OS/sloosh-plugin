@@ -8,7 +8,7 @@ listed tokens and files, keep the toolchain, the beat grid and the QA. Accent = 
 - `tl.py`: no hook AI rows; story = intro (0–5 s) → typing screen → build steps → cascade → tagline + feature card →
   black end card listing the roles `{ product shots · lifestyle scenes · short videos · campaigns }`. 30–40 s, 16:9, 24 fps.
 - Pages: `intro.html` (longer: 3 editorial lines, the bracket build twice), `ui.html` reduced to S5–S8 (composer,
-  photos, typing, send), `build.html` with the thermal hero, 4 steps and 12 tiles, a `tagline.html` (gradient,
+  photos, typing, send), `build.html` with the thermal hero, 4 steps and 12 tiles, a new tagline page that you build (copy ui/type.html; gradient,
   serif line, one feature card). Joins between pages: `fk.mosaic_wipe` 0.3 s (pixel dissolves), never crossfades.
 - AI: 0–2 stills only (a blurred portrait for the intro, a hero image for the thermal reveal); 0 clips.
 - Sound: `ambient` or `house` at 100–110 BPM, soft; ticks for type, soft pops for cards, sweeps for transitions.
@@ -23,7 +23,7 @@ listed tokens and files, keep the toolchain, the beat grid and the QA. Accent = 
 - `tl.py` `W, H = 1080, 1920`, FPS 30. Opener = the phone still and clip (hand on a phone), no desk.
 - `ui.html` → a phone frame 500×1080 (radius 80, bezel 16) as the window; scenes become screen pushes inside the phone;
   taps instead of the arrow cursor (a 64 px translucent disc that squashes, plus a ripple). Measured targets as always.
-- Captions in the top band (y 260–640); bottom 660 px clear.
+- Captions in a band from 14% to 33% of the height (about y 270–640). Keep the bottom 35% and 6% at each side clear.
 
 ## Data Story (analytics, finance, growth)
 - `build.html` S2 becomes stat moments: a count-up on a growing curve (`K.counter` + an SVG path drawn by

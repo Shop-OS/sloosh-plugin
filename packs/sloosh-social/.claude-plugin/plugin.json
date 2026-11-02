@@ -1,0 +1,24 @@
+{
+    "name": "sloosh-social",
+    "displayName": "Sloosh social",
+    "version": "0.1.0",
+    "description": "Make social content with Sloosh: carousels, Reels and Shorts clips, and YouTube thumbnails. The assistant asks for your approval before any paid work.",
+    "author": {
+        "name": "ShopOS",
+        "url": "https://sloosh.ai"
+    },
+    "homepage": "https://sloosh.ai/mcp",
+    "license": "MIT",
+    "keywords": [
+        "sloosh",
+        "social-media",
+        "carousel",
+        "reels",
+        "youtube",
+        "thumbnails"
+    ],
+    "icon": "./assets/sloosh.png",
+    "repository": "https://github.com/Shop-OS/sloosh-plugin",
+    "privacyPolicyUrl": "https://sloosh.ai/privacy-policy",
+    "dependencies": ["sloosh"]
+}

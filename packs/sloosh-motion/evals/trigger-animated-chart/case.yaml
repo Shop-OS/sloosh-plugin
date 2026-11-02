@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-animated-chart
+description: A request to animate quarterly numbers as a looping chart loads animated-chart.
+tags: [trigger]
+runs: 2

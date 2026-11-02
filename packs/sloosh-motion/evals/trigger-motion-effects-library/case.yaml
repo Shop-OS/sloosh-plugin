@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-motion-effects-library
+description: A request for named effect options with timings loads motion-effects-library.
+tags: [trigger]
+runs: 2

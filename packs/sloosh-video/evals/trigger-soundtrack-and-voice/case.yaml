@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-soundtrack-and-voice
+description: Adding an original music bed that lands on the logo to an existing silent product clip loads soundtrack-and-voice.
+tags: [trigger]
+runs: 2

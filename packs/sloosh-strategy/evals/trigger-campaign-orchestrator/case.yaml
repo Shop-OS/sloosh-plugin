@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-campaign-orchestrator
+description: A request to run an agreed multi-step campaign now, with outputs that feed later steps, loads campaign-orchestrator.
+tags: [trigger]
+runs: 2

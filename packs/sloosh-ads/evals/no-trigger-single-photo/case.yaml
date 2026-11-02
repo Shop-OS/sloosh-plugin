@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: no-trigger-single-photo
+description: One studio photo of one product, with no ad or test in view, does not load an ads pack skill.
+tags: [trigger, negative]
+runs: 2

@@ -486,7 +486,7 @@
     await KT.load(THEME.fonts || []);
     const stage = document.getElementById('stage'); Object.assign(stage.style, { width: W + 'px', height: H + 'px' }); stage.style.setProperty('--u', u);
     const safe = THEME.safe || TL.SAFE || 'reels';
-    const SZ = typeof safe === 'object' ? Object.assign({}, safe) : tall ? (safe === 'poster' ? { l: 64 * u, r: W - 64 * u, top: 200 * u, bot: H - 420 * u } : { l: 120 * u, r: W - 120 * u, top: 240 * u, bot: H - 660 * u })
+    const SZ = typeof safe === 'object' ? Object.assign({}, safe) : tall ? (safe === 'poster' ? { l: 64 * u, r: W - 64 * u, top: 200 * u, bot: H - 420 * u } : { l: 120 * u, r: W - 120 * u, top: H * 0.14, bot: H * 0.65 })
       : shape === 'landscape' ? { l: W * 0.06, r: W * 0.94, top: H * 0.08, bot: H * 0.92 } : { l: 90 * u, r: W - 90 * u, top: 90 * u, bot: H - 90 * u };
     const tickerY = tall ? 0.74 : 0.885;
     ((TL.TYPE || {}).kt || []).filter(s => s.move === 'ticker').forEach(s => { const y = H * (s.y ?? tickerY);   // a ticker reserves its band:

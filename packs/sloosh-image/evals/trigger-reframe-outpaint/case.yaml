@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-reframe-outpaint
+description: Turning one existing landscape product photo into a 9:16 story without cropping loads reframe-outpaint.
+tags: [trigger]
+runs: 2

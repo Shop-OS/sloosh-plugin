@@ -1,0 +1,4 @@
+---
+type: fixed
+---
+{"space": {"spaceId": "space-eval-review-cards", "canvasWorkflowId": null, "runner": "legacy", "title": "Review Card Set", "description": "Makes three matching testimonial cards. Each card shows one customer review word for word, the reviewer name and the product from the input image.", "slug": "review-card-set", "outputTypes": ["image"], "updatedAt": 1790000000000, "catalogVersion": "1", "visibility": "public", "ownedByThisWorkspace": false}, "formVersion": "2", "form": {"fields": [{"id": "product_image", "type": "image", "label": "Product image", "required": true}, {"id": "review_1", "type": "text", "label": "Review 1 with name", "required": true}, {"id": "review_2", "type": "text", "label": "Review 2 with name", "required": false}, {"id": "review_3", "type": "text", "label": "Review 3 with name", "required": false}, {"id": "style", "type": "select", "label": "Card style", "required": false, "options": ["clean", "editorial", "handwritten"]}]}}

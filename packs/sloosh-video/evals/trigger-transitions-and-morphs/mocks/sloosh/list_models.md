@@ -1,0 +1,4 @@
+---
+type: fixed
+---
+{"models": {"defaultModel": "studio-video-1", "models": [{"id": "studio-video-1", "label": "Studio Video", "description": "Video from a prompt, with an optional start frame and end frame.", "logo": "", "provider": "studio", "defaults": {"duration": 5, "aspectRatio": "16:9"}, "fields": {"duration": {"label": "Length", "options": [{"value": "3", "label": "3 s"}, {"value": "5", "label": "5 s"}, {"value": "8", "label": "8 s"}]}, "aspectRatio": {"label": "Aspect ratio", "options": [{"value": "1:1", "label": "1:1"}, {"value": "9:16", "label": "9:16"}, {"value": "16:9", "label": "16:9"}]}}, "constraints": {"framesExcludesReferenceImages": true, "frames": {"start": "optional", "end": "optional", "endNeedsStart": true}}, "controls": {"generateAudio": {"state": "optional", "default": false}}}]}, "cameraControls": {"cameras": [], "lenses": [], "apertures": []}}

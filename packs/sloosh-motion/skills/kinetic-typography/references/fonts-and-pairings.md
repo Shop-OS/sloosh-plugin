@@ -1,28 +1,28 @@
 # Fonts and pairings
 
-Six families ship with the sloosh-motion-director skill, all under the SIL Open Font License. Its `new_film.sh` copies every
-file into `<film>/fonts/`, with no network. No other family is fetched. Pages declare `@font-face` with `url('/fonts/<file>')`
-and list the faces in `KT.boot({fonts: [...]})`, so measuring waits for them.
+Six families ship with the sloosh-motion-director skill, all under the SIL Open Font License. Its new_film.sh copies every
+file into the film's fonts/ folder, with no network. No other family is fetched. Pages declare @font-face with url('/fonts/FILE')
+and list the faces in KT.boot({fonts: [...]}), so measuring waits for them.
 
-**Rule zero:** the brand's own font files win. Ask the user for the `.woff2` files and check that their license allows video
-use. Copy them into `fonts/`, add an `@font-face`, point `.d` (or `.s`) at it, and add it to `KT.boot` fonts. A static brand
-font cannot do `stretch`, `frame`'s width move or `wave`: use slam, stack and echo instead.
+**Rule zero:** the brand's own font files win. Ask the user for the .woff2 files and check that their license allows video
+use. Copy them into fonts/, add an @font-face, point .d (or .s) at it, and add it to KT.boot fonts. A static brand
+font cannot do stretch, frame's width move or wave: use slam, stack and echo instead.
 
 ## Files and axes
 
 | Family | File | Axes / styles | Used by |
 |---|---|---|---|
-| Archivo | `archivo-latin-wdth-{normal,italic}.woff2` | wght 100–900, wdth 62–125 | Poster (`.d` caps), Lyric (wdth 62 condensed), Caption (italic, wdth 125), Variable Stretch (`wave`, `stretch`, `frame`) |
-| Inter Tight | `inter-tight-latin-wght-{normal,italic}.woff2` | wght 100–900 | Swiss display, List rows, Editorial kickers |
-| Instrument Serif | `instrument-serif-latin-400-{normal,italic}.woff2` | 400, italic | Swiss accent word, Lyric breath words, Caption |
-| Bodoni Moda | `bodoni-moda-latin-{500,600}-{normal,italic}.woff2` | static 500 and 600, italic | luxury end cards and `rise` mastheads (no slams) |
-| Fraunces | `fraunces-latin-full-{normal,italic}.woff2` | opsz 9–144, wght 100–900, SOFT 0–100, WONK 0–1 | Editorial display + italic phrase; the "ink swell" (`wght`, `SOFT`) |
-| JetBrains Mono | `jetbrains-mono-latin-wght-normal.woff2` (variable), `jetbrains-mono-latin-500-normal.woff2` (static) | wght 100–800 | Swiss labels and board, List kicker / ticker, Stretch support, Lyric index |
+| Archivo | archivo-latin-wdth-{normal,italic}.woff2 | wght 100–900, wdth 62–125 | Poster (.d caps), Lyric (wdth 62 condensed), Caption (italic, wdth 125), Variable Stretch (wave, stretch, frame) |
+| Inter Tight | inter-tight-latin-wght-{normal,italic}.woff2 | wght 100–900 | Swiss display, List rows, Editorial kickers |
+| Instrument Serif | instrument-serif-latin-400-{normal,italic}.woff2 | 400, italic | Swiss accent word, Lyric breath words, Caption |
+| Bodoni Moda | bodoni-moda-latin-{500,600}-{normal,italic}.woff2 | static 500 and 600, italic | luxury end cards and rise mastheads (no slams) |
+| Fraunces | fraunces-latin-full-{normal,italic}.woff2 | opsz 9–144, wght 100–900, SOFT 0–100, WONK 0–1 | Editorial display + italic phrase; the "ink swell" (wght, SOFT) |
+| JetBrains Mono | jetbrains-mono-latin-wght-normal.woff2 (variable), jetbrains-mono-latin-500-normal.woff2 (static) | wght 100–800 | Swiss labels and board, List kicker / ticker, Stretch support, Lyric index |
 
-Drive axes with `font-variation-settings` (the engine's `KT.axes`), never with `font-stretch` tweens. Fit text at the axis values
-it will END at, or at its widest state (`wave` samples it), so nothing overflows mid-move.
+Drive axes with font-variation-settings (the engine's KT.axes), never with font-stretch tweens. Fit text at the axis values
+it will END at, or at its widest state (wave samples it), so nothing overflows mid-move.
 
-None of the vendored faces has a slant axis. A theme `slnt` value (for example `slnt: -10`) makes `wave` snap each letter with
+None of the vendored faces has a slant axis. A theme slnt value (for example slnt: -10) makes wave snap each letter with
 a short skew on its beats instead. For a true slant, use the Archivo or Inter Tight italic file.
 
 ## Pairing rules
@@ -33,7 +33,7 @@ a short skew on its beats instead. For a true slant, use the Archivo or Inter Ti
 4. Never two display faces of the same class. Never default system fonts.
 5. Display tracking is negative (−0.01 to −0.05 em); small caps labels are positive (+0.12 to +0.3 em). Tracking never animates, except the end card.
 
-## Families by mood (same structure, swap `.d`)
+## Families by mood (same structure, swap .d)
 
 | Mood | Family | Notes |
 |---|---|---|
@@ -41,8 +41,8 @@ a short skew on its beats instead. For a true slant, use the Archivo or Inter Ti
 | Condensed impact | Archivo wdth 62, wght 900 | sport, sale |
 | Wide statement | Archivo wdth 125, wght 900 (italic for hype captions) | slams, lockups |
 | Width-axis workhorse | Archivo | stretch, frame, wave |
-| Editorial serif | Fraunces | `rise`, `swap`, `end`; the ink swell |
-| Luxury serif | Bodoni Moda 500 / 600 | no slams; `rise` and `end` only |
+| Editorial serif | Fraunces | rise, swap, end; the ink swell |
+| Luxury serif | Bodoni Moda 500 / 600 | no slams; rise and end only |
 | Lyric breath word | Instrument Serif italic | one word per phrase |
 | Mono | JetBrains Mono | boards, counters, tickers; tabular figures |
 
@@ -57,3 +57,21 @@ a short skew on its beats instead. For a true slant, use the Archivo or Inter Ti
 | Kicker / label | 30–36 | 28–32 | 28–32 |
 | Mono index, board | 34–40 | 30 | 30 |
 | Nothing readable under | 28 | 28 | 28 |
+
+## From a brand kit
+
+1. The brand's own font files win (rule zero).
+2. If the kit names a font but gives no files, ask for the files. Until they arrive, use the nearest vendored family below and tell the user it is a stand-in.
+3. If the kit allows only a sans, drop the serif-italic accent word. Make the accent with weight (900 against 400), width or the accent colour.
+4. If the kit gives one family, get every contrast from it: weight, width, case and size. Use a mono only for labels, and only if the kit allows one.
+5. A generated image or clip never sets the brand's type. Models only approximate typefaces.
+
+| Brand type feel | Stand-in | Notes |
+|---|---|---|
+| Geometric or neutral sans | Inter Tight | 800 display, 600 kickers |
+| Condensed, sport, sale | Archivo wdth 62, wght 900 | caps |
+| Wide and loud | Archivo wdth 125, wght 900 | slams and lockups |
+| Didone or luxury serif | Bodoni Moda 500 / 600 | rise and end only, no slams |
+| Old-style or editorial serif | Fraunces | italic for the accent phrase |
+| Monospace or technical | JetBrains Mono | labels, boards, counters |
+| Script or handwriting | none | ask for the files; until then, Instrument Serif italic for one accent word only |

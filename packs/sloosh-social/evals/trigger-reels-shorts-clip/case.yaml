@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-reels-shorts-clip
+description: A vertical Reel with a hook, captions and music from a product photo loads reels-shorts-clip.
+tags: [trigger]
+runs: 2

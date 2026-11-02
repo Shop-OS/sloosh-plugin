@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-creative-performance-retro
+description: Pasting last week's ad results and asking what to kill, scale and make next loads creative-performance-retro.
+tags: [trigger]
+runs: 2

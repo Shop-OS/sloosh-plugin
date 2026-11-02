@@ -1,11 +1,11 @@
 ---
 name: dot-matrix-particles
-description: Make dot-matrix, LED-wall, halftone, ASCII, dither, scan-line, 3D point-cloud and particle assemble or dissolve films (6-15 s), or add one of these effects as a layer to another film. Use when the user asks for dot matrix, halftone, LED or LED billboard, ASCII or terminal, dither or 1-bit, pixel, particles, point cloud, 3D scan, hologram, thermal, made of dots, turns into dots, dissolves into particles or a data twin, or shares a reference like that. Sloosh makes only clean realistic footage on pure black; local code turns every frame into dots, builds an LED display face for the copy, flies particles into the wordmark and scores a minimal-techno track. Needs the sloosh-motion-director skill and a coding agent on the user's computer.
+description: Make dot-matrix, LED-wall, halftone, ASCII, dither, LED scan-line, 3D point-cloud and particle assemble or dissolve films (6-15 s), or add one of these effects as a layer to another film. Sloosh makes only clean realistic footage on pure black; local code turns every frame into dots, builds an LED display face for the copy, flies particles into the wordmark and scores a minimal-techno track. Needs the sloosh-motion-director skill and a coding agent on the user's computer. Use when the user asks for dot matrix, halftone, LED or LED billboard, ASCII or terminal, dither or 1-bit, pixel dots or pixel art, particles, point cloud, 3D scan, hologram, thermal, made of dots, turns into dots, dissolves into particles or a data twin, or shares a reference like that, and the Sloosh tools are connected. Not for glitch, RGB split or datamosh (glitch-fx) or a logo or shape morph (morph-shapeshift).
 ---
 
 # Dot-matrix particles
 
-This skill makes a short film in which the subject is rebuilt out of light: a face on an LED wall, a bottle printed as halftone, a portrait spelled in glowing characters, a head turning as a 3D point cloud, a product whose dots fly off and become the brand name. Sloosh makes the clean camera footage. Local Python turns that footage into dots, frame by frame.
+This skill makes a short film in which the subject is rebuilt out of light: a face on an LED wall, a bottle printed as halftone, a portrait spelled in glowing characters, a head turning as a 3D point cloud, a product whose dots fly off and become the brand name. Sloosh makes the clean camera footage. Local Python turns that footage into dots, frame by frame. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
 Paths in this skill are relative to this skill's folder. In commands, `<skill>` means this skill's folder and `<director>` means the folder of the `sloosh-motion-director` skill, which sits next to this one in the same pack (`../sloosh-motion-director`). Load the `sloosh-motion-director` skill first. This skill builds on its toolchain: its new_film.sh scaffold, and the film's tl.py, edit.py (with lib/filmkit.py), audio.py (with lib/audiokit.py), lib/render_html.py and lib/sheets.py. This skill adds:
 
@@ -17,7 +17,14 @@ Paths in this skill are relative to this skill's folder. In commands, `<skill>` 
 
 ## Requirements
 
-This skill runs on the user's computer. Before you start, check that you can run shell commands and that these are installed: Python 3 with numpy, opencv-python, scipy and Pillow; ffmpeg; and Playwright for Python with its Chromium browser (lib/render_html.py renders the type page with it).
+Before you start:
+
+- If the Sloosh tools are not available (no `get_connection`, `quote_generation` or `generate` tool), tell the user to install and connect the core Sloosh plugin. Then stop.
+    - Claude Code: run /plugin install sloosh@sloosh, then run /mcp and sign in.
+    - Claude app: open the plugin's Connectors tab and connect Sloosh. Or add a custom connector with the URL https://mcp.sloosh.ai/mcp.
+- Call `get_connection` once in the conversation if you have not called it yet. If spending is not enabled, give the user the settings link it returns and do no paid work. Build the film on placeholders instead.
+
+This skill runs on the user's computer. Check that you can run shell commands and that these are installed: Python 3 with numpy, opencv-python, scipy and Pillow; ffmpeg; and Playwright for Python with its Chromium browser (lib/render_html.py renders the type page with it).
 
 - If you cannot run shell commands on the user's own computer (a remote sandbox does not count), tell the user that the film needs a coding agent that runs on their computer. Offer the `product-video` skill from the core Sloosh plugin for a single generated clip instead. Then stop.
 - If the director skill is missing next to this skill, `scripts/setup_film.sh` stops with an install hint. Tell the user to install the full sloosh-motion pack.
@@ -40,7 +47,7 @@ The viewer feels they see the data twin of something real, and then the real thi
 |---|---|---|
 | 1. Goal, format, length | a standalone film, or a **layer** on another style (a burst drop, a dither cut, the end logo assembling; see section 10) | 9:16 (or 16:9, 1:1, 4:5), 15 s, 128 BPM |
 | 2. Look | **Data Twin** (LED hook, twin strobe, point cloud, thermal, burst, halftone, real, particles, wordmark) · **LED Billboard** (one continuous LED wall, slow) · **Halftone Editorial** (paper, 45 degrees, spot colour) · **ASCII Terminal** · **Point-Cloud Scan** · **Particle Logo** (6 s) · match my reference | Data Twin, amber LED |
-| 3. Inputs | a portrait, a product photo, a logo or a clip. For a face, ask: "Is this you, or someone who agreed to be in it?" | a fictional subject |
+| 3. Inputs | a portrait, a product photo, a logo or a clip. For a face, ask: "Is this you, or someone who agreed to be in it?" A yes is required before any quote that uses the face. A decline is a hard stop for that face. Never use a child or a public figure, even from the user's own photo. | a fictional subject |
 | 4. Words and sound | the brand word, a tag of at most 4 words and one 2-line LED line ("MADE OF / LIGHT"), or the user's lines. Sound: original minimal techno (default), with an optional voice line, or the user's own track | techno, 128 BPM, A minor |
 
 A brand name alone is enough for **Particle Logo**. It needs no generation: the particles come from a dither noise field or the user's logo file. Never invent claims, specs or fake data for the HUD labels.
@@ -139,23 +146,17 @@ The quote is the authority on cost. Never estimate a price yourself.
 
 ## 4. Make the footage with Sloosh
 
-The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
-
-- If the Sloosh tools are not available (no `get_connection`, `quote_generation` or `generate` tool), tell the user to install and connect the core Sloosh plugin. Then stop.
-    - Claude Code: run /plugin install sloosh@sloosh, then run /mcp and sign in.
-    - Claude app: open the plugin's Connectors tab and connect Sloosh. Or add a custom connector with the URL https://mcp.sloosh.ai/mcp.
-
-1. Call `get_connection` once in the conversation if you have not called it yet. If spending is not enabled, give the user the settings link it returns and do no paid work. Build the film on placeholders instead.
+1. Check the connection from Before you start. If spending is not enabled, do no paid work and build the film on placeholders.
 2. Get the user's photos into the workspace. For a local file, follow the server's upload instruction for this client. For a public HTTPS URL, call `import_asset`. To look at an image, call `view_asset` with its kind and id.
 3. Plan the round from section 3.3. Each round has at most 8 generations.
 4. Call `list_models` with mode `image_gen` for stills and edits, or `video_gen` for clips. Pick a model by its capabilities (a reference image, an edit, a start frame, the aspect ratio, the length). Never pick a model by a remembered name.
 5. Call `quote_generation` for each item of the round.
 6. Show the user a list of each item with its credits and the round's total. Compare the total with the daily allowance left from `get_connection`. That value is in millicredits, so divide it by 1000 first. If the total is more than the allowance left, give the settings link and do not run the round. Otherwise ask for one approval of this round, and wait for the user.
 7. Call `generate` for each item with its quote and its own stable idempotency key, for example `motion-dots-<subject>-portrait-9x16-v1` or `motion-dots-<subject>-c1-9x16-v1`. Set confirmed=true only after the user approves this quote. The user's approval of the round covers each quote in that round.
-8. After the last `generate` of the round, if `show_generation` is available, call `show_generation` once with all the operation ids of the round, up to 8. Show images and videos in separate calls. If not, check the results with `get_generation` when the user asks.
-9. When a result is ready, call `get_asset` with its kind and id. Download the file from the returned URL into the film's plates/ folder (stills: portrait.jpg, portrait_3q.jpg, product.jpg, product_turn.jpg) or clips/ folder (c1.mp4, c2.mp4). Look at each still with `view_asset` and ask the user to approve it before the next round uses it.
+8. After the last `generate` of the round, if `show_generation` is available, call `show_generation` once with all the operation ids of the round, up to 8. Show images and videos in separate calls. If not, poll `get_generation` about every 5 seconds for an image and every 15 seconds for a video until it says settled.
+9. When you need the files, read each output's kind and id from `get_generation` (or from the card's message), then call `get_asset`. Download the file from the returned URL into the film's plates/ folder (stills: portrait.jpg, portrait_3q.jpg, product.jpg, product_turn.jpg) or clips/ folder (c1.mp4, c2.mp4). Look at each still with `view_asset` and ask the user to approve it before the next round uses it.
 
-For card actions, model choice or generation errors, read the `generation` guide with `get_guide`. For imports, Spaces and holds, read the `assets`, `spaces` and `spending` guides with `get_guide`.
+For card actions, model choice or generation errors, read the `generation` guide with `get_guide`. For imports and holds, read the `assets` and `spending` guides with `get_guide`.
 
 ## 5. The edit
 
@@ -272,12 +273,12 @@ The whole film averages about 0.26 s per frame, including the finish.
 
 | Lockup | 9:16 (1080 wide) | 16:9 (1920 wide) | In and out | Placement |
 |---|---|---|---|---|
-| **LED BOARD** (Python, `dk.LEDText`) | cap 11 cells x pitch 12 = 132 px per line, a 3-cell line gap; it fits down to cap 7, then scrolls as a marquee | cap 9 x pitch 12 | in: a left-to-right switch-on over 0.25 s with a flickering front; out: rows switch off top to bottom in 0.15 s | the top band (y 300) inside the safe width (120-960), on a dark panel at 82% |
+| **LED BOARD** (Python, `dk.LEDText`) | cap 11 cells x pitch 12 = 132 px per line, a 3-cell line gap; it fits down to cap 7, then scrolls as a marquee | cap 9 x pitch 12 | in: a left-to-right switch-on over 0.25 s with a flickering front; out: rows switch off top to bottom in 0.15 s | the top band (top at about 16% of the height) inside the safe width (11% to 89% of the width), on a dark panel at 82% |
 | **WORD** (ui/type.html) | 220 px (6 letters or fewer; longer words fit down), HOT | 190 px | fades in over 0.45 s ON the assembled particles, with no movement | centred at 47% of the height |
-| **LABEL** (mono) | 28 px, +0.16em tracking, 2 lines, line height 1.5, a 2 px INK rule of at most 300 px under line 1 | 28 px | lines rise out of a mask (0.35 s, 0.2 s stagger) and the rule grows; out in 0.15 s | top-left of the safe zone (x 120, y 300), never over the face |
+| **LABEL** (mono) | 28 px, +0.16em tracking, 2 lines, line height 1.5, a 2 px INK rule of at most 300 px under line 1 | 28 px | lines rise out of a mask (0.35 s, 0.2 s stagger) and the rule grows; out in 0.15 s | top-left of the safe zone (x at 11% of the width, y at about 16% of the height), never over the face |
 | **TAG** (mono) | 30 px, +0.28em tracking, INK | 28 px | letters fade in one by one, 35 ms apart | 40 px under the wordmark |
 
-All four sizes work. 4:5 uses the 9:16 layout, and 1:1 uses the 16:9 layout. edit.py and ui/type.html pick the layout from the aspect ratio and scale type by the short side. On 16:9 the LED board is a centred band at 8% of the height, not a full-width bar.
+On 9:16, keep type and the product out of the top 14%, the bottom 35% and 6% at each side. The code keeps an 11% side margin; its px values (y=300, safe=(120, 960)) are these percentages at 1080x1920. All four sizes work. 4:5 uses the 9:16 layout, and 1:1 uses the 16:9 layout. edit.py and ui/type.html pick the layout from the aspect ratio and scale type by the short side. On 16:9 the LED board is a centred band at 8% of the height, not a full-width bar.
 
 Rules:
 - Load the fonts before you measure. Place type from measured boxes. Fit it to the safe zone.
@@ -378,6 +379,10 @@ Use the host's ink. Use at most one dot moment per 5 s.
 - **Generations:** standard 5 (2 stills, 1 edit, 2 clips); 6 for the Long cut or Point-Cloud Scan; light 2 stills; none with the user's own photo on black. The quote sets the cost.
 - **Build time:** about 25-35 minutes (generations about 10, type 1, the edit render about 2 for 15 s, QA 5).
 
+## When a run delivers nothing
+
+- A run can settle with nothing delivered because a reference photo shows a real person who is not verified yet. The same key returns the same result. Wait about a minute. Then get a fresh quote, ask for a new approval and use a new key. Do this once. If it fails again, tell the user and stop.
+
 ## Spending rules
 
 - Get a quote before any paid call. State its credits in plain words.
@@ -385,7 +390,7 @@ Use the host's ink. Use at most one dot moment per 5 s.
 - Plan at most 8 generations per round. Ask for one approval per round. If the round's total is more than the daily allowance left, do not run.
 - Wait for the user's approval of each round's quotes. A changed prompt, another model or an expired quote needs a new quote and a new approval.
 - Build each idempotency key from the subject, the shot, the format and a version number. Increase the version when you make a shot again. Never use one key for two different quotes. Use the same key when you retry the same item. Do not make a new key to retry.
-- If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Only this case needs a new quote, a new approval and a new key.
+- If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Among retries, only this case and the real person case need a new quote, a new approval and a new key.
 - If a call fails because the service owner is unavailable, retry once with the same key. If it fails again, tell the user and stop.
 - For any other error, read the `recovery` guide with `get_guide` before you act. Retry at most once.
 

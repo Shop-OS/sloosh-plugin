@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-motion-replicate
+description: Copying the moves of a dance clip onto a brand mascot loads motion-replicate.
+tags: [trigger]
+runs: 2

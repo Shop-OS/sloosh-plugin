@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-brand-consistency-check
+description: A request to check finished images against the brand kit before they post loads brand-consistency-check.
+tags: [trigger]
+runs: 2

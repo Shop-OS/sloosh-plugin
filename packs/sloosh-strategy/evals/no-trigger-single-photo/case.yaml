@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: no-trigger-single-photo
+description: One studio photo of one product, with no plan or strategy in view, does not load a strategy pack skill.
+tags: [trigger, negative]
+runs: 2

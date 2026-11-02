@@ -2,12 +2,19 @@
 
 ![Sloosh](assets/sloosh.png)
 
-Sloosh makes product images, ad variants and short product videos, and runs the published Sloosh Spaces in your workspace. This plugin connects Claude to your Sloosh workspace and adds six skills: product imagery, ad variants, published Spaces, product video, UGC storyboards and launch films.
+Sloosh makes product images, ad variants and short product videos, and runs the published Sloosh Spaces in your workspace. This plugin connects Claude to your Sloosh workspace and adds eleven skills: product imagery, ad variants, published Spaces, product video, UGC storyboards, video remixes, launch films, creative iteration, batch runs, asset management and a skill router. Creative iteration takes the next round on a Sloosh result you have seen. Batch runs run one published Space over a list of items. The router picks the skill for a request that names none.
 
-This marketplace also has two packs. Each pack is a separate plugin that needs this core plugin:
+This marketplace also has nine packs. Each pack is a separate plugin that needs this core plugin:
 
 - [Sloosh for Shopify stores](#sloosh-for-shopify-stores) (`sloosh-shopify`) makes catalog images, launch ads with copy and short product page videos for the products in a Shopify store.
-- [Sloosh motion films](#sloosh-motion-films) (`sloosh-motion`) makes stylised short films on your computer, such as product reveals, beat-synced edits and software walkthroughs.
+- [Sloosh motion films](#sloosh-motion-films) (`sloosh-motion`) makes stylised short films on your computer, such as product reveals, beat-synced edits and software walkthroughs, with a style guide from a reference video and a catalog of named motion effects.
+- [Sloosh performance ads](#sloosh-performance-ads) (`sloosh-ads`) plans, writes, makes and tests performance ads, such as hook grids, comparison ads, seasonal creatives and creative test plans.
+- [Sloosh video](#more-packs) (`sloosh-video`) makes product films, product animations, morphs, motion copies, talking-head clips, captions, soundtracks and voiceovers, upscales and edits or extensions of your clips.
+- [Sloosh image editing](#more-packs) (`sloosh-image`) retouches, swaps and relights backgrounds, reframes and outpaints, transfers a reference style and upscales your images.
+- [Sloosh ecommerce](#more-packs) (`sloosh-ecommerce`) makes marketplace and storefront images, such as listing sets, white-background images, colourways, try-on and lookbooks.
+- [Sloosh brand](#more-packs) (`sloosh-brand`) builds a brand kit, logos, icon sets, brand boards, moodboards, mockups and social profile kits, and checks work against the brand.
+- [Sloosh social](#more-packs) (`sloosh-social`) makes carousels, Reels and Shorts clips, and YouTube thumbnails.
+- [Sloosh strategy](#more-packs) (`sloosh-strategy`) plans creative work: a creative strategy, competitor teardowns, launch campaign plans and a campaign run in rounds.
 
 Sloosh uses the credits and the daily spending allowance of the workspace you connect. Claude shows you the quoted credits and asks for your approval. Sloosh blocks paid calls above your "Ask before spending more than" amount until you approve. You set the daily allowance in Sloosh settings. Claude cannot raise it, buy credits or change your plan.
 
@@ -39,7 +46,7 @@ On a Team or Enterprise plan, an Owner must add the Sloosh connector for the org
 
 ## Use the connector without the plugin
 
-You can also add Sloosh as a custom connector. In Claude, open Customize, then Connectors, and add a custom connector with this URL: https://mcp.sloosh.ai/mcp. Sign in to Sloosh and authorize your workspace. You get the Sloosh tools without the six skills.
+You can also add Sloosh as a custom connector. In Claude, open Customize, then Connectors, and add a custom connector with this URL: https://mcp.sloosh.ai/mcp. Sign in to Sloosh and authorize your workspace. You get the Sloosh tools without the skills.
 
 ## Use the skills in other agents
 
@@ -72,20 +79,25 @@ Always name the agents with `-a`. Without it, the CLI installs the skills into e
 
 Some skills hand work to other skills. Install them together:
 
-- `product-video`, `ad-variants`, `ugc-storyboard` and `launch-film` use `product-imagery`.
+- `product-video`, `ad-variants`, `ugc-storyboard`, `remix-video` and `launch-film` use `product-imagery`.
 - `ugc-storyboard` and `launch-film` use `product-video`.
 - `ad-variants` and `ugc-storyboard` can use `published-spaces`.
+- `product-imagery`, `product-video`, `ad-variants` and `published-spaces` hand changes to a result you have seen to `creative-iteration`.
 - `launch-film` needs its whole folder, with its scripts, assets and references folders. See the Launch films section below for what it needs on your computer.
 
 ### Install the plugin in Codex
 
-Codex can install the whole plugin from this repository, with the six skills and the Sloosh server:
+Codex can install the whole plugin from this repository, with the eleven skills and the Sloosh server:
 
 ```
 codex plugin marketplace add Shop-OS/sloosh-plugin
 codex plugin add sloosh@sloosh
 codex mcp login sloosh
 ```
+
+## Video remixes
+
+The remix skill runs the Shadow Clone Space on a short clip you give it. Your character takes the place of the person in the clip, with the same motion, camera and timing. The clip must be 4 to 30 seconds long and at most 64 MiB, as an .mp4 or .mov file. Upload the file or share a direct link to it. Links to Instagram, TikTok, X or YouTube post pages do not work yet: save the clip with the platform's own option first.
 
 ## Launch films
 
@@ -111,6 +123,33 @@ Sloosh motion films makes stylised short films on your computer: product reveals
 
 In Codex, run `codex plugin add sloosh-motion@sloosh`. See [packs/sloosh-motion/README.md](packs/sloosh-motion/README.md) for its skills and how a film is made.
 
+## Sloosh performance ads
+
+Sloosh performance ads plans, writes, makes and tests performance ads. Its planning skills write ad concepts, ad copy, creative test plans and results retros, and cost nothing. Its making skills make hook grids, sale banners, before and after ads, comparison ads, reference ad remixes, testimonial ads and creator-style video ads, after you approve each round's quote. It never posts ads and never reads your ad accounts. It needs this core plugin. Install it after the core plugin:
+
+```
+/plugin install sloosh-ads@sloosh
+```
+
+In Codex, run `codex plugin add sloosh-ads@sloosh`. See [packs/sloosh-ads/README.md](packs/sloosh-ads/README.md) for its skills.
+
+## More packs
+
+These packs each need this core plugin. Install the ones you want after the core plugin, for example:
+
+```
+/plugin install sloosh-video@sloosh
+```
+
+In Codex, run `codex plugin add <pack>@sloosh`. Each pack's README lists its skills:
+
+- `sloosh-video`: [packs/sloosh-video/README.md](packs/sloosh-video/README.md)
+- `sloosh-image`: [packs/sloosh-image/README.md](packs/sloosh-image/README.md)
+- `sloosh-ecommerce`: [packs/sloosh-ecommerce/README.md](packs/sloosh-ecommerce/README.md)
+- `sloosh-brand`: [packs/sloosh-brand/README.md](packs/sloosh-brand/README.md)
+- `sloosh-social`: [packs/sloosh-social/README.md](packs/sloosh-social/README.md)
+- `sloosh-strategy`: [packs/sloosh-strategy/README.md](packs/sloosh-strategy/README.md). Its skills plan work and cost nothing.
+
 ## What the plugin sends
 
 The plugin runs no code on its own. The launch film skill includes scripts and a Remotion project template that run on your computer only when you ask for a film. Claude calls the Sloosh server at https://mcp.sloosh.ai/mcp with the prompts, images and choices you give it, using the access you grant when you connect. Sloosh stores the images and videos it makes in your workspace. Each pack's README says what that pack sends and reads.
@@ -122,7 +161,9 @@ The plugin runs no code on its own. The launch film skill includes scripts and a
 - "Find a Space in my workspace that makes product ad grids and tell me what a run costs."
 - "Turn my latest product image into a short video clip."
 - "Write a UGC storyboard for my face serum and make the shots."
+- "Remix this 15-second dance clip with my brand character."
 - "Make a 30-second launch film for our app from PART 1.mp3 and our website."
+- "The label on that last image is wrong. Fix it and keep the rest."
 
 ## Support
 

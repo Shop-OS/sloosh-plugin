@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-cinematic-product-film
+description: A multi-shot brand film for a table lamp, generated shot by shot in the chat, loads cinematic-product-film.
+tags: [trigger]
+runs: 2

@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-seasonal-creatives
+description: A festival version of an existing product creative, with the product kept exact, loads seasonal-creatives.
+tags: [trigger]
+runs: 2

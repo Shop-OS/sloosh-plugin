@@ -1,8 +1,8 @@
 # Feature announcement mode (saas-product-video)
 
-One feature, one idea, 10 to 15 seconds. From the frames alone, the viewer can say: "Now you can ___ in ___." This mode uses the same engine, pages, prompt blocks, Sloosh rounds and spending rules as the walkthrough in SKILL.md, at a faster pace. Read SKILL.md first. This file holds only what differs.
+One feature, one idea, 10 to 15 seconds. From the frames alone, the viewer can say: "Now you can ___ in ___." This mode uses the same engine, pages, prompt blocks, Sloosh rounds and spending rules as the walkthrough (SKILL.md and walkthrough.md), at a faster pace. Read SKILL.md first. The real-screens rule and the shot list in shot-list.md apply here too. This file holds only what differs.
 
-The working film is `examples/feature-announcement-12s/`: tl.py, edit.py, audio.py, ui/feature.html, ui/type.html, ui/toggle.html (the Before/After tile only) and ui/logo.svg. Lay it over a new film folder with `bash scripts/use_example.sh <film> feature --placeholders`.
+The working film is `examples/feature-announcement-12s/`: tl.py, edit.py, audio.py, ui/feature.html, ui/type.html, ui/toggle.html (the Before/After tile only) and ui/logo.svg. Lay it over a new film folder with `bash <saas>/scripts/use_example.sh <film> feature --placeholders`, run from the folder that holds the film.
 
 ---
 
@@ -35,7 +35,7 @@ Ask at most 4 questions, as in the director's intake.
 | 3 | Inputs | 2 or 3 screenshots (the screen before, the feature's control, the result) or a URL; a logo; a brand colour; the opener person: "me" (a face photo and consent: "Is this you, or someone who agreed?") or a fictional person | a fictional person |
 | 4 | Words and sound | Copy: "write it", or the feature name, the benefit and the CTA. Sound: original techno score (default), score and voice-over, or the user's own track | write it; score |
 
-**Copy to write:** the pain as one hype stack ("ONE POST." / "NINE SIZES."); NEW, the feature name (1 to 3 words) and a benefit line of 4 to 8 words ("Every channel size, in one click."); the real UI labels; the payoff stack ("EVERY" / "CHANNEL."); the end card (product, "<Feature> is live.", CTA, URL).
+**Copy to write:** the pain as one hype stack ("ONE POST." / "NINE SIZES."); NEW, the feature name (1 to 3 words) and a benefit line of 4 to 8 words ("Every channel size, in one click."); the real UI labels; the payoff stack ("EVERY" / "CHANNEL."); the end card (product, "<Feature> is live.", CTA, URL). Use only a CTA, an offer and a result claim that the user gives or confirms. Never write "free", a trial or a discount that the user did not state.
 
 **Treatment (the one screen the user approves; the example film):**
 ```
@@ -47,13 +47,13 @@ FEATURE DROP · Example Studio "Auto-Resize" · 12 s · 1:1 1080 · 30 fps · te
 4.0  DROP  the real editor springs in; click Auto-Resize; click All channels
 6.1  code  one post becomes 1:1, 9:16 and 16:9, a check on each
 8.5  AI    phone / desk / phone, every beat effect on      EVERY / CHANNEL.
-10.0 code  end card: Example Studio · Auto-Resize is live. · [Try it free] · example.com
+10.0 code  end card: Example Studio · Auto-Resize is live. · [Learn more] · example.com
 Type: Archivo italic hype stacks, Instrument Serif benefit line, brand accent #FF6A3D.
 Sound: filtered intro, riser, breath, drop on the window, low-passed under the UI, wide open on the payoff;
        a click per click, pops on the menu and the checks, a sparkle on NEW and on A -> B.
 Generations: 2 stills, then 2 clips, each round with its own quote.
 ```
-The treatment itself is free. Each round of generations gets its own quote and approval later (SKILL.md, section 4).
+The treatment itself is free. Each round of generations gets its own quote and approval later (the Sloosh rounds in SKILL.md).
 
 ## Timeline
 
@@ -98,13 +98,13 @@ Keep the clicks on beats when you retime. FEAT_CUES are page time: page 3.0 = fi
 | Format | Name card | Window | A becomes B | Lockups |
 |---|---|---|---|---|
 | 1:1 1080x1080 | centred, name 140 px | 900x820, centred | one row of three | A 96/136 at x 72, bottom 84 |
-| 9:16 1080x1920 | centred at 42% height, name 150 px | 940x1180 at 46% height | the widest result on top, two below | A 118/168 at x 120, bottom at y 1260 |
+| 9:16 1080x1920 | centred at 42% height, name 150 px | 940x1180 at 46% height | the widest result on top, two below | A 118/168 at x 120, bottom at 65% height (y 1248) |
 | 4:5 1080x1350 | centred at 42% height, name 150 px | 940x1053 at 46% height | the widest result on top, two below | A 118/168 at x 120, bottom 96 |
 | 16:9 1920x1080 | centred, name 168 px | 1400x840, centred | one row of three | A 118/168 at x 104, bottom 96 |
 
 ## Shots
 
-Two AI shots by default: desk and phone. The Before/After tile adds the world shot. Use the prompt blocks in SKILL.md, section 3, with these changes:
+Two AI shots by default: desk and phone. The Before/After tile adds the world shot. Use the prompt blocks in shot-list.md, section 2, with these changes:
 - **desk:** "space low-left for type" instead of "room on the right for type".
 - **phone:** the same edit of the approved desk still.
 - **world** (Before/After only): the media the feature changes. For example the user's real product on a wet kerb at dusk, or the customer's own photo before a relight.
@@ -113,13 +113,13 @@ Clips: start frame = the approved still, aspect ratio = the film's, about 5 s, n
 - c1 desk: "leans in toward the screen, the screen light brightens on the face; slow push-in".
 - c2 phone: "taps twice, the phone tilts slightly toward the camera; static macro, tiny handheld drift".
 - c3 world: "a soft light sweep travels across the product; slow push-in, 3%".
-Add the person or product block from SKILL.md and the closing sentence "One continuous shot with no cuts, text, extra people or new objects."
+Add the person or product block from shot-list.md and the closing sentence "One continuous shot with no cuts, text, extra people or new objects."
 
 **Counts:** 2 stills and 2 clips (Before/After: 3 and 3). **Code Only and Changelog Loop:** no generations. The hook becomes the name card on the gradient, with the pain lockup typed in.
 
 The opener windows are short (0.5 to 0.75 s). Pick the cleanest, most decisive moment of each clip: the lean, the tap. After each clip, run `python3 lib/sheets.py clip clips/c1.mp4` and write the clean windows (in the first 60 to 70%) into SHOTS as in-points.
 
-Review each still at full size with the review list in SKILL.md, section 4. For the world shot, also reject any changed product part, shape, colour or label.
+Review each still at full size with the review list in shot-list.md, section 2. For the world shot, also reject any changed product part, shape, colour or label.
 
 ## Edit
 
@@ -168,7 +168,7 @@ Archivo italic, width 125, weight 900 (hype); Inter Tight 600-800 (UI, pill, end
 
 | Lockup | 1:1 (1080) | 9:16 (1080 wide) | 16:9 (1920) | In / out | Placement |
 |---|---|---|---|---|---|
-| **A Hype Stack** | 96 / 136 px | 118 / 168 | 118 / 168 | mask wipe left to right 0.16 s and a 44 px slide; out to the right in 0.2 s | bottom-left: x 72 / 120 / 104; bottom 84 / y 1260 / 96 |
+| **A Hype Stack** | 96 / 136 px | 118 / 168 | 118 / 168 | mask wipe left to right 0.16 s and a 44 px slide; out to the right in 0.2 s | bottom-left: x 72 / 120 / 104; bottom 84 / 65% height / 96 |
 | **N Name Card** | pill 28 px caps 0.2 em; name 140 px; serif benefit 54 px | 30 / 150 / 58 | 30 / 168 / 64 | the pill pops (back 2.2) with 8 sparks; the name 1.3 to 1 with blur 12 to 0 in 0.32 s; shine bar 0.45 s; benefit words blur in 0.09 s apart; exit up 120 px with blur | centred (9:16 at 42% height), auto-fit to the safe width |
 | **C Slam** (Keynote Hype) | 190 px | 200 | 240 | 1.35 to 1, blur 12 to 0 in 4 frames | centred at 40% |
 | **D End Card** | logo 104, wordmark 88, serif line 46, CTA 36, URL 24 | 112 / 96 / 52 / 40 / 26 | 120 / 104 / 54 / 38 / 26 | the logo pops, the wordmark tracks 0.30 to -0.02 em, the line blurs in, the CTA rises, the cursor clicks on END_CLICK | centred column |
@@ -228,7 +228,7 @@ ui/type.html is transparent; render it with `--dur LEN`. ui/toggle.html is for t
 | payoff | riser(2B) into it, impact, glitch_sfx on the negative, shutter on the red | -12, -6, -13 |
 | lockups, end card, CTA | shutter, sparkle, click | -12, -12, -9 |
 
-VO is optional: "One post. Nine sizes." / "New. Auto-Resize." / "Try it free." (normal), with the music ducked to 45%. It needs a text-to-speech engine that is already on the user's computer, or one the user agrees to install. Otherwise skip the VO or use the user's own recorded lines.
+VO is optional: "One post. Nine sizes." / "New. Auto-Resize." / "Learn more." (normal), with the music ducked to 45%. It needs a text-to-speech engine that is already on the user's computer, or one the user agrees to install. Otherwise skip the VO or use the user's own recorded lines.
 
 | Section | Music | Why |
 |---|---|---|
@@ -243,13 +243,13 @@ VO is optional: "One post. Nine sizes." / "New. Auto-Resize." / "Try it free." (
 
 1. Intake, then the treatment above: the beat table, 2 AI stills and clips, 2 pages, the exact lines and the sound plan. One approval. The treatment is free.
 2. `bash <director>/scripts/new_film.sh <brand>_feature 1x1 30`, then `bash <saas>/scripts/use_example.sh <brand>_feature feature --placeholders`.
-3. Run the stills rounds (SKILL.md, section 4). While they run: get the screens (capture or collect, anonymise, tokens), set the COPY in tl.py, the CONFIG and window markup in feature.html, and ui/logo.svg.
+3. Run the stills rounds (the Sloosh rounds in SKILL.md). While they run: get the screens (capture or collect, anonymise, tokens), set the COPY in tl.py, the CONFIG and window markup in feature.html, and ui/logo.svg.
 4. Fast page check: `python3 lib/render_html.py ui/feature.html --dur 6.5 --fps 4 --jobs 1 --out frames/feature_dbg`. Tile the PNGs, look, fix.
 5. Approve the stills, run the clips round, run sheets.py clip, and write the clean windows into SHOTS.
 6. Render: type.html with `--dur 12`, feature.html with `--dur 6.5 --scale 2` (use `--jobs 1` on a shared machine).
 7. `python3 edit.py out/sheet.jpg 0.3,0.9,1.6,2.4,3.0,4.1,4.8,5.05,5.6,6.05,7.3,8.2,8.6,9.2,10.6,11.25`. Look at the sheet. Fix.
 8. `python3 audio.py` (read the RMS report), `python3 edit.py`, `python3 lib/sheets.py film out/<name>_v1.mp4 3.5 9 --fps 6`, then `python3 audio.py out/<name>_v1.mp4`. Deliver as in the director's delivery section.
-9. **Other formats** (one folder per format, so each stays exact): run new_film.sh for `<brand>_feature_9x16 9x16 30`. Copy tl.py, edit.py, audio.py, ui/ and the approved plates/ and clips/ over it. Set `W, H` in tl.py to the folder's size. Render type.html and feature.html again and make the sheets at the same times. Fix anything that crowds the 9:16 safe zone (top 240, bottom 660, sides 120). For 4:5, use `4x5` and keep 96 px clear at the top and bottom. AI stills for each format are made at that aspect, never cropped from 1:1: edit the approved 1:1 still to the new aspect with "keep everything, extend the frame". That is a new round with its own quote and approval.
+9. **Other formats** (one folder per format, so each stays exact): run new_film.sh for `<brand>_feature_9x16 9x16 30`. Copy tl.py, edit.py, audio.py, ui/ and the approved plates/ and clips/ over it. Set `W, H` in tl.py to the folder's size. Render type.html and feature.html again and make the sheets at the same times. For 9:16, keep text and the product out of the top 14%, the bottom 35% and 6% at each side. Fix anything that crowds that safe zone. For 4:5, use `4x5` and keep about 7% clear at the top and bottom. AI stills for each format are made at that aspect, never cropped from 1:1: edit the approved 1:1 still to the new aspect with "keep everything, extend the frame". That is a new round with its own quote and approval.
 
 ## QA
 

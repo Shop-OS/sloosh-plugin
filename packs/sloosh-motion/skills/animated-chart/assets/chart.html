@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animated chart</title>
+<!--
+  Animated chart template. One self-contained file: no network, no external fonts or images.
+  Edit only the CONFIG block below. Every value on screen comes from CONFIG.data, typed once.
+
+  Page contract:
+    window.seek(seconds)  draws the exact frame for that time from the time alone.
+    window.render         the same function, for renderers that call render(t).
+    window.READY          true once fonts and the optional plate are decoded.
+    window.DURATION, window.FPS, window.WIDTH, window.HEIGHT
+  seek(0) and seek(DURATION) draw the same pixels, so the loop has no seam.
+  Opened in a browser, the page plays the loop. Add ?t=4 to the URL to hold one frame.
+  To embed a brand font, add an @font-face rule with a base64 data URL in the style block
+  and put its family name first in CONFIG.font.
+-->
+<style>
+  html, body { margin: 0; height: 100%; background: #111; }
+  body { display: flex; align-items: center; justify-content: center; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="chart"></canvas>
+<script>
+// ===== CONFIG: the only block to edit =====
+const CONFIG = {
+    width: 1080,
+    height: 1350,                 // 1080x1350 (4:5), 1080x1080, 1080x1920 (9:16) or 1920x1080
+    fps: 30,
+    duration: 8,                  // seconds; 12 suits "milestone"
+    motion: "bars",               // "bars" | "bars-to-line" | "count-up" | "before-after" | "milestone"
+    title: "Orders per quarter",  // "" for none (use "" for milestone)
+    subtitle: "",
+    // text is the exact string shown on screen. value is the number for bar or line geometry;
+    // leave it out when text is a plain number such as "12,000" or "4.8%".
+    // bars and bars-to-line: 2 to 8 entries. count-up and milestone: 1 entry.
+    // before-after: 2 entries, before first.
+    data: [
+        { label: "Q1", text: "12k", value: 12 },
+        { label: "Q2", text: "18k", value: 18 },
+        { label: "Q3", text: "31k", value: 31 },
+        { label: "Q4", text: "44k", value: 44 },
+    ],
+    headline: -1,                 // index of the highlighted entry; -1 means the last one
+    sample: true,                 // true keeps "Illustrative data" on every frame
+    source: "",                   // for example "Source: store admin, Jan to Dec"
+    colors: {
+        bg: "#0E0F12",
+        text: "#F4F4F2",
+        muted: "#8A8F98",
+        bar: "#3A3D44",
+        accent: "#3DDC97",
+        rule: "#2A2C31",
+    },
+    font: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    plate: "",                    // optional background image in this folder, such as "plate.png"
+    // Seconds for the four states: start, change, hold, return. The rest of the loop rests on the start.
+    timing: { start: 0.3, change: 2.0, hold: 4.0, back: 1.4 },
+    milestone: { points: 3200, onNumber: 0.84, seed: 7 },
+};
+// ===== end of CONFIG =====
+
+const C = CONFIG;
+const W = C.width;
+const H = C.height;
+const D = C.duration;
+const S = Math.min(W, H) / 1080;  // type and stroke scale
+const canvas = document.getElementById("chart");
+canvas.width = W;
+canvas.height = H;
+// willReadFrequently keeps Chromium on one drawing path, so every seek gives the same pixels.
+const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+window.DURATION = D;
+window.FPS = C.fps;
+window.WIDTH = W;
+window.HEIGHT = H;
+window.READY = false;
+
+// ----- helpers -----
+const clamp01 = (x) => Math.min(1, Math.max(0, x));
+const seg = (t, a, b) => (b <= a ? (t >= b ? 1 : 0) : clamp01((t - a) / (b - a)));
+const lerp = (a, b, k) => a + (b - a) * k;
+const easeInOutCubic = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3);
+const easeInOutSine = (x) => -(Math.cos(Math.PI * x) - 1) / 2;
+const easeInOutQuint = (x) => (x < 0.5 ? 16 * Math.pow(x, 5) : 1 - Math.pow(-2 * x + 2, 5) / 2);
+
+function hexToRgb(hex) {
+    const h = hex.replace("#", "");
+    const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
+    const n = parseInt(full, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+function mix(a, b, k) {
+    const x = hexToRgb(a);
+    const y = hexToRgb(b);
+    return `rgb(${x.map((v, i) => Math.round(lerp(v, y[i], k))).join(",")})`;
+}
+function font(weight, size) {
+    return `${weight} ${Math.round(size)}px ${C.font}`;
+}
+// Shrinks a size until the text fits maxWidth.
+function fit(text, weight, size, maxWidth) {
+    ctx.font = font(weight, size);
+    const width = ctx.measureText(text).width;
+    return width > maxWidth ? size * (maxWidth / width) : size;
+}
+// Splits "$1,234.5k" into prefix, number and suffix, so a count keeps the same format.
+function parseNumber(text) {
+    const m = /^(\D*?)(\d[\d,]*(?:\.\d+)?)(.*)$/.exec(String(text).trim());
+    if (!m) return null;
+    const digits = m[2];
+    const decimals = digits.includes(".") ? digits.split(".")[1].length : 0;
+    return {
+        prefix: m[1],
+        suffix: m[3],
+        decimals,
+        commas: digits.includes(","),
+        value: parseFloat(digits.replace(/,/g, "")),
+    };
+}
+function format(v, spec) {
+    const body = spec.commas
+        ? v.toLocaleString("en-US", {
+              minimumFractionDigits: spec.decimals,
+              maximumFractionDigits: spec.decimals,
+          })
+        : v.toFixed(spec.decimals);
+    return spec.prefix + body + spec.suffix;
+}
+function valueOf(item) {
+    if (typeof item.value === "number") return item.value;
+    const parsed = parseNumber(item.text);
+    return parsed ? parsed.value : 0;
+}
+function mulberry32(seed) {
+    let a = seed >>> 0;
+    return () => {
+        a = (a + 0x6d2b79f5) >>> 0;
+        let t = a;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+}
+
+// ----- the shared clock: 0 at the start state, 1 at the hold -----
+const T = C.timing;
+const tChange = T.start;
+const tHold = T.start + T.change;
+const tBack = tHold + T.hold;
+const tRest = tBack + T.back;
+function amount(t) {
+    if (t < tChange) return 0;
+    if (t < tHold) return easeInOutCubic(seg(t, tChange, tHold));
+    if (t < tBack) return 1;
+    if (t < tRest) return 1 - easeInOutSine(seg(t, tBack, tRest));
+    return 0;
+}
+// Bars grow one after another, then all return together.
+function staggered(t, i, n) {
+    if (t >= tHold) return amount(t);
+    if (t < tChange) return 0;
+    const raw = seg(t, tChange, tHold);
+    const step = n > 1 ? Math.min(0.12, 0.45 / (n - 1)) : 0;
+    const width = 1 - step * (n - 1);
+    return easeOutCubic(seg(raw, step * i, step * i + width));
+}
+// Value labels fade in once the hold starts and fade out as the return starts.
+function labelAlpha(t) {
+    if (t < tHold || t >= tRest) return 0;
+    if (t < tBack) return seg(t, tHold, tHold + 0.35);
+    return 1 - seg(t, tBack, tBack + 0.3);
+}
+
+// ----- layout: safe zones in percent of the frame -----
+const tall = H / W > 1.7;
+const pad = {
+    side: W * (tall ? 0.06 : 0.07),
+    top: H * (tall ? 0.14 : 0.07),
+    bottom: H * (tall ? 0.35 : 0.07),
+};
+const size = {
+    title: 62 * S,
+    subtitle: 34 * S,
+    label: 32 * S,
+    value: 38 * S,
+    note: 26 * S,
+};
+const headlineIndex = C.headline < 0 ? C.data.length - 1 : C.headline;
+const noteText = [C.sample ? "Illustrative data" : "", C.source].filter(Boolean).join("  ·  ");
+
+let plateImage = null;
+
+function drawBackground() {
+    ctx.fillStyle = C.colors.bg;
+    ctx.fillRect(0, 0, W, H);
+    if (plateImage) {
+        const k = Math.max(W / plateImage.width, H / plateImage.height);
+        const w = plateImage.width * k;
+        const h = plateImage.height * k;
+        ctx.drawImage(plateImage, (W - w) / 2, (H - h) / 2, w, h);
+    }
+}
+// Title, subtitle and note never move.
+function drawFrameText() {
+    let y = pad.top;
+    if (C.title) {
+        const s = fit(C.title, 700, size.title, W - pad.side * 2);
+        ctx.font = font(700, s);
+        ctx.fillStyle = C.colors.text;
+        ctx.textAlign = "left";
+        ctx.textBaseline = "alphabetic";
+        y += s;
+        ctx.fillText(C.title, pad.side, y);
+    }
+    if (C.subtitle) {
+        const s = fit(C.subtitle, 500, size.subtitle, W - pad.side * 2);
+        ctx.font = font(500, s);
+        ctx.fillStyle = C.colors.muted;
+        y += s * 1.5;
+        ctx.fillText(C.subtitle, pad.side, y);
+    }
+    if (noteText) {
+        const s = fit(noteText, 500, size.note, W - pad.side * 2);
+        ctx.font = font(500, s);
+        ctx.fillStyle = C.colors.muted;
+        ctx.textAlign = "left";
+        ctx.fillText(noteText, pad.side, H - pad.bottom);
+    }
+    return y;
+}
+function chartBox(headerBottom) {
+    const top = headerBottom + H * 0.06 + size.value * 1.6;
+    const bottom = H - pad.bottom - (noteText ? size.note * 2.4 : 0) - size.label * 2.2;
+    return { left: pad.side, right: W - pad.side, top, bottom };
+}
+function barSlots(box, n) {
+    const gapRatio = n > 5 ? 0.45 : 0.6;
+    const barW = (box.right - box.left) / (n + (n - 1) * gapRatio);
+    return Array.from({ length: n }, (_, i) => ({
+        x: box.left + i * barW * (1 + gapRatio),
+        w: barW,
+    }));
+}
+function drawBaseline(box) {
+    ctx.fillStyle = C.colors.rule;
+    ctx.fillRect(box.left, box.bottom, box.right - box.left, Math.max(2, 2 * S));
+}
+function drawCategoryLabels(box, slots, data) {
+    const s = Math.min(...data.map((d, i) => fit(d.label, 500, size.label, slots[i].w * 1.5)));
+    ctx.font = font(500, s);
+    ctx.fillStyle = C.colors.muted;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+    data.forEach((d, i) => ctx.fillText(d.label, slots[i].x + slots[i].w / 2, box.bottom + s * 1.6));
+}
+function drawValueLabel(text, x, y, alpha, color, s) {
+    if (alpha <= 0) return;
+    ctx.globalAlpha = alpha;
+    ctx.font = font(700, s);
+    ctx.fillStyle = color;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText(text, x, y);
+    ctx.globalAlpha = 1;
+}
+
+// ----- motions -----
+function drawBars(t) {
+    const box = chartBox(drawFrameText());
+    const data = C.data;
+    const slots = barSlots(box, data.length);
+    const max = Math.max(...data.map(valueOf)) || 1;
+    const vs = Math.min(...data.map((d, i) => fit(d.text, 700, size.value, slots[i].w * 1.4)));
+    drawBaseline(box);
+    data.forEach((d, i) => {
+        const full = (valueOf(d) / max) * (box.bottom - box.top);
+        const h = full * staggered(t, i, data.length);
+        const hot = i === headlineIndex;
+        ctx.fillStyle = hot ? C.colors.accent : C.colors.bar;
+        ctx.fillRect(slots[i].x, box.bottom - h, slots[i].w, h);
+        drawValueLabel(
+            d.text,
+            slots[i].x + slots[i].w / 2,
+            box.bottom - full - vs * 0.6,
+            labelAlpha(t),
+            hot ? C.colors.accent : C.colors.text,
+            vs,
+        );
+    });
+    drawCategoryLabels(box, slots, data);
+}
+
+function drawBarsToLine(t) {
+    const box = chartBox(drawFrameText());
+    const data = C.data;
+    const slots = barSlots(box, data.length);
+    const max = Math.max(...data.map(valueOf)) || 1;
+    const m = amount(t);
+    const dot = 7 * S;
+    const tops = data.map((d, i) => ({
+        x: slots[i].x + slots[i].w / 2,
+        y: box.bottom - (valueOf(d) / max) * (box.bottom - box.top),
+    }));
+    drawBaseline(box);
+    // Each bar slims, then shrinks up into a point at its own top. Values never change.
+    const slim = easeInOutCubic(seg(m, 0, 0.5));
+    const lift = easeInOutCubic(seg(m, 0.3, 0.8));
+    data.forEach((d, i) => {
+        const w = lerp(slots[i].w, dot * 2, slim);
+        const h = lerp(box.bottom - tops[i].y, dot * 2, lift);
+        ctx.fillStyle = mix(C.colors.bar, C.colors.accent, slim);
+        ctx.fillRect(tops[i].x - w / 2, tops[i].y - dot, w, h);
+    });
+    // The line draws through the tops, left to right.
+    const draw = seg(m, 0.45, 1);
+    if (draw > 0) {
+        const lengths = tops.slice(1).map((p, i) => Math.hypot(p.x - tops[i].x, p.y - tops[i].y));
+        const total = lengths.reduce((a, b) => a + b, 0);
+        let left = total * draw;
+        ctx.strokeStyle = C.colors.accent;
+        ctx.lineWidth = 6 * S;
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(tops[0].x, tops[0].y);
+        for (let i = 1; i < tops.length && left > 0; i++) {
+            const k = Math.min(1, left / lengths[i - 1]);
+            ctx.lineTo(lerp(tops[i - 1].x, tops[i].x, k), lerp(tops[i - 1].y, tops[i].y, k));
+            left -= lengths[i - 1];
+        }
+        ctx.stroke();
+    }
+    // The headline value gets a tag during the hold.
+    const hot = data[headlineIndex];
+    const vs = fit(hot.text, 700, size.value * 1.2, W * 0.3);
+    const a = labelAlpha(t);
+    if (a > 0) {
+        ctx.font = font(700, vs);
+        const tw = ctx.measureText(hot.text).width + vs * 0.9;
+        const th = vs * 1.6;
+        const p = tops[headlineIndex];
+        const x = Math.min(Math.max(p.x - tw / 2, box.left), box.right - tw);
+        const y = p.y - th - dot * 2.5;
+        ctx.globalAlpha = a;
+        ctx.fillStyle = C.colors.accent;
+        ctx.beginPath();
+        ctx.roundRect(x, y, tw, th, th / 2);
+        ctx.fill();
+        ctx.fillStyle = C.colors.bg;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(hot.text, x + tw / 2, y + th / 2 + vs * 0.05);
+        ctx.globalAlpha = 1;
+    }
+    drawCategoryLabels(box, slots, data);
+}
+
+function countText(item, from, k) {
+    const spec = parseNumber(item.text);
+    if (!spec) return item.text;    // an unparsed value never counts; it shows as typed
+    if (k >= 1) return item.text;   // the hold always shows the exact text
+    return format(lerp(from, spec.value, k), spec);
+}
+
+function drawCountUp(t) {
+    const headerBottom = drawFrameText();
+    const item = C.data[0];
+    const k = amount(t);
+    const top = Math.max(headerBottom, pad.top);
+    const cy = (top + (H - pad.bottom)) / 2;
+    const ns = fit(item.text, 700, 240 * S, W - pad.side * 2);
+    const shown = countText(item, 0, k);
+    ctx.font = font(700, ns);
+    const finalWidth = ctx.measureText(item.text).width;
+    // Right-aligned at the final width, so digits do not jitter while they count.
+    ctx.fillStyle = C.colors.text;
+    ctx.textAlign = "right";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText(shown, W / 2 + finalWidth / 2, cy + ns * 0.35);
+    const lw = finalWidth * k;
+    ctx.fillStyle = C.colors.accent;
+    ctx.fillRect(W / 2 - finalWidth / 2, cy + ns * 0.55, lw, Math.max(4, 6 * S));
+    if (item.label) {
+        const ls = fit(item.label, 500, 44 * S, W - pad.side * 2);
+        ctx.font = font(500, ls);
+        ctx.fillStyle = C.colors.muted;
+        ctx.textAlign = "center";
+        ctx.fillText(item.label, W / 2, cy + ns * 0.55 + ls * 2);
+    }
+}
+
+function drawBeforeAfter(t) {
+    const box = chartBox(drawFrameText());
+    const [before, after] = C.data;
+    const slots = barSlots(box, 2);
+    const max = Math.max(valueOf(before), valueOf(after)) || 1;
+    const k = amount(t);
+    const hB = (valueOf(before) / max) * (box.bottom - box.top);
+    const hA = lerp(hB, (valueOf(after) / max) * (box.bottom - box.top), k);
+    const vs = Math.min(
+        fit(before.text, 700, size.value * 1.8, slots[0].w * 1.3),
+        fit(after.text, 700, size.value * 1.8, slots[1].w * 1.3),
+    );
+    drawBaseline(box);
+    ctx.fillStyle = C.colors.bar;
+    ctx.fillRect(slots[0].x, box.bottom - hB, slots[0].w, hB);
+    ctx.fillStyle = mix(C.colors.bar, C.colors.accent, k);
+    ctx.fillRect(slots[1].x, box.bottom - hA, slots[1].w, hA);
+    drawValueLabel(before.text, slots[0].x + slots[0].w / 2, box.bottom - hB - vs * 0.5, 1, C.colors.text, vs);
+    const parsedBefore = parseNumber(before.text);
+    const shown = countText(after, parsedBefore ? parsedBefore.value : 0, k);
+    drawValueLabel(
+        shown,
+        slots[1].x + slots[1].w / 2,
+        box.bottom - hA - vs * 0.5,
+        seg(k, 0, 0.08),
+        k >= 1 ? C.colors.accent : C.colors.text,
+        vs,
+    );
+    drawCategoryLabels(box, slots, [before, after]);
+}
+
+// Milestone: points drift like a night sky, pull into the number, hold, drift back.
+let points = null;
+let numberBox = null;
+function buildPoints() {
+    const item = C.data[0];
+    const rand = mulberry32(C.milestone.seed);
+    const ns = fit(item.text, 800, 300 * S, W * 0.84);
+    const off = document.createElement("canvas");
+    off.width = W;
+    off.height = H;
+    const o = off.getContext("2d", { willReadFrequently: true });
+    o.font = font(800, ns);
+    o.textAlign = "center";
+    o.textBaseline = "alphabetic";
+    const cy = H * (tall ? 0.42 : 0.47);
+    o.fillStyle = "#fff";
+    o.fillText(item.text, W / 2, cy + ns * 0.36);
+    const width = o.measureText(item.text).width;
+    numberBox = { cx: W / 2, cy, ns, width };
+    const pixels = o.getImageData(0, 0, W, H).data;
+    const targets = [];
+    const step = Math.max(1, Math.round(2 * S));
+    for (let y = 0; y < H; y += step) {
+        for (let x = 0; x < W; x += step) {
+            if (pixels[(y * W + x) * 4 + 3] > 128) targets.push([x, y]);
+        }
+    }
+    for (let i = targets.length - 1; i > 0; i--) {
+        const j = Math.floor(rand() * (i + 1));
+        [targets[i], targets[j]] = [targets[j], targets[i]];
+    }
+    const n = C.milestone.points;
+    const onNumber = Math.round(n * C.milestone.onNumber);
+    points = Array.from({ length: n }, (_, i) => {
+        const target = i < onNumber && targets.length ? targets[i % targets.length] : null;
+        return {
+            hx: rand() * W,
+            hy: rand() * H,
+            ax: (0.008 + rand() * 0.02) * W,
+            ay: (0.008 + rand() * 0.02) * H,
+            kx: 1 + Math.floor(rand() * 2),
+            ky: 1 + Math.floor(rand() * 2),
+            px: rand() * Math.PI * 2,
+            py: rand() * Math.PI * 2,
+            tw: rand() * Math.PI * 2,
+            alpha: 0.25 + rand() * 0.45,
+            size: (1.2 + rand() * 0.9) * S,
+            delay: rand() * 0.35,
+            target,
+        };
+    });
+}
+function drawMilestone(t) {
+    drawFrameText();
+    const item = C.data[0];
+    const u = t / D;   // the beats below are fractions of a 12 s loop
+    const gather = seg(u, 2 / 12, 6.5 / 12);
+    const back = u >= 10.5 / 12 ? easeInOutSine(seg(u, 10.5 / 12, 1)) : 0;
+    const shimmer = u >= 8.5 / 12 && u < 10.5 / 12;
+    const tau = Math.PI * 2;
+    for (const p of points) {
+        const x0 = p.hx + p.ax * Math.sin((tau * p.kx * t) / D + p.px);
+        const y0 = p.hy + p.ay * Math.sin((tau * p.ky * t) / D + p.py);
+        const twinkle = 0.75 + 0.25 * Math.sin((tau * 3 * t) / D + p.tw);
+        if (!p.target) {
+            ctx.globalAlpha = p.alpha * twinkle;
+            ctx.fillStyle = C.colors.text;
+            ctx.fillRect(x0, y0, p.size, p.size);
+            continue;
+        }
+        const g = easeInOutQuint(seg(gather, p.delay, p.delay + 0.65)) * (1 - back);
+        const x = lerp(x0, p.target[0], g);
+        const y = lerp(y0, p.target[1], g);
+        const s = lerp(p.size, 2.5 * S, g);
+        const glow = shimmer ? 0.92 + 0.08 * Math.sin((tau * 6 * t) / D + p.tw) : 1;
+        ctx.globalAlpha = lerp(p.alpha * twinkle, 0.95, g) * glow;
+        ctx.fillStyle = C.colors.text;
+        ctx.fillRect(x - s / 2, y - s / 2, s, s);
+    }
+    ctx.globalAlpha = 1;
+    const fadeOut = 1 - seg(u, 10.5 / 12, 11 / 12);
+    const nb = numberBox;
+    const line = seg(u, 6.5 / 12, 7.5 / 12);
+    if (line > 0 && fadeOut > 0) {
+        ctx.globalAlpha = fadeOut;
+        ctx.fillStyle = C.colors.accent;
+        ctx.fillRect(nb.cx - nb.width / 2, nb.cy + nb.ns * 0.6, nb.width * easeInOutCubic(line), Math.max(3, 4 * S));
+        ctx.globalAlpha = 1;
+    }
+    const label = easeOutCubic(seg(u, 7.5 / 12, 8.5 / 12));
+    if (item.label && label > 0 && fadeOut > 0) {
+        const ls = fit(item.label, 500, 48 * S, W - pad.side * 2);
+        ctx.globalAlpha = label * fadeOut;
+        ctx.font = font(500, ls);
+        ctx.fillStyle = C.colors.text;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "alphabetic";
+        ctx.fillText(item.label, nb.cx, nb.cy + nb.ns * 0.6 + ls * 2 + 12 * S * (1 - label));
+        ctx.globalAlpha = 1;
+    }
+}
+
+const motions = {
+    "bars": drawBars,
+    "bars-to-line": drawBarsToLine,
+    "count-up": drawCountUp,
+    "before-after": drawBeforeAfter,
+    "milestone": drawMilestone,
+};
+
+function draw(t) {
+    drawBackground();
+    (motions[C.motion] || drawBars)(t);
+}
+
+// ----- page contract -----
+let seeked = false;
+window.seek = function seek(seconds) {
+    seeked = true;
+    draw(Math.min(Math.max(Number(seconds) || 0, 0), D));
+};
+window.render = window.seek;
+
+function fitToWindow() {
+    const k = Math.min(window.innerWidth / W, window.innerHeight / H, 1);
+    canvas.style.width = `${W * k}px`;
+    canvas.style.height = `${H * k}px`;
+}
+
+async function start() {
+    await Promise.all([
+        document.fonts.load(font(500, 40), "0"),
+        document.fonts.load(font(700, 40), "0"),
+        document.fonts.load(font(800, 40), "0"),
+    ]).catch(() => undefined);
+    await document.fonts.ready;
+    if (C.plate) {
+        plateImage = await new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+            img.src = C.plate;
+        });
+    }
+    if (C.motion === "milestone") buildPoints();
+    fitToWindow();
+    window.addEventListener("resize", fitToWindow);
+    window.READY = true;
+    const held = new URLSearchParams(location.search).get("t");
+    if (held !== null) return window.seek(parseFloat(held));
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return window.seek(tHold + 0.5);
+    draw(0);
+    const t0 = performance.now();
+    const loop = (now) => {
+        if (seeked) return;
+        draw((((now - t0) / 1000) % D + D) % D);
+        requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+}
+start();
+</script>
+</body>
+</html>

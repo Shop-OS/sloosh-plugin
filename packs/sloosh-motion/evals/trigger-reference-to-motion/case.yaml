@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-reference-to-motion
+description: A request to break down a reference reel into a style guide and shot list loads reference-to-motion.
+tags: [trigger]
+runs: 2

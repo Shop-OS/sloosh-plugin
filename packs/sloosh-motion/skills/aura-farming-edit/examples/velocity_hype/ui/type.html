@@ -39,8 +39,8 @@ html,body{margin:0;background:transparent;overflow:hidden}
                   : { a1: 118, a2: 168, echo: 260, small: 44, ghostUp: 120, slam: 230, name: 150, line: 38 };
   await Promise.all(['italic 900 100px Archivo', '700 100px Archivo', '600 100px "Inter Tight"'].map(f => document.fonts.load(f)));
   const st = document.getElementById('stage'); st.style.width = W + 'px'; st.style.height = H + 'px'; st.style.setProperty('--u', u);
-  // safe zone: 9:16 top 240, bottom 660, sides 120 (+ the right UI column is avoided by left-aligning A); 16:9, 1:1 and 4:5: 6% sides, 8% top, 10% bottom
-  const SZ = tall ? { l: 120 * u, r: W - 120 * u, top: 240 * u, bot: H - 660 * u } : { l: W * .06, r: W * .94, top: H * .08, bot: H * .9 };
+  // safe zone: 9:16 top 14%, bottom 35%, sides 11% (the rule's minimum is 6%; the right UI column is avoided by left-aligning A); 16:9, 1:1 and 4:5: 6% sides, 8% top, 10% bottom
+  const SZ = tall ? { l: W * .11, r: W * .89, top: H * .14, bot: H * .65 } : { l: W * .06, r: W * .94, top: H * .08, bot: H * .9 };
   const maxW = SZ.r - SZ.l;
   const el = (cls, html) => { const d = document.createElement('div'); d.className = cls; d.innerHTML = html; st.appendChild(d); return d; };
   const fit = (span, max) => { const w = K.measure(span).width; if (w > max) span.style.fontSize = (parseFloat(span.style.fontSize) * max / w) + 'px'; };

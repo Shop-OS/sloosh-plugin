@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-sloosh-motion-director
+description: A plan-only request for a beat-synced film that mixes product shots, big words and a reference's pacing, with no chosen look, loads sloosh-motion-director, which plans a treatment and generates nothing.
+tags: [trigger]
+runs: 2

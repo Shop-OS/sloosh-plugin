@@ -1,0 +1,24 @@
+{
+    "name": "sloosh-video",
+    "displayName": "Sloosh video",
+    "version": "0.1.0",
+    "description": "Make product films, animations, morphs, motion copies, talking-head clips, captions and video edits and extensions with Sloosh. The assistant asks for your approval before any paid work.",
+    "author": {
+        "name": "ShopOS",
+        "url": "https://sloosh.ai"
+    },
+    "homepage": "https://sloosh.ai/mcp",
+    "license": "MIT",
+    "keywords": [
+        "sloosh",
+        "video",
+        "product-video",
+        "captions",
+        "video-editing",
+        "ecommerce"
+    ],
+    "icon": "./assets/sloosh.png",
+    "repository": "https://github.com/Shop-OS/sloosh-plugin",
+    "privacyPolicyUrl": "https://sloosh.ai/privacy-policy",
+    "dependencies": ["sloosh"]
+}

@@ -2,7 +2,7 @@ name: Check generated files
 
 # Every file in this repository is generated from Shop-OS/shopos-backend-ts
 # (apps/spacelab-mcp/plugins). This check fails when a file differs from the build
-# manifest, so a hand edit here is caught before it drifts from the source.
+# manifests, so a hand edit here is caught before it drifts from the source.
 on:
     pull_request:
     push:
@@ -20,23 +20,34 @@ jobs:
               with:
                   persist-credentials: false
 
-            - name: Compare the files with .sloosh-build.json
+            - name: Compare the files with the .sloosh-build.json manifests
               run: |
                   node --input-type=module <<'EOF'
                   import { createHash } from "node:crypto";
                   import { execFileSync } from "node:child_process";
                   import { readFileSync } from "node:fs";
 
-                  const manifestPath = ".sloosh-build.json";
-                  const { files } = JSON.parse(readFileSync(manifestPath, "utf8"));
-                  const entries = execFileSync("git", ["ls-files", "-s", "-z"], { encoding: "utf8" })
+                  // The root manifest lists the files outside packs/; each packs/<name>/ has its own.
+                  const manifestName = ".sloosh-build.json";
+                  const isManifest = (path) =>
+                      path === manifestName || /^packs\/[^/]+\/\.sloosh-build\.json$/.test(path);
+                  const all = execFileSync("git", ["ls-files", "-s", "-z"], { encoding: "utf8" })
                       .split("\0")
                       .filter(Boolean)
                       .map((line) => {
                           const [meta, path] = line.split("\t");
                           return { mode: meta.split(" ")[0], path };
-                      })
-                      .filter((entry) => entry.path !== manifestPath);
+                      });
+                  const manifests = all.filter((entry) => isManifest(entry.path)).map((entry) => entry.path);
+                  if (!manifests.includes(manifestName)) {
+                      console.error(`${manifestName}: missing`);
+                      process.exit(1);
+                  }
+                  const files = Object.assign(
+                      {},
+                      ...manifests.map((path) => JSON.parse(readFileSync(path, "utf8")).files),
+                  );
+                  const entries = all.filter((entry) => !isManifest(entry.path));
                   const problems = [];
                   for (const { mode, path } of entries) {
                       if (mode !== "100644") problems.push(`${path}: mode ${mode}, expected 100644`);

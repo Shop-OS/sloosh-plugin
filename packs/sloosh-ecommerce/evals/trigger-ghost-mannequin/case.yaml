@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-ghost-mannequin
+description: A request to show a shirt from on-model photos on its own on white, shaped as if worn with no person visible, front and back, loads ghost-mannequin.
+tags: [trigger]
+runs: 2

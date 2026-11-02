@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: no-trigger-product-video
+description: A short product video, with no image edit in view, does not load an image editing pack skill.
+tags: [trigger, negative]
+runs: 2

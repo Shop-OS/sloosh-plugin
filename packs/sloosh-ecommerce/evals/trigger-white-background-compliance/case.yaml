@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-white-background-compliance
+description: A pure white background main image that passes marketplace rules, made from a cluttered phone photo, loads white-background-compliance.
+tags: [trigger]
+runs: 2

@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-moodboard-exploration
+description: An undecided look for a new product that asks to see a few directions first loads moodboard-exploration.
+tags: [trigger]
+runs: 2

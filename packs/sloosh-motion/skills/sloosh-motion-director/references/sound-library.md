@@ -4,6 +4,18 @@
 
 A music or SFX file from elsewhere enters a film **only when the user supplies it** and confirms that they have the rights to use it. Then follow section 3.
 
+
+## 0. audio.py at a glance (the director's sound section)
+
+All audio is made in one script, audio.py, that imports the same timeline as the picture. Nothing is copied from a reference.
+
+- **Score:** ak.score(GENRE, BPM, LEN, DROP, KEY, breath=...). Genres: phonk, trap, techno, house, luxury, cinematic, ambient. It follows the picture: a sparse intro, a riser and snare roll into the drop, silence in the breath, the full groove from the drop, and a tail.
+- **Edits on the music:** ak.tape_stop before a drop, ak.lowpass_region under a UI section so the clicks read, ak.gap for the breath, and ak.duck under every voice line.
+- **SFX from the shared cue list:** a whoosh on every whip or pre-drop cut, a click on every UI click, a pop on tile and card drops, a sparkle on connect and logo moments, a tick per typed letter, an impact on every drop and slam, a glitch sound on negative hits, a shutter on duotone frames, and a riser that ends on the drop.
+- **Voice-over (optional):** ak.tts(text, "audio/vo_<t>.wav") uses Kokoro or Piper only when one is already installed with a local voice. It never downloads a voice. If no voice is installed, ask the user before you install one (`engine-choice.md` section 4). Otherwise make the film without a voice-over, or use the user's own voice file (USER_VO in audio.py). Process each line with ak.vo_fx(x, "normal" | "shout" | "announcer").
+- **The user's own track:** run python3 <director>/scripts/beatmap.py (section 3), then set USER_TRACK and USER_DROP in audio.py. The track is cut so that its drop lands on DROP.
+- **Master:** ak.master(mix, "out/audio.wav") gives -14 LUFS and -2 dBTP and prints the RMS per 2 s window. The extra 1 dB leaves room for the AAC encode. ak.mux measures the final file and turns the AAC down if its true peak is above -1 dBTP. You cannot hear the mix. Read the numbers (silent gaps, a bed too loud under UI), then ask the user to listen.
+
 ---
 
 ## 1. The score: ak.score(GENRE, BPM, LEN, DROP, KEY, breath=...)

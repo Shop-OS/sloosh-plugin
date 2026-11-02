@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-creative-testing-plan
+description: Asking how to test and name a batch of finished ad variants loads creative-testing-plan.
+tags: [trigger]
+runs: 2

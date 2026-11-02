@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-brand-kit
+description: A request for brand guidelines for a Shopify store, saved for later shoots and ads, loads brand-kit.
+tags: [trigger]
+runs: 2

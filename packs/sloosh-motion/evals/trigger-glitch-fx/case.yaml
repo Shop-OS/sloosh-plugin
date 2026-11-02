@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-glitch-fx
+description: A cyber teaser with datamosh and RGB-split hits on the beat loads glitch-fx.
+tags: [trigger]
+runs: 2

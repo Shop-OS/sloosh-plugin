@@ -45,7 +45,7 @@ html,body{margin:0;background:transparent;overflow:hidden}
   const lab = $('#lab'); lab.innerHTML = `<span>${L1}</span><span style="color:${A2}">${L2}</span>`; lab.style.fontSize = (34 * u) + 'px'; lab.style.marginLeft = (16 * u) + 'px';
   const offN = K.measure(off).width, labN = K.measure(lab).width, offW = offN + 14 * u, labW = labN + 16 * u;   // natural widths; + the CSS margin once
   const tag = $('#tag'); tag.style.fontSize = (22 * u) + 'px'; tag.style.padding = `${10 * u}px ${18 * u}px`;
-  const SZ = fmt === 'land' ? { l: 104, b: H - 96 } : fmt === 'port' ? { l: 120, b: tall ? Math.round(1260 * H / 1920) : H - 96 } : { l: 72, b: H - 84 };
+  const SZ = fmt === 'land' ? { l: 104, b: H - 96 } : fmt === 'port' ? { l: 120, b: tall ? Math.round(0.65 * H) : H - 96 } : { l: 72, b: H - 84 };
   tag.style.left = SZ.l + 'px'; tag.style.top = (tall ? Math.round(260 * H / 1920) : fmt === 'port' ? 96 : 60 * u) + 'px';
   const cur = $('#cur'); cur.style.width = cur.style.height = (46 * u) + 'px';
 

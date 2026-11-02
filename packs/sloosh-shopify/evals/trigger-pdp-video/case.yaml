@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-pdp-video
+description: A request for one product page clip for each of several store products loads pdp-video.
+tags: [trigger]
+runs: 2

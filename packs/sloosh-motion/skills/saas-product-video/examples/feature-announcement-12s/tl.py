@@ -42,7 +42,7 @@ END_CLICK = T_END + 1.2
 COPY = {
     "lockA_1": ["ONE POST.", "NINE SIZES."],
     "lockA_2": ["EVERY", "CHANNEL."],
-    "end":     ["Example Studio", "Auto-Resize is live.", "Try it free", "example.com"],
+    "end":     ["Example Studio", "Auto-Resize is live.", "Learn more", "example.com"],
     "feature": ["NEW", "Auto-Resize", "Every channel size, in one click."],
     "menu":    ["Feed · 1:1", "Story · 9:16", "Video · 16:9", "All channels"],
     "sizes":   ["1:1", "9:16", "16:9"],
@@ -51,7 +51,7 @@ COPY = {
 ACCENT, ACCENT2, INK, RULE = "#FF6A3D", "#FFB547", "#FFFFFF", "#FF6A3D"
 HITS = [(T_PAY, "negative", 2), (T_PAY + 2 * B, "red", 2)]
 VO = {}
-# VO = {0.15: ("One post. Nine sizes.", "normal"), T_NAME + 0.3: ("New. Auto-Resize.", "normal"), T_END + 0.2: ("Try it free.", "normal")}
+# VO = {0.15: ("One post. Nine sizes.", "normal"), T_NAME + 0.3: ("New. Auto-Resize.", "normal"), T_END + 0.2: ("Learn more.", "normal")}
 # Before/After sub-preset only (ui/toggle.html over footage; see references/feature-announcement.md, Tiles): T_TOG = T_PAY - 2 * B; T_CLICK = T_PAY
 
 def dump(path="tl.json"):

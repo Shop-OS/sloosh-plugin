@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-logo-animation
+description: A short intro sting that animates an existing logo with a light sweep loads logo-animation.
+tags: [trigger]
+runs: 2

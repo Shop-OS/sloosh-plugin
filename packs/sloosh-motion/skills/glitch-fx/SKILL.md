@@ -1,6 +1,6 @@
 ---
 name: glitch-fx
-description: Make a 6 to 20 s glitch film on the user's computer from clean Sloosh stills and clips (cyber teaser, logo sting, tech launch, VHS memory edit, mono fashion glitch), or add glitch transitions and hits to another film. Use when the user says glitch, glitchy, cyber, datamosh, VHS, CRT, scanlines, RGB split, pixel sort, corrupted, signal lost, HUD, tracking boxes, x-ray scan or make the transitions glitchy. All damage is code, frame by frame and locked to the beat. Needs the sloosh-motion-director skill.
+description: Make a 6 to 20 s glitch film on the user's computer from clean Sloosh stills and clips (cyber teaser, glitch logo sting, glitch tech teaser, VHS memory edit, mono fashion glitch), or add glitch transitions and hits to another film. All damage is code, frame by frame and locked to the beat. Needs the sloosh-motion-director skill. Use when the user says glitch, glitchy, cyber, datamosh, VHS, CRT, glitch scanlines, RGB split, pixel sort, corrupted, signal lost, glitch HUD tracking boxes, an x-ray glitch scan or make the transitions glitchy, and the Sloosh tools are connected. Not for word-only kinetic type (kinetic-typography), a logo or shape morph (morph-shapeshift), a product launch film (product-reveal) or a dot, halftone or LED look (dot-matrix-particles).
 ---
 
 # Glitch FX
@@ -50,7 +50,7 @@ Glitch is **controlled damage**. A clean, beautiful frame breaks for 2 to 6 fram
 |---|---|---|
 | 1. Goal, format, length | Standalone film (teaser, sting, launch, memory edit) or **layer** on another style ("make the transitions glitchy" = layer, section 10). Format: 9:16, 16:9, 1:1 or 4:5 | vertical 9:16, 15 s, 128 BPM |
 | 2. Look | **Signal** (clean tech glitch: cool, dark, one accent, x-ray + HUD + datamosh drop) · **Cyber Hard** (neon clusters, mirror, thermal, ERROR card) · **VHS Memory** (tape texture, line wipes, warm) · **Mono Fashion** (B/W + the product's one hue, slices on backgrounds) · **Logo Sting** (6 s, wordmark only) · **Data Bloom** (quiet HUD, palette flip, no destruction) · Match my reference | Signal |
-| 3. Inputs | Logo / product photo / person photo / app screenshot / brand name only. A face: "Is this you, or someone who agreed to be in it?" | Generate a fictional subject |
+| 3. Inputs | Logo / product photo / person photo / app screenshot / brand name only. A face: "Is this you, or someone who agreed to be in it?" A yes is required before any quote that uses the face. A decline is a hard stop for that face. Never use a child or a public figure, even from the user's own photo. | Generate a fictional subject |
 | 4. Words and sound | Copy: "write it" (hook of at most 2 words, 3 slams, brand + a tagline of at most 4 words) or the user's lines. Sound: original techno (default) · techno + VO · own track | Original techno 128 BPM, Dm |
 
 A brand name alone is enough for **Logo Sting** (no generations). Never invent product claims. Copy prompt for the treatment: *"SIGNAL / LOST → NEW · BUILD · LIVE → NOVA, built for noise."*
@@ -167,11 +167,11 @@ Make the stills in one round, look at them, then make the clips in a second roun
 3. Call `quote_generation` for each item of the round, with its prompt from section 3 and its reference asset ids. For a clip, the start image is the approved still.
 4. Show the user a list of each item with its credits and the round's total. Compare the total with the daily allowance left from `get_connection`. That value is in millicredits, so divide it by 1000 first. If the total is more than the allowance left, give the settings link and do not run the round. Otherwise ask for one approval of this round, and wait for the user.
 5. Call `generate` for each quote with its own stable idempotency key, for example motion-glitch-nova-hero-9x16-v1 or motion-glitch-nova-c2-9x16-v1. Set confirmed=true only after the user approves this quote. The user's approval of the round covers each quote in that round.
-6. After the last `generate` of a round, if `show_generation` is available, call `show_generation` once with all the operation ids of the round, up to 8. If not, check the results with `get_generation` when the user asks.
-7. When a result is ready, call `get_asset` with its kind and id. Download the file from the returned URL into the film folder: stills to plates/hero.jpg, street.jpg, macro.jpg and product.jpg; clips to clips/c1.mp4, c2.mp4 and c3.mp4. Then they replace the placeholders.
+6. After the last `generate` of a round, if `show_generation` is available, call `show_generation` once with all the operation ids of the round, up to 8. If not, poll `get_generation` about every 5 seconds for an image and every 15 seconds for a video until it says settled.
+7. When you need the files, read each output's kind and id from `get_generation` (or from the card's message), then call `get_asset`. Download the file from the returned URL into the film folder: stills to plates/hero.jpg, street.jpg, macro.jpg and product.jpg; clips to clips/c1.mp4, c2.mp4 and c3.mp4. Then they replace the placeholders.
 8. Look at each still with `view_asset` before it starts a clip. A rejected still goes into the next round with a new version in its key. Subtract the totals of earlier rounds from the allowance before the next round.
 
-For card actions, model choice or generation errors, read the `generation` guide with `get_guide`. For imports, Spaces and holds, read the `assets`, `spaces` and `spending` guides with `get_guide`.
+For card actions, model choice or generation errors, read the `generation` guide with `get_guide`. For imports and holds, read the `assets` and `spending` guides with `get_guide`.
 
 ---
 
@@ -262,12 +262,12 @@ Never stack more than 2 destructive modes on one frame for more than 2 frames (t
 
 | Lockup | 9:16 | 16:9 | In | Out | Placement |
 |---|---|---|---|---|---|
-| **STACK** (hook) | 2 lines × 172 px, line 2 in the accent, leading 0.84, −0.02em | 150 px | letters stutter on in 6 seeded steps every 2 f + a 4-frame chroma burst (18 px), then a 3 px rest; the layer tears 4 f | hard cut on the wipe | bottom-left of the safe zone (x 120, bottom 1260 on 9:16) |
+| **STACK** (hook) | 2 lines × 172 px, line 2 in the accent, leading 0.84, −0.02em | 150 px | letters stutter on in 6 seeded steps every 2 f + a 4-frame chroma burst (18 px), then a 3 px rest; the layer tears 4 f | hard cut on the wipe | bottom-left of the safe zone (left edge at 11% of the width, bottom at 65% of the height on 9:16) |
 | **SLAM** | 1 word × 250 px, auto-fit, the last word in the accent | 210 px | instant, scale 1.14 to 1 in 3 f, chroma burst 24 px, then a 3 px rest, tears 2 f | hard cut on the next beat | centred at 40% height |
-| **LABEL** (mono) | 30 px, +0.14em, [ 01 / TRACKING ] | 28 px | typed at 30 cps with a block cursor █ | hard cut | top band, 120 px under the safe-zone top (clear of the HUD timecode row) |
+| **LABEL** (mono) | 30 px, +0.14em, [ 01 / TRACKING ] | 28 px | typed at 30 cps with a block cursor █ | hard cut | top band, about 6% of the height under the safe-zone top (clear of the HUD timecode row) |
 | **END** | wordmark 240 px + tagline mono 34 px +0.24em in the accent | 200 / 30 px | wordmark stutter 4 steps + chroma; tagline typed 0.45 s later | holds; chroma rest 0 after 2 s | wordmark centred at 46%; tagline 34 px under it |
 
-Sizes are in px when the frame's short side is 1080. They scale with the short side. 1:1 and 4:5 sit between the two columns, and ui/type.html holds the exact sizes for each format. On 9:16 the safe zone keeps clear of the phone UI over the bottom third.
+Sizes are in px when the frame's short side is 1080. They scale with the short side. 1:1 and 4:5 sit between the two columns, and ui/type.html holds the exact sizes for each format. On 9:16, keep type and the product out of the top 14%, the bottom 35% and 6% at each side. ui/type.html and ui/hud.html keep an 11% side margin.
 
 Rules:
 - Load fonts before measuring. Place every element from measured boxes. Auto-fit any line to the safe zone (the director's safe-zone rules).
@@ -406,6 +406,10 @@ gk.budget(rows, LEN, B, "layer", drop=drop_t)
 - **Generations:** standard 4 stills + 3 clips · light 3 stills + 1 clip · Logo Sting none. The quote of each round decides the price.
 - **Build:** about 25-40 min (generations 10-15, pages 2 min, edit render about 2 min for 15 s, QA 5).
 
+## When a run delivers nothing
+
+- A run can settle with nothing delivered because a reference photo shows a real person who is not verified yet. The same key returns the same result. Wait about a minute. Then get a fresh quote, ask for a new approval and use a new key. Do this once. If it fails again, tell the user and stop.
+
 ## Spending rules
 
 - Get a quote before any paid call. State its credits in plain words.
@@ -413,7 +417,7 @@ gk.budget(rows, LEN, B, "layer", drop=drop_t)
 - Plan at most 8 generations per round. Ask for one approval per round. If the round's total is more than the daily allowance left, do not run.
 - Wait for the user's approval of each round's quotes. A changed table, another model or an expired quote needs a new quote and a new approval.
 - Build each idempotency key from the brand, shot and aspect ratio it makes, with the motion-glitch- prefix. Increase the version when you shoot the same item again. Never use one key for two different quotes. Use the same key when you retry the same item. Do not make a new key to retry.
-- If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Only this case needs a new quote, a new approval and a new key.
+- If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Among retries, only this case and the real person case need a new quote, a new approval and a new key.
 - If a call fails because the service owner is unavailable, retry once with the same key. If it fails again, tell the user and stop.
 - For any other error, read the `recovery` guide with `get_guide` before you act. Retry at most once.
 
