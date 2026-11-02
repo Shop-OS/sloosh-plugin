@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-brand-kit-extract
+description: A request to pull a brand's colours, fonts and voice from its own website and brand guide into a reusable brand kit loads brand-kit-extract.
+tags: [trigger]
+runs: 2

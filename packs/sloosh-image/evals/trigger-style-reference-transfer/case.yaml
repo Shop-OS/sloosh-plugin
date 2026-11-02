@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-style-reference-transfer
+description: Shooting the user's product in the look of their own mood board images loads style-reference-transfer.
+tags: [trigger]
+runs: 2

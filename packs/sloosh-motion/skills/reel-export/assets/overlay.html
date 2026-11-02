@@ -1,0 +1,80 @@
+<!doctype html>
+<!--
+overlay.html: the hook and logo layer of a vertical export, as one transparent 1080x1920 frame.
+Copy it into the reel folder with overlay.json beside it, fonts/ (the director's assets/fonts) and logos/.
+Render one frame with the director's lib/render_html.py, for example:
+  python3 <director>/lib/render_html.py overlay.html --root . --dur 1 --fps 1 --w 1080 --h 1920 --out frames/overlay
+overlay.json: {"hook": ["line one", "line two"], "logos": ["logos/brand.png"], "accent": "#F2C14E", "type": "wide"}
+type is "wide" (Archivo, heavy) or "clean" (Inter Tight). Every position is a share of the frame, so the
+layout follows the 9:16 safe zone: nothing in the top 14%, the bottom 35% or 6% at each side.
+Logos sit in a row from 14% to 19%. The hook sits from 20.5% to 31%, above the video box (32% to 65%).
+The page loads nothing from the network.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@font-face{font-family:'Archivo';src:url('/fonts/archivo-latin-wdth-normal.woff2') format('woff2');font-weight:100 900;font-stretch:62% 125%;font-display:block}
+@font-face{font-family:'Inter Tight';src:url('/fonts/inter-tight-latin-wght-normal.woff2') format('woff2');font-weight:100 900;font-display:block}
+html,body{margin:0;width:1080px;height:1920px;background:transparent;overflow:hidden}
+#stage{position:absolute;inset:0}
+.logos{position:absolute;left:6%;right:6%;top:14%;height:5%;display:flex;justify-content:center;gap:2.2%}
+.tile{height:100%;aspect-ratio:1/1;border-radius:22%;background:rgba(11,11,15,0.86);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(0,0,0,0.35)}
+.tile img{max-width:70%;max-height:70%;object-fit:contain}
+.hook{position:absolute;left:6%;right:6%;top:20.5%;height:10.5%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.line{display:block;white-space:nowrap;line-height:1.02;color:#fff;text-shadow:0 4px 18px rgba(0,0,0,0.55)}
+.wide .line{font-family:'Archivo',sans-serif;font-weight:850;font-stretch:112%;letter-spacing:-0.01em}
+.clean .line{font-family:'Inter Tight',sans-serif;font-weight:700;letter-spacing:-0.02em}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+(async () => {
+    const cfg = await (await fetch('overlay.json')).json();
+    const stage = document.getElementById('stage');
+    const hook = document.createElement('div');
+    hook.className = 'hook ' + (cfg.type === 'clean' ? 'clean' : 'wide');
+    const lines = (cfg.hook || []).slice(0, 2).map((text, i) => {
+        const span = document.createElement('span');
+        span.className = 'line';
+        span.textContent = text;
+        if (i === 1 && cfg.accent) span.style.color = cfg.accent;
+        hook.appendChild(span);
+        return span;
+    });
+    stage.appendChild(hook);
+    const logos = cfg.logos || [];
+    const images = [];
+    if (logos.length) {
+        const row = document.createElement('div');
+        row.className = 'logos';
+        for (const src of logos.slice(0, 4)) {
+            const tile = document.createElement('div');
+            tile.className = 'tile';
+            const img = new Image();
+            img.src = src;
+            images.push(img.decode().catch(() => { throw new Error('logo did not load: ' + src); }));
+            tile.appendChild(img);
+            row.appendChild(tile);
+        }
+        stage.appendChild(row);
+    }
+    await document.fonts.load("850 100px 'Archivo'");
+    await document.fonts.load("700 100px 'Inter Tight'");
+    await Promise.all(images);
+    // Measure, never guess: start big, then shrink each line until it fits the safe width and the
+    // two lines fit the hook band together.
+    const box = hook.getBoundingClientRect();
+    let size = 132;
+    const fits = () => lines.every((l) => l.scrollWidth <= box.width) && hook.scrollHeight <= box.height;
+    const apply = () => lines.forEach((l) => { l.style.fontSize = size + 'px'; });
+    apply();
+    while (!fits() && size > 40) { size -= 2; apply(); }
+    if (size <= 40) throw new Error('hook too long: use two lines of four words or fewer');
+    window.render = () => {};
+    window.READY = true;
+})().catch((error) => { console.error(String(error)); throw error; });
+</script>
+</body>
+</html>

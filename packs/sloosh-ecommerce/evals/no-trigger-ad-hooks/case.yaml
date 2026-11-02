@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: no-trigger-ad-hooks
+description: Ad hooks for one product, with no listing or catalog image in view, do not load an ecommerce pack skill.
+tags: [trigger, negative]
+runs: 2

@@ -27,7 +27,7 @@ html,body{margin:0;background:transparent;overflow:hidden}
   const st = document.getElementById('stage'); st.style.width = W + 'px'; st.style.height = H + 'px'; st.style.setProperty('--u', u);
   // frame shape from the aspect: tall (9:16, phone UI over the bottom third), portrait (4:5), square, landscape (16:9)
   const ar = W / H, shape = ar < 0.7 ? 'tall' : ar < 0.85 ? 'portrait' : ar > 1.2 ? 'landscape' : 'square';
-  const SZ = { tall: { l: 120 * u, r: W - 120 * u, top: 240 * u, bot: H - 660 * u }, portrait: { l: W * .08, r: W * .92, top: H * .07, bot: H * .9 },
+  const SZ = { tall: { l: W * .11, r: W * .89, top: H * .14, bot: H * .65 }, portrait: { l: W * .08, r: W * .92, top: H * .07, bot: H * .9 },
                square: { l: W * .07, r: W * .93, top: H * .07, bot: H * .91 }, landscape: { l: W * .054, r: W * .946, top: H * .08, bot: H * .91 } }[shape];
   const S = { tall: { stack: 172, label: 30, slam: 250, word: 240, tag: 34 }, portrait: { stack: 160, label: 30, slam: 230, word: 220, tag: 32 },
               square: { stack: 150, label: 28, slam: 220, word: 210, tag: 30 }, landscape: { stack: 150, label: 28, slam: 210, word: 200, tag: 30 } }[shape];  // px when the short side is 1080

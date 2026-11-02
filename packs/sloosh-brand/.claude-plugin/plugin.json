@@ -1,0 +1,24 @@
+{
+    "name": "sloosh-brand",
+    "displayName": "Sloosh brand",
+    "version": "0.1.0",
+    "description": "Build and keep a brand with Sloosh: a brand kit from your site or guide, logos, icon sets, brand boards, moodboards, mockups, social profile kits, logo animations and brand checks. The assistant asks for your approval before any paid work.",
+    "author": {
+        "name": "ShopOS",
+        "url": "https://sloosh.ai"
+    },
+    "homepage": "https://sloosh.ai/mcp",
+    "license": "MIT",
+    "keywords": [
+        "sloosh",
+        "brand",
+        "logo",
+        "brand-kit",
+        "moodboard",
+        "mockups"
+    ],
+    "icon": "./assets/sloosh.png",
+    "repository": "https://github.com/Shop-OS/sloosh-plugin",
+    "privacyPolicyUrl": "https://sloosh.ai/privacy-policy",
+    "dependencies": ["sloosh"]
+}

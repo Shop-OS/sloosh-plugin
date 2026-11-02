@@ -1,6 +1,6 @@
 ---
 name: launch-ads
-description: Plan launch, sale or new-collection ads for products from the user's Shopify store, with 3 to 5 ad angles, copy for each Meta, TikTok and Google Performance Max placement, Sloosh ad images in each placement size and a copy table to paste into the ad tools. Use when the user wants launch, sale or new-collection ads for products from their Shopify store with ad copy for each placement, such as a launch ad set for these products, and the Sloosh tools are connected.
+description: Plan launch, sale or new-collection ads for products from the user's Shopify store, with 3 to 5 ad angles, copy for each Meta, TikTok and Google Performance Max placement, Sloosh ad images in each placement size and a copy table to paste into the ad tools. Use when the user wants launch, sale or new-collection ads for products from their Shopify store with ad copy for each placement, such as a launch ad set for these products, and the Sloosh tools are connected. Not for one offer written into matching banners in every size with no ad angles or ad-tool copy (use the sloosh-ads sale-banner-set skill if it is installed), a dated launch calendar of all assets (use the sloosh-strategy launch-campaign-plan skill if it is installed) or ads for a product that is not in the Shopify store (use ad-variants).
 ---
 
 # Launch ads

@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-before-after-ad
+description: A before and after split-screen ad for a product and the problem it fixes loads before-after-ad.
+tags: [trigger]
+runs: 2

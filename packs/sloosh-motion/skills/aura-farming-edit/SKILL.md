@@ -1,11 +1,11 @@
 ---
 name: aura-farming-edit
-description: Make a short, beat-synced aura edit (12-25 s) of one person, athlete, car or product. One calm subject moves through a fast world, cut on the beat of an original phonk, trap or techno score. Sloosh makes one identity sheet, 10-17 matching stills and short clips animated from them. Local Python then cuts 25-45 shots with speed ramps, grade flashes, a face-flicker burst, light leaks and a tape-stop drop, adds bold italic type slams and optional local voice lines, and masters the sound. Use when the user asks for an aura edit, aura farming, a main-character, velocity, phonk, hype, fit-check, driver, athlete, gym or luxury-flex edit, or an edit like a reference they share. Needs the sloosh-motion-director skill and a coding agent on the user's computer.
+description: Make a short, beat-synced aura edit (12-25 s) of one person, athlete, car or product. One calm subject moves through a fast world, cut on the beat of an original phonk, trap or techno score. Sloosh makes one identity sheet, 10-17 matching stills and short clips animated from them. Local Python then cuts 25-45 shots with speed ramps, grade flashes, a face-flicker burst, light leaks and a tape-stop drop, adds bold italic type slams and optional local voice lines, and masters the sound. Needs the sloosh-motion-director skill and a coding agent on the user's computer. Use when the user asks for an aura edit, aura farming, a main-character edit, a velocity or phonk hype edit of one subject, a fit-check, driver, athlete, gym or luxury-flex edit, or an aura edit like a reference they share, and the Sloosh tools are connected. Not for a product launch film (product-reveal), a glitch film (glitch-fx), captions only (kinetic-typography) or a cut of talking-to-camera footage (auto-edit).
 ---
 
 # Aura farming edit
 
-An aura edit makes one subject look untouchable for 12 to 25 seconds. Sloosh makes the stills and clips. Local code cuts, grades, types, scores and masters the film.
+An aura edit makes one subject look untouchable for 12 to 25 seconds. Sloosh makes the stills and clips. Local code cuts, grades, types, scores and masters the film. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
 Paths in this skill are relative to this skill's folder. In commands, `<skill>` means this skill's folder, and `<director>` means the folder of the `sloosh-motion-director` skill, which sits next to this one in the same pack (`../sloosh-motion-director`). Load the `sloosh-motion-director` skill first. This skill builds on its toolchain: its new_film.sh scaffold, lib/filmkit.py, lib/audiokit.py, lib/kit.js, lib/render_html.py, lib/sheets.py and its beatmap.py and qa.py scripts. This skill adds:
 
@@ -17,7 +17,14 @@ Paths in this skill are relative to this skill's folder. In commands, `<skill>` 
 
 ## Requirements
 
-This skill runs on the user's computer. Before you start, check that you can run shell commands and that these are installed: Python 3 with numpy, opencv-python and scipy; ffmpeg; and Playwright for Python with its Chromium browser (lib/render_html.py renders the type page with it). Without Playwright, the picture-only sheets still run, but the type and the final film cannot render.
+Before you start:
+
+- If the Sloosh tools are not available (no `get_connection`, `quote_generation` or `generate` tool), tell the user to install and connect the core Sloosh plugin. Then stop.
+    - Claude Code: run /plugin install sloosh@sloosh, then run /mcp and sign in.
+    - Claude app: open the plugin's Connectors tab and connect Sloosh. Or add a custom connector with the URL https://mcp.sloosh.ai/mcp.
+- Call `get_connection` once in the conversation if you have not called it yet. If spending is not enabled, give the user the settings link it returns and do no paid work. The placeholders still let you build and show the edit.
+
+This skill runs on the user's computer. Check that you can run shell commands and that these are installed: Python 3 with numpy, opencv-python and scipy; ffmpeg; and Playwright for Python with its Chromium browser (lib/render_html.py renders the type page with it). Without Playwright, the picture-only sheets still run, but the type and the final film cannot render.
 
 - If you cannot run shell commands on the user's own computer (a remote sandbox does not count), tell the user that the film needs a coding agent that runs on their computer. Offer the `product-video` skill from the core Sloosh plugin for a single generated clip instead. Then stop.
 - If the director skill is missing next to this skill, `bash scripts/new_aura_film.sh` stops with an install hint. Tell the user to install the full sloosh-motion pack.
@@ -44,7 +51,7 @@ This skill also makes it harder than a generic aura edit:
 4. **Enigmatic and cinematic.** Direct stares, unreadable faces, dramatic sets.
 5. **The lens-look ending.** The subject finally looks into the lens and holds. The end loops back to the eyes of the hook.
 
-Never put a creator, a brand, a team, a series, a celebrity or a film name in a prompt or on screen.
+Never put a creator, a brand, a team, a series, a celebrity or a film name in a prompt or on screen. Never use a reference photo of a celebrity, a public athlete or another public figure.
 
 ## 1. Intake (ask at most 4 questions)
 
@@ -52,7 +59,7 @@ Never put a creator, a brand, a team, a series, a celebrity or a film name in a 
 |---|---|---|
 | 1. Format and length | 9:16 for vertical feeds, 16:9 for widescreen, 1:1 or 4:5 for feeds. Length 12, 17.5 or 25 s | 9:16, 17.5 s, 30 fps |
 | 2. Look | one of the sub-presets in section 11, or "match my reference edit" | picked from the subject |
-| 3. Inputs and consent | the user's face photos, outfit, car or product, or a fictional subject. If a real face appears, ask: "Is this you, or someone who agreed to be in it?" A yes is required before any face generation. | a fictional subject |
+| 3. Inputs and consent | the user's face photos, outfit, car or product, or a fictional subject. If a real face appears, ask: "Is this you, or someone who agreed to be in it?" A yes is required before any quote that uses the face. A decline is a hard stop for that face. Never use a child or a public figure, even from the user's own photo. | a fictional subject |
 | 4. Words and sound | copy: "write it for me", or the user's lines (2 lockups, 1 hero word, 2 slam words, an end name and line). Sound: score with voice slams, score only, or the user's own track | score with voice slams |
 
 If you write the copy: 1 or 2 words per line, deadpan, imperative or declarative. Examples: LIGHTS / OUT., PURE / AURA, FULL, SEND., STAY / QUIET., and the end card NO. 07 · CALM IS THE FLEX. Never motivational sentences, benefit lists or emoji. Use "+1000 AURA" only in the Daylight Fit Check preset.
@@ -118,7 +125,7 @@ tl.py also holds TYPE (the cue times), COPY (the words), ACCENT and the other co
 
 - **One identity, one wardrobe, one set, one light** from the first still to the last. That is what makes the edit read as one shoot.
 - **The identity sheet comes first** (1 image). It is the second reference on every face still, together with the user's best face photo. Prepare that photo as a JPG of the head and shoulders, about 1500 px on the long side. Keep each input image under the server's size limit.
-- **Faces need consent.** Get it at intake. If the video model refuses a face clip, retry once with the start frame only, a smaller JPG and slightly wider framing. This is a new quote: show it, wait for the user's approval, and use the next key version (for example -v2). If it refuses again, tell the user and wait for the user.
+- **Faces need consent.** Get it at intake. If the video model refuses a face clip because a reference shows a real person who is not verified yet, follow the When a run delivers nothing section instead. Otherwise retry once with the start frame only, a smaller JPG and slightly wider framing. This is a new quote: show it, wait for the user's approval, and use the next key version (for example -v2). If it refuses again, tell the user and stop. The skill allows at most one paid retry per refused face clip.
 - **Frame for the type:**
   - The GESTURE still puts the eyes at about 22% of the height, with the torso in the centre, so the echo stack sits on the chest.
   - Shots under the echo and the slams show no face (crowd, hands, macro, wide, machine).
@@ -194,14 +201,7 @@ After each clip, run `python3 lib/sheets.py clip clips/cNN.mp4` in the film fold
 
 ## 4. Make the shots with Sloosh
 
-The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
-
-If the Sloosh tools are not available (no `get_connection`, `quote_generation` or `generate` tool), tell the user to install and connect the core Sloosh plugin. Then stop.
-
-- Claude Code: run /plugin install sloosh@sloosh, then run /mcp and sign in.
-- Claude app: open the plugin's Connectors tab and connect Sloosh. Or add a custom connector with the URL https://mcp.sloosh.ai/mcp.
-
-1. Call `get_connection` once in the conversation if you have not called it yet. If spending is not enabled, give the user the settings link it returns and do no paid work. The placeholders still let you build and show the edit.
+1. Check the connection from Before you start. If spending is not enabled, do no paid work and build the edit on the placeholders.
 2. Bring in the user's photos. For a local file, follow the server's upload instruction for this client. For a public HTTPS URL, call `import_asset`. Look at each image with `view_asset`.
 3. Do not choose a model or estimate a price from memory. Call `list_models` with mode `image_gen` for the sheet and the stills, and with mode `video_gen` for the clips. Pick a model that takes reference images (for stills) or a start frame (for clips).
 4. Plan the rounds. A round holds at most 8 generations:
@@ -209,9 +209,9 @@ If the Sloosh tools are not available (no `get_connection`, `quote_generation` o
    - Then the stills in edit-chain order. Each still references the previous approved one, so a still waits for the one before it. Quote the stills that are ready in one round, or one at a time.
    - Then the clips, up to 8 per round, each from its approved still.
 5. For each round, call `quote_generation` for each item. Show the user a list of each item with its credits and the round's total. Compare the total with the daily allowance left from `get_connection`. That value is in millicredits, so divide it by 1000 first. If the total is more than the allowance left, give the settings link and do not run the round. Otherwise ask for one approval of this round, and wait for the user.
-6. Call `generate` for each quote with its own stable idempotency key, for example `aura-<subject>-sheet-v1`, `aura-<subject>-k05-v1` or `aura-<subject>-c05-v1`. Set confirmed=true only after the user approves this quote. The user's approval of the round covers each quote in that round.
-7. After the last `generate` of a round, if `show_generation` is available, call `show_generation` once with all the operation ids of the round, up to 8. Show images and videos in separate calls. If not, check the results with `get_generation` when the user asks.
-8. Look at each still with `view_asset` at full size before you approve it for the chain. Check the face, wardrobe, set and light against the sheet. Redo only the still that drifts, with a new quote and a new key version.
+6. Call `generate` for each quote with its own stable idempotency key, for example `motion-aura-<subject>-sheet-9x16-v1`, `motion-aura-<subject>-k05-9x16-v1` or `motion-aura-<subject>-c05-9x16-v1`. Set confirmed=true only after the user approves this quote. The user's approval of the round covers each quote in that round.
+7. After the last `generate` of a round, if `show_generation` is available, call `show_generation` once with all the operation ids of the round, up to 8. Show images and videos in separate calls. If not, poll `get_generation` about every 5 seconds for an image and every 15 seconds for a video until it says settled. When you need the files, read each output's kind and id from `get_generation` (or from the card's message), then call `get_asset`.
+8. Look at each still with `view_asset`. To check the face and wardrobe at full size, download it with `get_asset` (step 9) and open the local plates/kNN.jpg before you approve it for the chain. Check the face, wardrobe, set and light against the sheet. Redo only the still that drifts, with a new quote and a new key version.
 9. When a result is ready, call `get_asset` with its kind and id, and download the file from the returned URL into plates/ or clips/ of the film folder. Save stills as plates/kNN.jpg and clips as clips/cNN.mp4, under the names the placeholders use. Check that each file is not empty.
 
 For card actions, model choice or generation errors, read the `generation` guide with `get_guide`. For imports and holds, read the `assets` and `spending` guides with `get_guide`.
@@ -277,7 +277,7 @@ Archivo variable, italic, width 125, weight 900 (expanded black italic) for ever
 
 | Lockup | Content | 9:16, 1:1 and 4:5 (1080 wide) | 16:9 (1080 tall) | Placement | In and out |
 |---|---|---|---|---|---|
-| **A: two-line stack** | a white line 1 and an accent line 2, tucked -0.13 em | 118 and 168 px | 118 and 168 px | bottom-left of the safe zone (x = 120, bottom at y = 1260) | a 0.16 s mask wipe (line 2 after 0.07 s) and a 44 px quartic slide; out: a 0.2 s wipe right |
+| **A: two-line stack** | a white line 1 and an accent line 2, tucked -0.13 em | 118 and 168 px | 118 and 168 px | bottom-left of the safe zone (left edge at 11% of the width, bottom at 65% of the height at 9:16) | a 0.16 s mask wipe (line 2 after 0.07 s) and a 44 px quartic slide; out: a 0.2 s wipe right |
 | **B: echo stack** | a small tracked word (44 px), the hero word in the accent and 3 outlined copies, 120 px tucks | 260 px, hero bottom at ECHO_Y (0.495 of the height) | 300 px | centred, over a faceless chest or the world | lands from 1.25 to 1.0, copies cascade; out 0.2 s before the first slam |
 | **C: smear slam** | one white word per beat, a red copy dragged behind with horizontal motion blur | 230 px, centred at SLAM_Y (0.45 of the height) | 260 px | centred over a shot with no face | scale 1.35 to 1 and blur 12 to 0 in 4 frames; the smear decays from 84 px to 14 px |
 | **D: end card** | the name tracking from 0.30 to 0.06 em, the line at 38 px spaced 0.32 em, red rules growing from the centre | 150 and 38 px | 150 and 34 px | bottom of the safe zone, under the lens-look face | tracking over 1.0 s, rules from +0.3 s, the line from +0.6 s |
@@ -285,7 +285,7 @@ Archivo variable, italic, width 125, weight 900 (expanded black italic) for ever
 Rules:
 
 - The page loads the fonts, then measures. It shrinks any line wider than the safe zone.
-- Safe zone at 9:16: top 240 px, bottom 660 px, sides 120 px. Keep the right 180 px column clear from y = 840, except for centred slams. At 16:9, 1:1 and 4:5: sides 6%, top 8%, bottom 10%.
+- Safe zone at 9:16: keep type and the product out of the top 14%, the bottom 35% and 6% at each side. ui/type.html keeps an 11% side margin. Keep the right 17% of the width clear below 44% of the height, except for centred slams. At 16:9, 1:1 and 4:5: sides 6%, top 8%, bottom 10%.
 - Type sizes follow the short side of the frame. The px in the table are for a short side of 1080 px.
 - The echo stack never starts above 0.32 of the height. Frame the drop face above that line at every aspect.
 - At most 2 words on screen per lockup. Never over a face or another word.
@@ -394,14 +394,18 @@ Voice lines go through the director's text-to-speech helper, then a voice effect
 
 Set each preset's colours in tl.py (ACCENT, INK, RULE, SMEAR) and its sound in GENRE, BPM and KEY. The defaults: Velocity Hype, 9:16 at 1080 x 1920, 30 fps, 17.5 s, 130 BPM drift phonk in F#m, voice slams on.
 
+## When a run delivers nothing
+
+- A run can settle with nothing delivered because a reference photo shows a real person who is not verified yet. `get_generation` names this reason in owner.errorCode. The same key returns the same result. Wait about a minute. Then get a fresh quote, ask for a new approval and use the next key version (for example -v2). Do this once. If it fails again, tell the user and stop. This retry counts as the one paid retry for that face shot.
+
 ## Spending rules
 
 - Get a quote before any paid call. State its credits in plain words.
 - If a quote has a warning, tell the user what it says before they approve.
 - Plan at most 8 generations per round. Ask for one approval per round. If the round's total is more than the daily allowance left, do not run.
 - Wait for the user's approval of each round's quotes. A changed treatment, another model or an expired quote needs a new quote and a new approval.
-- Build each idempotency key from the film, the item and a version, for example `aura-<subject>-k05-v1`. Never use one key for two different quotes. Use the same key when you resend the identical request for the same quote, such as after a timeout or an unavailable owner. Do not make a new key to retry. A reshoot or a retry with changed inputs (a drifted still, the face-refusal retry, a changed prompt) is not the same request: it is a new quote, needs a new approval and takes the next key version (-v2, -v3).
-- If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result.
+- Build each idempotency key from the subject, the item, the aspect ratio and a version, with the motion-aura- prefix, for example `motion-aura-<subject>-k05-9x16-v1`. Never use one key for two different quotes. Use the same key when you resend the identical request for the same quote, such as after a timeout or an unavailable owner. Do not make a new key to retry. A reshoot or a retry with changed inputs (a drifted still, the face-refusal retry, a changed prompt) is not the same request: it is a new quote, needs a new approval and takes the next key version (-v2, -v3).
+- If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Among retries of the same request, only this case and the real person case need a new quote, a new approval and a new key.
 - If a call fails because the service owner is unavailable, retry once with the same key. If it fails again, tell the user and stop.
 - For any other error, read the `recovery` guide with `get_guide` before you act. Retry at most once.
 

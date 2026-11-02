@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-captions-subtitles
+description: Burning captions into an existing talking clip so it reads on mute loads captions-subtitles.
+tags: [trigger]
+runs: 2

@@ -2,7 +2,9 @@
 
 ![Sloosh](assets/sloosh.png)
 
-Sloosh for Shopify stores turns the products in your Shopify store into catalog images, launch ads with copy and short product page videos. It reads your products and your brand, saves a brand kit once, and reuses that brand kit in every request. The pack adds five skills to the core Sloosh plugin: start, brand-kit, catalog-shoot, pdp-video and launch-ads. It reads products and basic shop information only. It never changes your store and never posts to your ad accounts. Claude shows you the quoted credits for each round of work and asks for your approval before it spends.
+Sloosh for Shopify stores audits the images in your Shopify store and turns your products into catalog images, launch ads with copy and short product page videos. It reads your products and your brand, saves a brand kit once, and reuses that brand kit in every request. The pack adds five skills to the core Sloosh plugin: start, brand-kit, catalog-shoot, pdp-video and launch-ads. The store audit and the brand kit cost nothing. Claude shows you the quoted credits for each round of paid work and asks for your approval before it spends.
+
+The pack reads products, basic shop information and the public pages of your store only. It never changes your store and never posts to your ad accounts. It does not cover SEO, site speed or checkout.
 
 ## What you need
 
@@ -45,13 +47,15 @@ codex mcp login sloosh
 
 ## Skills
 
-| Skill | What it makes | Where it runs |
+| Skill | What it makes | Cost |
 |---|---|---|
-| start | A short tour: it checks your connections, finds or makes your brand kit and suggests a first job. | Claude Code, Cowork, Claude app |
-| brand-kit | A brand kit file, sloosh-brand.md, with your voice, colours, type, logo, photo style and hero products. | Claude Code, Cowork, Claude app |
-| catalog-shoot | Catalog and lifestyle images for several products, in the aspect ratios your channels use. | Claude Code, Cowork, Claude app |
-| pdp-video | Short product page videos, made from a start frame for each product. | Claude Code, Cowork, Claude app |
-| launch-ads | Ad images and ad copy for a launch, sized for each channel. The pack does not post the ads. | Claude Code, Cowork, Claude app |
+| start | The place to begin. It checks your connections, finds or makes your brand kit and audits your store's images. The audit scores your homepage, a collection and product pages, and gives a fix list that names the skill for each fix. Then it offers catalog images, launch ads, product page videos or a full launch set of all three. The audit is free. | Paid |
+| brand-kit | A brand kit file, sloosh-brand.md, with your voice, colours, type, logo, photo style and hero products. An on-brand test image is optional and paid. | Free |
+| catalog-shoot | Catalog and lifestyle images for several products, in the aspect ratios your channels use. | Paid |
+| pdp-video | Short product page videos, made from a start frame for each product. | Paid |
+| launch-ads | Ad images and ad copy for a launch, sized for each channel. The pack does not post the ads. | Paid |
+
+Every skill runs in Claude Code, Cowork and the Claude app.
 
 ## Where the brand kit lives
 
@@ -77,15 +81,17 @@ Claude then imports each product image into your Sloosh workspace from its publi
 
 The pack runs no code on its own. Claude calls the Sloosh server at https://mcp.sloosh.ai/mcp with the prompts, images and choices you give it, using the access you grant when you connect. Sloosh stores the images and videos it makes in your workspace.
 
-When you give a store, Claude fetches public pages of that store's domain and product images from cdn.shopify.com. Through a Shopify connector, Claude reads products and shop information only. The pack never reads orders, customers, discounts or analytics. It never creates, changes or deletes anything in your store, and it does not upload images to your store. It does not post or upload to ad accounts, even when an ads connector is present.
+When you give a store, Claude fetches public pages of that store's domain and product images from cdn.shopify.com. For a store audit, Claude reads the homepage, one collection and two or three product pages. If Claude cannot read a page, it asks you for screenshots instead. Through a Shopify connector, Claude reads products and shop information only. The pack never reads orders, customers, discounts or analytics. It never creates, changes or deletes anything in your store, and it does not upload images to your store. It does not post or upload to ad accounts, even when an ads connector is present.
 
 ## Spending
 
-Sloosh uses the credits and the daily spending allowance of the workspace you connect. Claude gets a quote for each item before it makes anything. Claude groups the work into rounds. For each round, Claude shows each item with its quoted credits and the round total, and asks for one approval. If the round total is more than the allowance left today, Claude gives you the Sloosh settings link and does not run the round. A video needs a start frame first. If no image fits, Claude makes one in an earlier round, so that video takes two rounds. You set the daily allowance in Sloosh settings. Claude cannot raise it, buy credits or change your plan.
+The store audit and the brand kit file cost nothing. The skills that make images and videos use the credits and the daily spending allowance of the workspace you connect. Claude gets a quote for each item before it makes anything. Claude groups the work into rounds of up to eight items. For each round, Claude shows each item with its quoted credits and the round total, and asks for one approval. If the round total is more than the allowance left today, Claude gives you the Sloosh settings link and does not run the round. A video needs a start frame first. If no image fits, Claude makes one in an earlier round, so that video takes two rounds. You set the daily allowance in Sloosh settings. Claude cannot raise it, buy credits or change your plan.
 
 ## Example prompts
 
 - "Set up Sloosh for my Shopify store."
+- "Audit my store's images. What is my store missing?"
+- "Make catalog images, launch ads and product page videos for my three new candles."
 - "Make a brand kit for my store from my storefront and my logo."
 - "Shoot lifestyle images in 4:5 for the five mugs in my Ceramics collection."
 - "Make a short product page video for each product in my new summer collection."

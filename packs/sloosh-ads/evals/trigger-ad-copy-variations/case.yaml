@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-ad-copy-variations
+description: A request for hooks, headlines and primary text with no images loads ad-copy-variations.
+tags: [trigger]
+runs: 2

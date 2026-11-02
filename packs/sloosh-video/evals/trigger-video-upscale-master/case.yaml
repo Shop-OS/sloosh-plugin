@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-video-upscale-master
+description: A request to make an existing 720p product clip sharper and 4K for a big screen loads video-upscale-master.
+tags: [trigger]
+runs: 2

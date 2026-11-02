@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-virtual-try-on
+description: A request to put one flat-lay garment on the model in an existing photo, keeping her face and pose, loads virtual-try-on.
+tags: [trigger]
+runs: 2

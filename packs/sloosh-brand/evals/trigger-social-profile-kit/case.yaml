@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-social-profile-kit
+description: A profile picture, Instagram highlight covers and LinkedIn and YouTube banners from a logo and hex codes loads social-profile-kit.
+tags: [trigger]
+runs: 2

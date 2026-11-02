@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-transitions-and-morphs
+description: A generated clip that morphs one product packshot into a second packshot, from a start frame to an end frame, loads transitions-and-morphs.
+tags: [trigger]
+runs: 2

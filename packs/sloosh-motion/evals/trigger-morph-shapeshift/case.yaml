@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-morph-shapeshift
+description: A seamless outfit-to-outfit morph film request with no cuts loads morph-shapeshift.
+tags: [trigger]
+runs: 2

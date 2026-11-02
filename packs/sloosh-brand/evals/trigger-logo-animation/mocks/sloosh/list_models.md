@@ -1,0 +1,4 @@
+---
+type: fixed
+---
+{"models": {"defaultModel": "studio-video-1", "models": [{"id": "studio-video-1", "label": "Studio Video", "description": "Makes a short clip from a prompt, with an optional start frame and end frame.", "logo": "", "provider": "studio", "defaults": {"aspectRatio": "16:9", "duration": 5}, "fields": {"aspectRatio": {"label": "Aspect ratio", "options": [{"value": "16:9", "label": "16:9"}, {"value": "9:16", "label": "9:16"}, {"value": "1:1", "label": "1:1"}]}, "duration": {"label": "Duration", "options": [{"value": "5", "label": "5 s"}, {"value": "8", "label": "8 s"}]}}, "constraints": {"maxPromptChars": 2000, "maxVideoSeconds": 8, "frames": {"start": "optional", "end": "optional"}}, "controls": {"generateAudio": {"state": "optional", "default": false}}}]}, "cameraControls": {"cameras": [], "lenses": [], "apertures": []}}

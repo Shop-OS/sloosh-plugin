@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-reference-ad-remix
+description: A request to put the user's product into the layout of a shared ad loads reference-ad-remix.
+tags: [trigger]
+runs: 2

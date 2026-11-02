@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-ad-hook-matrix
+description: Testing three headlines against each other on one product photo loads ad-hook-matrix.
+tags: [trigger]
+runs: 2

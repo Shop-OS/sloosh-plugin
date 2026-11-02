@@ -9,7 +9,7 @@ effect on) -> end card."""
 import json
 
 NAME = "example_saas"                # REPLACE: <brand>_saas
-W, H, FPS = 1920, 1080, 24        # 16:9 master. 9:16 1080x1920, 1:1 1080x1080, 4:5 1080x1350 (see SKILL.md, "Other sizes")
+W, H, FPS = 1920, 1080, 24        # 16:9 master. 9:16 1080x1920, 1:1 1080x1080, 4:5 1080x1350 (see references/walkthrough.md, "Other sizes")
 BPM = 120.0; B = 60.0 / BPM       # one beat = 0.5 s
 GENRE, KEY = "house", "Am"
 
@@ -55,7 +55,7 @@ COPY = {
     "lockA_2": ["ZERO", "DESIGNERS."],
     "echo":    ["40 POSTS", "DONE."],
     "slams":   ["BEFORE", "LUNCH."],
-    "end":     ["Example Studio", "Your creative team, in one app.", "Start free", "example.com"],
+    "end":     ["Example Studio", "Your creative team, in one app.", "Learn more", "example.com"],
     # pages
     "intro":   ["Imagine a whole", "creative team", "in one app", "intro·ducing"],   # editorial line, bracket words, split word
     "prompt":  "Launch posts for our new sneaker, rainy city at dusk",

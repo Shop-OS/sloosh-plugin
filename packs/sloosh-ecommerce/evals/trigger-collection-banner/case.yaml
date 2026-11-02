@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-collection-banner
+description: A wide homepage banner with three products together and an empty side for the headline loads collection-banner.
+tags: [trigger]
+runs: 2

@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-upscale-and-finish
+description: Making a finished, slightly soft hero image bigger for 4K web and an A2 print loads upscale-and-finish.
+tags: [trigger]
+runs: 2

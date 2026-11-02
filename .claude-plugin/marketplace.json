@@ -5,7 +5,7 @@
         "url": "https://sloosh.ai"
     },
     "metadata": {
-        "description": "The Sloosh plugins for Claude: product images, ad variants, product videos, Sloosh Spaces and launch films, plus a Shopify pack for catalog images, launch ads and product page videos, and a motion pack for stylised short films."
+        "description": "The Sloosh plugins for Claude: product images, ad variants, product videos, Sloosh Spaces, launch films and creative iteration, plus packs for Shopify stores, stylised motion films, performance ads, video, image editing, ecommerce and marketplace images, brand, social content and creative strategy."
     },
     "plugins": [
         {
@@ -14,14 +14,49 @@
             "description": "Create product images, ad variants and short product videos, run published Sloosh Spaces from chat, and direct a product launch film with Remotion in a coding agent. The assistant asks for your approval before any paid work."
         },
         {
+            "name": "sloosh-ads",
+            "source": "./packs/sloosh-ads",
+            "description": "Plan, write, make and test performance ads with Sloosh: ad concepts, copy at volume, hook grids, before and after, comparison, testimonial, sale banner, reference remix and creator-style video ads, plus test plans and results retros. Never posts ads or reads ad accounts. The assistant asks for your approval before any paid work."
+        },
+        {
+            "name": "sloosh-brand",
+            "source": "./packs/sloosh-brand",
+            "description": "Build and keep a brand with Sloosh: a brand kit from your site or guide, logos, icon sets, brand boards, moodboards, mockups, social profile kits, logo animations and brand checks. The assistant asks for your approval before any paid work."
+        },
+        {
+            "name": "sloosh-ecommerce",
+            "source": "./packs/sloosh-ecommerce",
+            "description": "Make marketplace and storefront images with Sloosh: Amazon listing sets, white-background images, multi-angle shots, colourways, ghost mannequin, try-on, lookbooks, food photos, room scenes and collection banners. The assistant asks for your approval before any paid work."
+        },
+        {
+            "name": "sloosh-image",
+            "source": "./packs/sloosh-image",
+            "description": "Edit and finish your images with Sloosh: retouch, swap and relight backgrounds, reframe and outpaint, transfer a reference style, and upscale. The assistant asks for your approval before any paid work."
+        },
+        {
             "name": "sloosh-motion",
             "source": "./packs/sloosh-motion",
-            "description": "Stylised short motion films rendered on your computer: product reveals, beat-synced edits, software walkthroughs, kinetic typography, glitch, dot-matrix and morph films, with Sloosh stills and clips for the missing shots. Needs a coding agent that runs local commands. The assistant asks for your approval before any paid work."
+            "description": "Stylised short motion films rendered on your computer: product reveals, beat-synced edits, software walkthroughs, kinetic typography, glitch, dot-matrix and morph films, and edits of your own talking-to-camera footage, with Sloosh stills and clips for the missing shots. Needs a coding agent that runs local commands. The assistant asks for your approval before any paid work."
         },
         {
             "name": "sloosh-shopify",
             "source": "./packs/sloosh-shopify",
             "description": "Catalog images, launch ads with copy and product page videos for the products in a Shopify store, made with Sloosh from a saved brand kit. Reads products only and never changes the store. The assistant asks for your approval before any paid work."
+        },
+        {
+            "name": "sloosh-social",
+            "source": "./packs/sloosh-social",
+            "description": "Make social content with Sloosh: carousels, Reels and Shorts clips, and YouTube thumbnails. The assistant asks for your approval before any paid work."
+        },
+        {
+            "name": "sloosh-strategy",
+            "source": "./packs/sloosh-strategy",
+            "description": "Plan creative work with Sloosh: a creative strategy from a brief, competitor creative teardowns, launch campaign plans and a campaign run across rounds. The assistant asks for your approval before any paid work."
+        },
+        {
+            "name": "sloosh-video",
+            "source": "./packs/sloosh-video",
+            "description": "Make product films, animations, morphs, motion copies, talking-head clips, captions and video edits and extensions with Sloosh. The assistant asks for your approval before any paid work."
         }
     ]
 }

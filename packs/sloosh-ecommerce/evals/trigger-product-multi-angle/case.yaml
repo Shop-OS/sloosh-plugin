@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-product-multi-angle
+description: A request for the back, side and top views of a sneaker from a single photo loads product-multi-angle.
+tags: [trigger]
+runs: 2

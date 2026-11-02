@@ -1,0 +1,4 @@
+---
+type: fixed
+---
+{"spaces": [{"spaceId": "space_eval_food_studio", "title": "Food photo studio", "description": "Relights and restyles a real dish photo into a commercial food photo with clean plating. 1:1, 4:3, 4:5 and 9:16.", "slug": "food-photo-studio", "outputTypes": ["image"]}]}

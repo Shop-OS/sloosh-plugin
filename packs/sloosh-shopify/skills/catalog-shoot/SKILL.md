@@ -1,6 +1,6 @@
 ---
 name: catalog-shoot
-description: Make on-brand product images with Sloosh for several products from a Shopify store in one go, such as packshots on white, lifestyle scenes and detail shots for product pages. Use when the user wants a catalog shoot, new photos for a collection or for many store products, or product page images for several store products that match their brand kit, and the Sloosh tools are connected.
+description: Make on-brand product images with Sloosh for several products from a Shopify store in one go, such as packshots on white, lifestyle scenes and detail shots for product pages. Use when the user wants a catalog shoot, new photos for a collection or for many store products, or product page images for several store products that match their brand kit, and the Sloosh tools are connected. Not for an on-model lookbook where one model wears the garments across a shoot (use the sloosh-ecommerce fashion-lookbook-set skill if it is installed), one banner showing several products together or a full marketplace image set for one product (use the sloosh-ecommerce collection-banner or amazon-listing-pack skill if it is installed).
 ---
 
 # Catalog shoot

@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-colourway-variants
+description: A request to show one photographed bag in several new colours with the hardware unchanged loads colourway-variants.
+tags: [trigger]
+runs: 2

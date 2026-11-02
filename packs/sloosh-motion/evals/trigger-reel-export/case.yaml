@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-reel-export
+description: A request to make a finished wide promo vertical for Reels and TikTok, with a hook and a clean upload, loads reel-export.
+tags: [trigger]
+runs: 2

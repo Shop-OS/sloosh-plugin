@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-launch-campaign-plan
+description: A request for a phased launch plan and calendar of what to make and when loads launch-campaign-plan.
+tags: [trigger]
+runs: 2

@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-sale-banner-set
+description: A sale offer that needs matching banners in every size and an email header loads sale-banner-set.
+tags: [trigger]
+runs: 2

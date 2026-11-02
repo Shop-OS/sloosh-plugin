@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-motion-plates
+description: A request for background plates and a product cut-out to animate over loads motion-plates.
+tags: [trigger]
+runs: 2

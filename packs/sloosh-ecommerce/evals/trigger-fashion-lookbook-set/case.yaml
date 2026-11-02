@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-fashion-lookbook-set
+description: An on-model lookbook for several garments with one model across planned poses loads fashion-lookbook-set.
+tags: [trigger]
+runs: 2

@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-product-animation
+description: An exploded view of a product's parts from one packshot loads product-animation.
+tags: [trigger]
+runs: 2

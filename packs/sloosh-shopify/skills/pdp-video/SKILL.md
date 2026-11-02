@@ -1,6 +1,6 @@
 ---
 name: pdp-video
-description: Make short product page or social video clips with Sloosh for the hero products of a Shopify store, one clip for each product. Use when the user wants a product page video or social clip for each of several products in their Shopify store, a collection or a set of hero products, and the Sloosh tools are connected.
+description: Make short product page or social video clips with Sloosh for the hero products of a Shopify store, one clip for each product. Use when the user wants a product page video or social clip for each of several products in their Shopify store, a collection or a set of hero products, and the Sloosh tools are connected. Not for one product's clip (use product-video), a named product effect such as a 360 spin or exploded view (use the sloosh-video product-animation skill if it is installed) or vertical Reels with a planned hook for one product (use the sloosh-social reels-shorts-clip skill if it is installed).
 ---
 
 # Product page video

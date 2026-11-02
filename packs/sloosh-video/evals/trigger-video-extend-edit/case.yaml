@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-video-extend-edit
+description: A request to make a product clip from the user's own shoot longer past its last frame loads video-extend-edit.
+tags: [trigger]
+runs: 2

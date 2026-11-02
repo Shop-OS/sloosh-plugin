@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-creative-strategy
+description: A request for a few creative directions and a big idea before production, from a half brief, loads creative-strategy.
+tags: [trigger]
+runs: 2
