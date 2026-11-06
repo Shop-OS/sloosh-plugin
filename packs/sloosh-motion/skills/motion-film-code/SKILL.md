@@ -15,7 +15,7 @@ Use this skill to build a motion film whose every frame comes from code, and to 
 - The Sloosh tools are optional. Without them, make the film only from code and the user's own files. To add Sloosh shots, the user must install and connect the core Sloosh plugin.
     - Claude Code: run /plugin install sloosh@sloosh, then run /mcp and sign in.
     - Claude app: open the plugin's Connectors tab and connect Sloosh. Or add a custom connector with the URL https://mcp.sloosh.ai/mcp.
-- If the Sloosh tools are available, call `get_connection` once in the conversation if you have not called it yet. If spending is not enabled, give the user the settings link it returns and do no paid work. Build the film from code and the user's files instead.
+- At the start, before you write any file, call `get_connection` once in the conversation if the Sloosh tools are available and you have not called it yet. Do this for a code-only film too. If spending is not enabled, give the user the settings link it returns and do no paid work. Build the film from code and the user's files instead.
 - If a brand kit exists, read it: a sloosh-brand.md file, Project knowledge, memory or pasted brand text. Use its colours, fonts and words exactly.
 
 ## 1. When to use this skill
@@ -44,9 +44,9 @@ Check each tool on the user's computer before the build. Do not install anything
 - For the HTML route: Playwright for Python and its Chromium browser (the director's render_html.py uses them). opencv-python and Pillow for the director's edit.py, sheets.py and qa.py.
 - For the Remotion route: Node.js. The Remotion packages go into the film's own project, never globally.
 
-Ask the user before you install anything. Prefer a virtual environment in the film folder for the Python packages. Never use the system-packages override flag. Ask the user before you add Remotion to the project. Use the package manager that the user already uses, and take packages only from the public npm registry. Read `references/remotion-route.md` before you ask.
+Ask the user before you install anything. Install the Python packages into the film's virtual environment. Every install command you show the user uses this virtual environment. Never use the system-packages override flag. Ask the user before you add Remotion to the project. Use the package manager that the user already uses, and take packages only from the public npm registry. Read `references/remotion-route.md` before you ask.
 
-If the user says no to a tool, stop at the step that needs it and tell the user which tool it is. If Node.js or Remotion is missing or refused, use the HTML route. If Playwright is missing or refused, use the Remotion route. If both are missing or refused, stop.
+If the user says no to a tool, stop at the step that needs it and tell the user which tool it is. If Node.js or Remotion is missing or refused, use the HTML route. If Playwright is missing, ask to install it into the film's virtual environment. If the user declines, use the Remotion route if Node.js and Remotion are there or approved. Else stop at the HTML render step and name the missing tool. Do not write your own browser renderer. If both routes are missing or refused, stop.
 
 Remotion is free for individuals, non-profits and companies with up to three employees. Larger for-profit companies need a Remotion company license. Tell the user this once before you scaffold the project.
 
@@ -65,7 +65,7 @@ Use the director's intake: at most 4 questions in one message, about goal and fo
 
 Check the rights before a file goes into the film or to Sloosh:
 
-- Photos, logos, footage and music: use a file only if the user owns it or has the rights for this use. Ask the user to confirm this for each file.
+- Photos, logos, footage and music: use a file only if the user owns it or has the rights for this use. Ask the user to confirm this for each file. An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 - A person who can be recognised in a photo or a clip must have agreed to appear. If the user cannot confirm this, leave the file out.
 - Real UI: rebuild only the user's own product screens. Use demo data. Never show private account data, such as real names, emails or payment details. Never invent UI, numbers, reviews or claims.
 - Fonts: use only the fonts in the director's fonts folder (OFL) or fonts the user owns.
@@ -79,7 +79,7 @@ Then write the treatment with the director's beat map. Add these lines:
 - The exact words on screen, from the brief.
 - The Sloosh shots, if any, and the paid rounds. Write "none" for a code-only film.
 
-The approval of the treatment is not the approval of a quote.
+The approval of the treatment is not the approval of a quote. Wait for the user to approve the treatment before you scaffold the film or write any file.
 
 ## 5. Scaffold the film folder
 
@@ -159,12 +159,12 @@ Get the shots in one of these ways:
 Each round has at most 8 generations. Stills come one round before their clips. Images and videos never share a round.
 
 1. Get the user's photos into the workspace. For a local file, follow the server's upload instruction for this client. For a public HTTPS URL, call `import_asset`. Look at each photo with `view_asset`.
-2. Call `list_models` with mode `image_gen` for a stills round, or with mode `video_gen` for the clips round. Pick by capability: stills at the highest resolution offered that can edit from reference images; clips that start from an image, run about 5 s at the film's aspect ratio and can leave out generated audio. Set the aspect ratio, length, resolution and audio in the terms that the chosen model's entry uses. Do not choose a model or estimate a price from memory.
+2. Call `list_models` with mode `image_gen` for a stills round, or with mode `video_gen` for the clips round. Pick by capability: stills at the highest resolution offered that can edit from reference images; clips that start from an image, run about 5 s at the film's aspect ratio and can leave out generated audio. Set the aspect ratio, length, resolution and audio in the terms that the chosen model's entry uses. Do not choose a model or estimate a price from memory. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
 3. Call `quote_generation` for each item of the round. For a clip, the start image is the approved still.
 4. Show the user a list of each item with its credits and the round's total. Compare the total with the daily allowance left from `get_connection`. That value is in millicredits, so divide it by 1000 first. Subtract what earlier rounds in this conversation used. If the total is more than the allowance left, give the settings link and do not run the round. Otherwise ask for one approval of this round, and wait for the user.
 5. Call `generate` for each quote with its own stable idempotency key, for example `motion-code-<film>-hero-16x9-v1` or `motion-code-<film>-c1-16x9-v1`. Set confirmed=true only after the user approves this quote. The user's approval of the round covers each quote in that round.
-6. After the last `generate` of a round, if `show_generation` is available, call `show_generation` once with all the operation ids of the round, up to 8. If not, check the results with `get_generation` when the user asks.
-7. When a result is ready, call `get_asset` with its kind and id. Download the file from the returned URL into the film folder: stills to plates/, clips to clips/, under the name the film uses. For the Remotion route, copy them into remotion/public/ too.
+6. After the last `generate` of a round, if `show_generation` is available, call `show_generation` once with all the operation ids of the round, up to 8. If not, check the status with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
+7. When a result is ready, call `get_asset` with its kind and id. Download the file from the returned URL into the film folder: stills to plates/, clips to clips/, under the name the film uses. For the Remotion route, copy them into remotion/public/ too. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind. For each clip, check that the output ratio and size match the brief. A start frame's ratio drives the clip, so match the start frame to the brief first.
 8. Look at each still with `view_asset` before it starts a clip, and ask the user to approve it. A rejected still or clip is a retake: it goes into the next round with -v2 in its key, a new quote and a new approval.
 
 For card actions, model choice or generation errors, read the `generation` guide with `get_guide`. For imports and holds, read the `assets` and `spending` guides with `get_guide`.
@@ -222,6 +222,7 @@ Fix every failed gate and render again. Also run the director's qa.py for loudne
 - Get a quote before any paid call. State its credits in plain words.
 - If a quote has a warning, tell the user what it says before they approve.
 - Plan at most 8 generations per round. Ask for one approval per round. If the round's total is more than the daily allowance left, do not run.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Wait for the user's approval of each round's quotes. A changed prompt, another model or an expired quote needs a new quote and a new approval.
 - Build each idempotency key from the film, shot and aspect ratio it makes, with the motion-code- prefix. Increase the version when you shoot the same item again. Never use one key for two different quotes. Use the same key when you retry the same item. Do not make a new key to retry.
 - If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Only this case needs a new quote, a new approval and a new key.

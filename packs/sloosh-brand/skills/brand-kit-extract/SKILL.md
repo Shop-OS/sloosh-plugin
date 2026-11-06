@@ -7,7 +7,7 @@ description: Build or update a brand kit file, sloosh-brand.md, from brand mater
 
 Use this skill to turn the brand material a user already has into one brand kit file, sloosh-brand.md. The sources can be a website, a brand guide as a PDF or pasted text, logo files and campaign images. The file uses the same headings as the Sloosh for Shopify brand kit, so every Sloosh skill reads it the same way. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
-This skill costs nothing. You read the sources yourself and write the kit. Paid work goes to other skills, and each one quotes its own work and asks for approval.
+This skill costs nothing. Tell the user this in your first reply. You read the sources yourself and write the kit. Paid work goes to other skills, and each one quotes its own work and asks for approval.
 
 ## Before you start
 
@@ -26,7 +26,7 @@ This skill costs nothing. You read the sources yourself and write the kit. Paid 
 2. Read each source yourself. Write down only what the source shows.
     - Website: if you can fetch URLs, fetch the home page, an about page and one product page. On the Claude app, fetch only URLs the user gave or that appeared in results.
     - Brand guide: read the PDF or the pasted text directly. Guides usually state exact hex codes, font names and do and don't rules. A guide wins over a website for these values.
-    - Logo and campaign images: if the user attached them in the chat, look at them directly. If they are already in Sloosh, find them with `list_assets` (search by name). Look at each one with `view_asset` (pass the kind and id).
+    - Logo and campaign images: if the user attached them in the chat, look at them directly. If they are already in Sloosh, find them with `list_assets` (search by name). Look at each one with `view_asset` (pass the kind and id). A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
 3. Pull each field from the right place:
     - Colours: CSS custom properties, button and link colours, the header and the hero background. In a guide, the palette page. Write a hex code only when the source states it.
     - Type: font-family names in the page styles, or the guide's type page. Write the role of each font, for example headings or body text. Do not guess a font name from how the text looks. Write the feel instead, for example "geometric sans, wide".

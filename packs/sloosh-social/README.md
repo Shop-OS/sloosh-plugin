@@ -2,7 +2,7 @@
 
 ![Sloosh](assets/sloosh.png)
 
-Sloosh social helps you make posts for social feeds. It adds three skills to the core Sloosh plugin: swipe-through carousels, vertical clips for Reels, TikTok and Shorts, and YouTube thumbnails and covers. Each skill first writes a plan in the chat, such as the slides, the hooks or the headline. The plan costs nothing. Then the skill makes the content. It uses a published Sloosh Space when one fits, and makes the content directly when none does. Claude shows you the quoted credits for each round of work and asks for your approval before it spends.
+Sloosh social helps you make posts for social feeds. It adds four skills to the core Sloosh plugin: swipe-through carousels, vertical clips for Reels, TikTok and Shorts, YouTube thumbnails and covers, and a preview skill that remixes a social post into a new video of your product. Each skill first writes a plan in the chat, such as the slides, the hooks or the headline. The plan costs nothing. Then the skill makes the content. It uses a published Sloosh Space when one fits, and makes the content directly when none does. Claude shows you the quoted credits for each round of work and asks for your approval before it spends.
 
 The pack never posts to a social account and never reads your social accounts. For one ad in several sizes, use the core plugin's ad variants skill. For a product clip that is not for a vertical feed, use the core plugin's product video skill.
 
@@ -50,6 +50,7 @@ codex mcp login sloosh
 | carousel-builder | A carousel of 4 to 10 slides in one look for Instagram or a LinkedIn document post, with a cover that works alone and copy for each slide. | Paid |
 | reels-shorts-clip | One vertical clip of up to 15 seconds for Reels, TikTok or Shorts, built around a hook in the first 3 seconds. Captions and music come only from published Spaces that fit. | Paid |
 | youtube-thumbnail | Truthful, high-contrast YouTube thumbnails and vertical Shorts or Reels covers with a 3 to 5 word headline, and variants that each test one change. | Paid |
+| social-post-remix | Preview. A new video of your product or character in the structure and style of an Instagram or X post. It studies the post's hook, pacing and shots, makes new shots, and never reuses the post's footage or script. It needs the Calypso editor, which only some Sloosh connections have yet. | Paid |
 
 ## Where the brand kit lives
 
@@ -60,6 +61,8 @@ If you have a brand kit, such as a sloosh-brand.md file from the Shopify pack, P
 The pack runs no code on its own. Claude calls the Sloosh server at https://mcp.sloosh.ai/mcp with the prompts, images and choices you give it, using the access you grant when you connect. Sloosh stores the images and videos it makes in your workspace.
 
 The pack reads only what you give it: product photos, faces, logos, reviews, style references and the story or title you paste or upload. It does not read social accounts or analytics. It does not post, schedule or upload to a social account, even when a social connector is present. It does not mix audio, join or trim clips. For a LinkedIn document post, you join the slides into a PDF.
+
+The social post remix skill is the one exception to "only what you give it": when you paste a public Instagram or X post link, Sloosh imports that post's video into your workspace as a reference. Sloosh's hosted Calypso editor studies it and assembles the new edit there. The result uses only new shots of your product or character. It never reuses the post's footage or script. TikTok and YouTube links are not supported.
 
 ## Spending
 
@@ -73,6 +76,7 @@ Every skill in this pack makes content, so each one uses the credits and the dai
 - "Make this still postable as a TikTok with captions."
 - "Make three YouTube thumbnails for my video on our trainer test."
 - "Make a Shorts cover for this clip."
+- "Remix this Instagram Reel into a new video for our candle."
 
 ## Support
 

@@ -1,13 +1,13 @@
 ---
 name: ad-copy-variations
-description: Write ad copy at volume for one ad concept from real customer language. It writes a text table of hooks in visual, spoken and caption columns, headlines by awareness stage, primary text, descriptions and calls to action inside Meta, TikTok, Google, LinkedIn and Pinterest limits. Each variant gets a test hypothesis. It writes text only and costs nothing. Use when the user wants ad copy, hooks, headlines, primary text, Google ad headlines or captions for an ad, or wants ad copy that sounds machine-written rewritten, and the Sloosh tools are connected. Not for ad images, a rendered grid of hook images to compare before launch (use ad-hook-matrix), ad concepts (use ad-concepts) or landing page and email copy.
+description: Write ad copy at volume for one ad concept from real customer language. It writes a text table of hooks in visual, spoken and caption columns, headlines by awareness stage, primary text, descriptions and calls to action inside Meta, TikTok, Google, LinkedIn and Pinterest limits. Each variant gets a test hypothesis. It writes text only and costs nothing. Use when the user wants ad copy, hooks, headlines, primary text, Google ad headlines or captions for an ad, or wants ad copy that sounds machine-written rewritten, and the Sloosh tools are connected. Not for ad images, a rendered grid of hook images to compare before launch (use ad-hook-matrix), ad concepts (use ad-concepts), a timed video script with beats and voiceover lines (use script-writer) or landing page and email copy.
 ---
 
 # Ad copy variations
 
 Use this skill to write ad copy at volume for one ad concept. It turns the concept and the customer's own words into a copy sheet: a hook matrix, headlines by awareness stage, primary text, descriptions and calls to action. Each line fits its platform's limit. Each variant has a test hypothesis that a result can prove wrong. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
-This skill costs nothing. It writes text only. It makes no images or videos, and it does not post anything to an ad platform.
+This skill costs nothing. Tell the user so in your first reply. It writes text only. It makes no images or videos, and it does not post anything to an ad platform.
 
 ## Before you start
 
@@ -25,7 +25,7 @@ This skill costs nothing. It writes text only. It makes no images or videos, and
 - Concept (required): the buyer, their pain or motivation, the proof and the offer. A concept row from the `ad-concepts` skill works. If the user has no concept, ask for these four things. Or offer the `ad-concepts` skill first.
 - Platforms (required): Meta placements, TikTok, Google Performance Max, Google Search, LinkedIn or Pinterest. Take them from the kit's Channels and aspect ratios. Ask only if the kit has none. Write copy only for the platforms the user chose.
 - Evidence (optional): reviews, comments, support messages and survey answers, word for word. Ask for them. Customer phrasing makes the strongest hooks.
-- Product image (optional): if the user names a Sloosh asset, find it with `list_assets` by name. Search the library first. Then search with kind generated. Look at it with `view_asset`, using the kind and id that `list_assets` returns. Then the visual column can name real product details.
+- Product image (optional): if the user names a Sloosh asset, find it with `list_assets` by name. Search the library first. Then search with kind generated. Look at it with `view_asset`, using the kind and id that `list_assets` returns. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `view_asset` returns asset not found, try once with the other kind. Then the visual column can name real product details.
 
 ## Evidence and rights
 
@@ -46,9 +46,9 @@ This skill costs nothing. It writes text only. It makes no images or videos, and
 4. Write headlines by awareness stage. Write two for each stage the brief needs, with the treatments in the reference. If the stage is unknown, write for two stages and say so.
 5. Write primary text in three lengths: one line, three lines and a short story. Put the hook in the first line. Do not use hashtags.
 6. Write descriptions only for platforms with a description field: Meta, Performance Max, Google Search and Pinterest. Write calls to action. Give each variant one call-to-action verb.
-7. Check every line against the platform limits in the reference. Count the characters. Cut any line that is over a hard limit. For a recommended figure, keep the main point inside it.
+7. Check every line against the platform limits in the reference. Count the characters. Cut any line that is over a hard limit. Count the words of each on-image headline. If it has more than 6 words, cut it. Give exact counts, not estimates. For a recommended figure, keep the main point inside it.
 8. Run the tells check in the reference. Replace each banned pattern with a plain statement of what the product is, who it is for and what changes.
-9. Give each variant one test hypothesis. Use this form: If [variant] beats [control] on [metric] by [threshold] for [segment], then [what we learn]. Change one variable in each comparison.
+9. Give each variant one test hypothesis. Use this form: If [variant] beats [control] on [metric] by [threshold] for [segment], then [what we learn]. Fill every slot, including the segment. Change one variable in each comparison.
 10. Give the copy sheet in the chat. In a coding agent, also offer to write it as a CSV file.
 11. Offer the next step from the hand-off list below.
 

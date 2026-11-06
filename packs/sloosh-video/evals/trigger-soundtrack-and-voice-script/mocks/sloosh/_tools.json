@@ -1,0 +1,14 @@
+{
+  "tools": [
+    {"name": "get_connection", "description": "Check the Sloosh connection, spending status and the daily allowance left. Call once at the start of a conversation.", "inputSchema": {"type": "object", "properties": {}}},
+    {"name": "get_guide", "description": "Read a Sloosh guide by id: connection, spending, assets, generation, spaces, recovery, release-status.", "inputSchema": {"type": "object", "properties": {"id": {"type": "string"}}, "required": ["id"]}},
+    {"name": "list_assets", "description": "List assets already in the Sloosh workspace.", "inputSchema": {"type": "object", "properties": {"kind": {"type": "string"}, "query": {"type": "string"}}}},
+    {"name": "import_asset", "description": "Import an image, video or audio file from any public HTTPS URL and register it in the workspace library. Returns the asset kind and id.", "inputSchema": {"type": "object", "properties": {"url": {"type": "string"}, "name": {"type": "string"}}, "required": ["url"]}},
+    {"name": "get_asset", "description": "Resolve a typed workspace or generated asset reference and its current URL.", "inputSchema": {"type": "object", "properties": {"kind": {"type": "string"}, "id": {"type": "string"}}, "required": ["kind", "id"]}},
+    {"name": "list_models", "description": "Discover available models. Pass type speech for the speech models, their premade voices and languages, and whether each speaks the workspace's own voices (customVoices).", "inputSchema": {"type": "object", "properties": {"type": {"type": "string", "enum": ["image", "video", "speech"]}, "mode": {"type": "string"}}}},
+    {"name": "list_voices", "description": "List the workspace's own cloned voices. A voice whose status is pending_verification can't speak yet.", "inputSchema": {"type": "object", "properties": {}}},
+    {"name": "quote_generation", "description": "Quote image generation, video generation, video editing or speech. For speech, use mode speech_gen with the script as prompt (spoken word for word) and modelConfig.voice or modelConfig.voiceAssetId. Free. Returns a quoteId and its credits.", "inputSchema": {"type": "object", "properties": {"mode": {"type": "string"}, "model": {"type": "string"}, "prompt": {"type": "string"}, "modelConfig": {"type": "object"}}, "required": ["mode", "model", "prompt"]}},
+    {"name": "generate", "description": "Start a paid generation for a quote. Needs quoteId, a stable idempotencyKey and confirmed=true after the user approves the quote.", "inputSchema": {"type": "object", "properties": {"quoteId": {"type": "string"}, "idempotencyKey": {"type": "string"}, "confirmed": {"type": "boolean"}}, "required": ["quoteId", "idempotencyKey", "confirmed"]}},
+    {"name": "get_generation", "description": "Get the status and outputs of a generation.", "inputSchema": {"type": "object", "properties": {"operationId": {"type": "string"}}, "required": ["operationId"]}}
+  ]
+}

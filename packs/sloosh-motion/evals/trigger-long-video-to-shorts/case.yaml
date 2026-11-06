@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-long-video-to-shorts
+description: A long podcast recording the user owns, to be cut into several vertical shorts with captions, loads long-video-to-shorts.
+tags: [trigger]
+runs: 2

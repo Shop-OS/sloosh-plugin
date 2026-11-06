@@ -18,6 +18,7 @@ One pass makes one change. For two changes, do two passes, each on the latest ou
 - If a brand kit exists, read it: a sloosh-brand.md file, Project knowledge, memory or pasted brand text. Use its colours and label text as the target for colour and text fixes.
 - Ask the user to confirm they own the image and any extra reference, such as a logo, or may use them. Ask before any quote. If they cannot confirm, stop.
 - If the image shows a person, ask the user to confirm that the person agreed to an AI edit of their photo. Ask before any quote. Do not edit a photo of a child or of a public figure. If the user declines or cannot confirm, explain why and stop.
+- An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 
 ## Steps
 
@@ -25,7 +26,7 @@ One pass makes one change. For two changes, do two passes, each on the latest ou
 2. Get the source image. Reuse an asset from `list_assets` when it exists. Call `import_asset` for a public HTTPS URL. For a local file, follow the server's upload instruction for this client. For a generated image from a result card, call `get_asset` with its kind and id and use the returned URL.
 3. Look at the source with `view_asset`. Write a keep-list: the product, the label, the light, the shadows, the background and the framing around the change. Be concrete, such as "the wooden table grain on the left".
 4. Choose the route. A mechanical job, such as a full cut-out or a skin retouch, can go to a published Space. A job that needs judgement, such as removing one object or fixing text, goes to the direct path.
-5. For a mechanical job, call `list_spaces` with output type image. Search for background remover for a cut-out, or skin retouch for skin. Choose by each Space's description from `list_spaces` or `get_space`. If none fits, use the direct path. If no Space fits a cut-out, tell the user that the direct path may not return a transparent background. Offer a plain white or solid backdrop instead, and quote only after they agree.
+5. For a mechanical job, call `list_spaces` with output type image. Search for background remover for a cut-out, or skin retouch for skin. Choose by each Space's description from `list_spaces` or `get_space`. If none fits, use the direct path. Before you take the direct path, call `get_space` on the best one or two matches from `list_spaces`. Tell the user in one line why no Space fits. If no Space fits a cut-out, tell the user that the direct path may not return a transparent background. Offer a plain white or solid backdrop instead, and quote only after they agree.
 
 ## Space path
 
@@ -34,7 +35,7 @@ One pass makes one change. For two changes, do two passes, each on the latest ou
 3. The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits. Compare the maximum hold with it. If the hold is more, give the user the settings link and do not run.
 4. Ask the user to approve this quote. Wait for the user.
 5. Call `run_space` with the quote and a stable idempotency key, for example `image-serum-cutout-1x1-v1`. Set confirmed=true only after the user approves this quote.
-6. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, poll `get_space_run` with the operation id until the run settles or stops at a checkpoint.
+6. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, check the status with `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
 7. If `get_space_run` shows a checkpoint, show the user what it needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides.
 8. When the run finishes, call `get_space_run_outputs`. Call `import_asset` with each output URL to get an asset reference.
 9. Look at that asset with `view_asset`. Use the same reference as the first reference asset for any direct follow-up edit.
@@ -43,12 +44,12 @@ For checkpoints, holds and run states, read the `spaces` guide with `get_guide`.
 
 ## Direct path
 
-1. Call `list_models` with mode `image_gen`. Pick a model that takes a reference image and supports the source ratio. If you will pass an extra reference, pick a model whose maxReferenceImages is at least 2, or has no cap. For text fixes, prefer a model whose description says it renders text well. Do not choose a model or estimate a price from memory.
+1. Call `list_models` with mode `image_gen`. Pick a model that takes a reference image and supports the source ratio. If you will pass an extra reference, pick a model whose maxReferenceImages is at least 2, or has no cap. For text fixes, prefer a model whose description says it renders text well. Do not choose a model or estimate a price from memory. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
 2. Write the edit prompt from `references/edit-prompts.md`. Name the one change, then the keep-list, then "Do not add objects or text."
 3. Call `quote_generation` with the prompt, the chosen model and the source ratio. Pass the source as the first reference asset. Pass an extra reference, such as a logo, as the second. Set enhancePrompt to false so the keep-list stays word for word.
 4. Show the credits. The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits. Compare the quote's credits with it. If the quote is more, give the user the settings link and do not generate. Ask the user to approve this quote. Wait for the user.
 5. Call `generate` with a stable idempotency key, for example `image-serum-label-fix-4x5-v1`. Set confirmed=true only after the user approves this quote.
-6. If `show_generation` is available, call `show_generation` once with the operation id. If not, poll `get_generation` with the operation id until the generation settles. Then use the output's generation id with kind generated for `view_asset`.
+6. If `show_generation` is available, call `show_generation` once with the operation id. If not, check the status with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. Then use the output's generation id with kind generated for `view_asset`.
 
 For quote expiry and card actions, read the `generation` and `spending` guides with `get_guide`.
 
@@ -61,6 +62,8 @@ For quote expiry and card actions, read the `generation` and `spending` guides w
 - Check that a cut-out is a PNG with a transparent background. If you cannot confirm it, tell the user and suggest a background remover Space.
 - A retouched face keeps its skin texture and its identity.
 - Name the source image with the new one in your handoff, so the user can go back.
+- A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
+- If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
 
 ## Craft rules
 
@@ -87,6 +90,7 @@ For quote expiry and card actions, read the `generation` and `spending` guides w
 - If the quote has a warning, tell the user what it says before they approve.
 - Plan at most 8 generations per round. Ask for one approval per round. If the total or the maximum hold is more than the allowance left, do not run.
 - Wait for the user's approval of each quote. A changed request, another model, another Space, changed inputs or an expired quote needs a new quote and a new approval.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Start each idempotency key with image- and build it from the product, variant and aspect ratio it makes. Use the same key when you retry the same item. Never reuse a key across different quotes. Do not make a new key to retry.
 - If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Among retries, only this case and the real person case need a new quote, a new approval and a new key.
 - If a call fails because the service owner is unavailable, retry once with the same key. If it fails again, tell the user and stop.

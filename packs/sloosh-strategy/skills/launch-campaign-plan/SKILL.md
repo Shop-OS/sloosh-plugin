@@ -7,7 +7,7 @@ description: Plan the creative for a product launch, a drop, a sale window or a 
 
 Use this skill to plan what to make for a dated campaign, and when. A brief and a date go in. A phased plan comes out: the assets each phase needs, the Sloosh skill and inputs for each asset, a cost tier, the approval rounds and a calendar. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
-This skill costs nothing. It writes a plan in the chat. It makes no images or videos. The producing skills quote their own work and ask for approval.
+This skill costs nothing. Tell the user so in your first reply. It writes a plan in the chat. It makes no images or videos. The producing skills quote their own work and ask for approval.
 
 ## Before you start
 
@@ -45,7 +45,7 @@ If the user wants one asset, use the skill that makes it, such as the `product-i
     - Sustain: D+3 to D+21.
     - Retention: D+21 onward.
 
-    Drop the phases that the dates do not allow. Tell the user which phases you dropped and why.
+    Drop the phases that the dates do not allow. Tell the user which phases you dropped and why. Do not add a phase that is not in this list. Mark any other timing advice as a suggestion.
 3. For each phase, list the assets each channel needs. Take the asset types from `references/asset-matrix.md`. Give every asset a channel and a job. Do not add an asset that has no job. Keep a typical launch at or under 25 assets.
 4. Check what already exists. Search `list_assets` for product photos, the logo and past hero images. If there is no usable product photo, make round 0 "get the product photo". Every image and video asset waits for it.
 5. Check for ready-made recipes. Search `list_spaces` for the asset types in the plan, such as ad grid, product video or UGC set. Choose by the description that `list_spaces` returns. Mark a matching asset "can go through a published Space". Do not run it here.

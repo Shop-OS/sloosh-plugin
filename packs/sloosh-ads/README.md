@@ -2,7 +2,7 @@
 
 ![Sloosh](assets/sloosh.png)
 
-Sloosh performance ads helps you plan, write, make and test performance ads. It adds twelve skills to the core Sloosh plugin. Four skills plan and write: ad concepts, ad copy, creative test plans and results retros. These four cost nothing. Eight skills make ads: hook grids, sale banners, seasonal creatives, before and after ads, comparison ads, reference ad remixes, testimonial ads and creator-style video ads. They use a published Sloosh Space when one fits, and make the ad directly when none does. Claude shows you the quoted credits for each round of work and asks for your approval before it spends.
+Sloosh performance ads helps you plan, write, make and test performance ads. It adds thirteen skills to the core Sloosh plugin. Five skills plan and write: ad concepts, ad copy, short video scripts, creative test plans and results retros. These five cost nothing. Eight skills make ads: hook grids, sale banners, seasonal creatives, before and after ads, comparison ads, reference ad remixes, testimonial ads and creator-style video ads. They use a published Sloosh Space when one fits, and make the ad directly when none does. Claude shows you the quoted credits for each round of work and asks for your approval before it spends.
 
 The pack never posts ads, never reads your ad accounts and never changes a campaign. For simple resized or restyled variants of one ad, use the core plugin's ad variants skill.
 
@@ -48,6 +48,7 @@ codex mcp login sloosh
 |---|---|---|
 | ad-concepts | Ad concepts for a product: the angle, the format and the skill that makes each one. | Free |
 | ad-copy-variations | Ad copy at volume: hooks, headlines, primary text and calls to action within each platform's limits. | Free |
+| script-writer | A 15, 30 or 60 second video script: a hook for the first 2 seconds, timed beats with on-screen text and voiceover lines, a call to action and three alternative hooks, ready for the storyboard skill. | Free |
 | creative-testing-plan | A test plan: one variable per test, the names, the ad sets, the metrics and what each result decides. | Free |
 | creative-performance-retro | A retro of the results you paste: what won, how sure the data is and what to test next. | Free |
 | ad-hook-matrix | A grid of hook images that change one thing at a time, ready for a test. | Paid |
@@ -77,11 +78,19 @@ The planning skills cost nothing. The skills that make ads use the credits and t
 
 - "Give me ten ad concepts for our new protein bar."
 - "Write twenty hooks and headlines for our serum for Meta and TikTok."
+- "Write a 30 second TikTok script for our lunch bags, for parents, to drive sales."
 - "Make a hook grid for our trainer launch so we can test the first line."
 - "Make a sale banner set for 20% off everything this weekend."
 - "Make Diwali feed and story images for our scented candle."
 - "Plan a creative test for these three ad angles."
 - "Here are last week's results. What won and what should we test next?"
+
+## Open-source credits
+
+The script writer adapts two MIT-licensed projects. It ships no code from them.
+
+- Its virality checklist adapts the ranked virality criteria in [AI-Youtube-Shorts-Generator](https://github.com/SamurAIGPT/AI-Youtube-Shorts-Generator) (MIT License).
+- Its post-style rules adapt the post structure and content rules in the generate-post prompts of [social-media-agent](https://github.com/langchain-ai/social-media-agent) by LangChain (MIT License).
 
 ## Support
 

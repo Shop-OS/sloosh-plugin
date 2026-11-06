@@ -18,7 +18,8 @@ This skill makes still images. It does not post to YouTube.
 - The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits before you compare it with a quote.
 - If a brand kit exists, read it: a sloosh-brand.md file, Project knowledge, memory or pasted brand text. Use its colours, fonts and logo.
 - If a face appears, ask the user to confirm that the person agreed to appear in an AI-made thumbnail. Ask before any quote. Do not use a photo of a child or of a public figure. If the user declines or cannot confirm, explain why and stop.
-- If a logo, a product photo or another third-party image appears, ask the user to confirm they may use it. If they cannot, stop.
+- If a logo, a product photo or another third-party image appears, ask the user to confirm they may use it. Ask before any quote. If they cannot, stop.
+- An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 
 ## Steps
 
@@ -27,7 +28,7 @@ This skill makes still images. It does not post to YouTube.
 3. Write up to five concepts in the chat, one per framework in `references/thumbnail-craft.md`. Skip a framework the video does not support. Give each concept a headline of 3 to 5 words, each word at most 10 characters. This step costs nothing.
 4. Ask the user to approve one concept and the exact headline words. Do not quote before this approval.
 5. Get the face or logo into Sloosh. Reuse an asset from `list_assets` when it exists. Call `import_asset` for a public HTTPS URL. For a local file, follow the server's upload instruction for this client. Look at each with `view_asset`. If the face is small or blurred, ask for a sharper photo.
-6. Call `list_spaces` with the search term thumbnail and output type image. Read each candidate with `get_space`. A Space fits when its description says it makes a face plus headline thumbnail. If one fits, offer it and use the Space path. If none fits, or the user wants layout control, use the direct path.
+6. Call `list_spaces` with the search term thumbnail and output type image. Read each candidate with `get_space`. A Space fits when its description says it makes a face plus headline thumbnail. If one fits, offer it and use the Space path. If none fits, or the user wants layout control, use the direct path. Before you take the direct path, call `get_space` on the best one or two matches from `list_spaces`. Tell the user in one line why no Space fits.
 
 ## Space path
 
@@ -37,7 +38,7 @@ This skill makes still images. It does not post to YouTube.
 4. Compare the maximum hold with the allowance left in credits. If the hold is more, give the user the settings link and do not run.
 5. Ask the user to approve this quote. Wait for the user.
 6. Call `run_space` with the quote and a stable idempotency key, for example `social-serum-test-space-16x9-v1`. Set confirmed=true only after the user approves this quote.
-7. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, poll `get_space_run` until the run settles or stops at a checkpoint.
+7. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, check the status with `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
 8. If `get_space_run` shows a checkpoint, show the user what it needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides.
 9. When the run finishes, call `get_space_run_outputs`. To look at an image, call `import_asset` with its url. Then call `view_asset` with the returned kind and id. Check it with the quality check in `references/thumbnail-craft.md`.
 
@@ -45,14 +46,14 @@ For checkpoints, holds and run states, read the `spaces` guide with `get_guide`.
 
 ## Direct path
 
-1. Call `list_models` with mode `image_gen`. Pick a model whose description says it renders text well. When a face or logo is used, the model must take reference images. The model must support the ratio. Do not choose a model or estimate a price from memory.
+1. Call `list_models` with mode `image_gen`. Pick a model whose description says it renders text well. When a face or logo is used, the model must take reference images. The model must support the ratio. Do not choose a model or estimate a price from memory. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
 2. Write the prompt from the template in `references/thumbnail-craft.md`. Put the approved headline in quotes, word for word. Pass the face and the logo as reference assets.
 3. Pass enhancePrompt false, so the headline stays exact.
 4. Call `quote_generation` for each item. Each item is one concept, one variant and one ratio. Use a generation count of up to 4 only for rolls of the same prompt.
 5. Show each item's credits and the round's total. Compare the total with the allowance left in credits. If it is more, give the settings link and do not run. If not, ask for one approval of this round. Wait for the user.
 6. Call `generate` for each quote with its own stable idempotency key, for example `social-serum-test-reaction-16x9-v1`. Set confirmed=true only after the user approves this quote.
-7. After the last `generate` of a round, if `show_generation` is available, call `show_generation` once with up to 8 operation ids. If not, poll `get_generation` about every 5 seconds for each operation until it settles.
-8. When the images are ready, get each output's kind and id from the result card or `get_generation`. Use `get_asset` for the current URL. Look at each image with `view_asset`.
+7. After the last `generate` of a round, if `show_generation` is available, call `show_generation` once with up to 8 operation ids. If not, check the status of each operation with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
+8. When the images are ready, get each output's kind and id from the result card or `get_generation`. Use `get_asset` for the current URL. Look at each image with `view_asset`. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
 9. Check each image with the quality check in `references/thumbnail-craft.md`. Check every headline word letter by letter. Tell the user what fails.
 10. Give the user the headline text and the concept rationale, one line each.
 
@@ -78,6 +79,7 @@ For quote expiry, round limits and card actions, read the `generation` and `spen
 - If the quote has a warning, tell the user what it says before they approve.
 - Plan at most 8 generations per round. Ask for one approval per round. If the total or the maximum hold is more than the allowance left, do not run.
 - Wait for the user's approval of each quote. A changed headline, model, Space or input, or an expired quote, needs a new quote and a new approval.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Start each idempotency key with social- and build it from the video, variant and ratio it makes. Use the same key when you retry the same item. Never reuse a key across different quotes. Do not make a new key to retry.
 - If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Among retries, only this case and the real person case need a new quote, a new approval and a new key.
 - If a call fails because the service owner is unavailable, retry once with the same key. If it fails again, tell the user and stop.

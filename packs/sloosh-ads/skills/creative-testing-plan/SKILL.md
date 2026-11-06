@@ -7,7 +7,7 @@ description: Turn a batch of Sloosh ad creatives into a test plan before launch,
 
 Use this skill to turn a batch of ad creatives into a test plan. Each test changes one variable. The plan says how each ad is named, where it runs, which number decides and what happens next. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
-This skill costs nothing. It makes a plan and a blank results table. It does not read ad accounts, change ad sets or post anything. The user sets up the ads in their own ad tools.
+This skill costs nothing. Tell the user so in your first reply. It makes a plan and a blank results table. It does not read ad accounts, change ad sets or post anything. The user sets up the ads in their own ad tools.
 
 ## Before you start
 
@@ -28,7 +28,7 @@ This skill costs nothing. It makes a plan and a blank results table. It does not
 
 ## Steps
 
-1. List every creative with its name and the one variable it changes from the control. The idempotency key is known only in the conversation that made the creative. If it is missing, find the asset with `list_assets` (kind generated), searched by words from its original request. Then build a new name in the Naming shape and tell the user the name is new. If the variable is unclear for an image creative, look at it with `view_asset` (kind and id from `list_assets`). For a video creative, ask the user what changed.
+1. List every creative with its name and the one variable it changes from the control. The idempotency key is known only in the conversation that made the creative. If it is missing, find the asset with `list_assets` (kind generated), searched by words from its original request. Then build a new name in the Naming shape and tell the user the name is new. If the variable is unclear for an image creative, look at it with `view_asset` (kind and id from `list_assets`). A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `view_asset` returns asset not found, try once with the other kind. For a video creative, ask the user what changed.
 2. If a creative changes two things, split it into two cells or drop it. Tell the user why. For a clean variant, use the `ad-variants` skill.
 3. Group the cells into tests. One test is one variable: hook, format, offer, background, CTA or copy. Give each test a control. A background test needs the same product on new backgrounds. Make them with the `product-imagery` skill.
 4. Name each ad (see Naming). Use the same string as the ad name and in the results table. If the Sloosh asset name differs, show it beside the ad name.
@@ -75,6 +75,7 @@ A hook test can use draft creatives. A CVR test needs finished creatives.
 - Impressions per cell = required events divided by the expected rate.
 - Total impressions = impressions per cell multiplied by the cells.
 - Days = total impressions divided by the daily impressions the budget buys.
+- If you assume a CPM or a rate, say it is an assumption. Ask the user for their own figure.
 - Run each test for at least 3 days. Do not call a test early.
 - If a test needs more than 7 days, cut cells or test a cheaper metric such as hook rate. Tell the user.
 - If the budget cannot reach the CVR minimum, test hook rate or CTR instead. Tell the user what that proves and what it does not.
@@ -82,6 +83,8 @@ A hook test can use draft creatives. A CVR test needs finished creatives.
 ## Decisions
 
 Write each hypothesis in this form: if the variant beats the control on the metric by the threshold for the segment, then the learning.
+
+Write one hypothesis for each cell against the control. Do not put several hook types in one hypothesis.
 
 Give each test a rule for each outcome:
 

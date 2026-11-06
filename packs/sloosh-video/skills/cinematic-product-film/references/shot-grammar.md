@@ -4,7 +4,7 @@ Use this file to write the storyboard, the keyframe prompts and the shot prompts
 
 ## Shot arc
 
-A product film of 4 to 8 shots, 2 to 5 seconds each, often follows this arc. Change it to fit the brief.
+A product film of 4 to 8 shots, 3 to 5 seconds each, often follows this arc. Change it to fit the brief.
 
 | Shot | Picture | Camera |
 |---|---|---|

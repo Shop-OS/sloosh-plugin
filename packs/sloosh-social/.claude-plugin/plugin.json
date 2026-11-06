@@ -1,8 +1,8 @@
 {
     "name": "sloosh-social",
     "displayName": "Sloosh social",
-    "version": "0.1.0",
-    "description": "Make social content with Sloosh: carousels, Reels and Shorts clips, and YouTube thumbnails. The assistant asks for your approval before any paid work.",
+    "version": "0.2.1",
+    "description": "Make social content with Sloosh: carousels, Reels and Shorts clips, YouTube thumbnails and remixes of social posts. The assistant asks for your approval before any paid work.",
     "author": {
         "name": "ShopOS",
         "url": "https://sloosh.ai"

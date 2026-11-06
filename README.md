@@ -97,7 +97,7 @@ codex mcp login sloosh
 
 ## Video remixes
 
-The remix skill runs the Shadow Clone Space on a short clip you give it. Your character takes the place of the person in the clip, with the same motion, camera and timing. The clip must be 4 to 30 seconds long and at most 64 MiB, as an .mp4 or .mov file. Upload the file or share a direct link to it. Links to Instagram, TikTok, X or YouTube post pages do not work yet: save the clip with the platform's own option first.
+The remix skill runs the Shadow Clone Space on a short clip you give it. Your character takes the place of the person in the clip, with the same motion, camera and timing. The clip must be 4 to 30 seconds long and at most 64 MiB, as an .mp4 or .mov file. Upload the file, share a direct link to it, or paste a link to a public Instagram Reel or post or an X post, and Sloosh imports the clip. TikTok and YouTube links do not work yet: save the clip with the platform's own option first.
 
 ## Launch films
 
@@ -125,7 +125,7 @@ In Codex, run `codex plugin add sloosh-motion@sloosh`. See [packs/sloosh-motion/
 
 ## Sloosh performance ads
 
-Sloosh performance ads plans, writes, makes and tests performance ads. Its planning skills write ad concepts, ad copy, creative test plans and results retros, and cost nothing. Its making skills make hook grids, sale banners, before and after ads, comparison ads, reference ad remixes, testimonial ads and creator-style video ads, after you approve each round's quote. It never posts ads and never reads your ad accounts. It needs this core plugin. Install it after the core plugin:
+Sloosh performance ads plans, writes, makes and tests performance ads. Its planning skills write ad concepts, ad copy, short video scripts, creative test plans and results retros, and cost nothing. Its making skills make hook grids, sale banners, before and after ads, comparison ads, reference ad remixes, testimonial ads and creator-style video ads, after you approve each round's quote. It never posts ads and never reads your ad accounts. It needs this core plugin. Install it after the core plugin:
 
 ```
 /plugin install sloosh-ads@sloosh
