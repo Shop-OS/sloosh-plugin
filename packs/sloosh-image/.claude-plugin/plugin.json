@@ -1,7 +1,7 @@
 {
     "name": "sloosh-image",
     "displayName": "Sloosh image editing",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Edit and finish your images with Sloosh: retouch, swap and relight backgrounds, reframe and outpaint, transfer a reference style, and upscale. The assistant asks for your approval before any paid work.",
     "author": {
         "name": "ShopOS",

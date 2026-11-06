@@ -24,7 +24,7 @@ One Space run makes one item's outputs. The Space fixes its own models and steps
 ### Choose the Space
 
 1. Call `list_spaces` with a search term from the request. Narrow by output type when you know it. Pass scope own when the user asks for their own Spaces.
-2. Call `get_space` on the best matches. Describe one to three options in plain words and let the user choose. Choose by the description, the output type and what the form needs.
+2. Call `get_space` on the best matches. Describe one to three options in plain words and let the user choose. Choose by the description, the output type and what the form needs. Do not quote a Space before the user chooses it.
 3. If no Space fits, tell the user. This skill does not build a Space. For one or two stills, offer the `product-imagery` skill.
 4. Call `get_space_input_schema` for the chosen Space. Sort its fields into two groups: the fields that change per item, such as the product photo or the product name, and the fields that stay the same for every item, such as the aspect ratio or the style.
 
@@ -32,9 +32,9 @@ One Space run makes one item's outputs. The Space fixes its own models and steps
 
 5. Get the list from the user: names in chat, image URLs, workspace assets or the rows of a table they share. Give each item a short, unique item id from its own data, such as the SKU, the product name or the file name. Use only lowercase letters, digits and hyphens. If two items give the same id, add the row number.
 6. Ask for the values of the fields that stay the same once. Ask for missing per-item values once, as one list. For a select field, pick one of its options. Do not type free text into a select.
-7. Before you import or pass a person's photo, a third-party image, reviews, a reference ad or a style reference, ask the user to confirm they may use it. Ask once for the whole list, before any quote. Do not use a photo of a child or of a public figure. If the user cannot confirm an item, drop that item and tell the user.
-8. For each image, reuse an asset from `list_assets`, use `import_asset` for a public URL, or follow the server's upload instruction for a local file. Look at each image with `view_asset` before its round. Drop an image that does not show the item, and tell the user.
-9. Show the user the item list with each item id and its per-item values. Ask the user to fix it before you quote.
+7. Before you import or pass a person's photo, a third-party image, reviews, a reference ad or a style reference, ask the user to confirm they may use it. Ask once for the whole list, before any quote. An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote. Do not use a photo of a child or of a public figure. If the user cannot confirm an item, drop that item and tell the user.
+8. For each image, reuse an asset from `list_assets`, use `import_asset` for a public URL, or follow the server's upload instruction for a local file. Look at each image with `view_asset` before its round. Drop an image that does not show the item, and tell the user. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
+9. Show the user the item list with each item id and its per-item values. Ask the user to fix it before you quote. Wait for the user.
 
 ### Plan and approve a round
 
@@ -48,10 +48,10 @@ One Space run makes one item's outputs. The Space fixes its own models and steps
 
 15. Call `run_space` for each item in the round, one after another. Pass that item's quote and a stable idempotency key built from the Space, the item id and the version, for example `batch-white-packshot-sku-1042-v1`. Set confirmed=true only after the user approves this quote.
 16. Keep a status table for the whole batch: item id, key, operation id, state and outputs. Update it after each call. Do not show raw ids to the user unless they ask.
-17. If `show_generation` is available, call `show_generation` once for each run, with that run's operation id. Show each Space run on its own. The card follows the run, so do not poll only to wait. If not, poll `get_space_run` for each open run about every 15 seconds until it settles or stops at a checkpoint. A slow run is not a failure.
+17. If `show_generation` is available, call `show_generation` once for each run, with that run's operation id. Show each Space run on its own. The card follows the run, so do not poll only to wait. If not, check the status with `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. Do this for each open run. A slow run is not a failure. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
 18. If `get_space_run` shows a pending checkpoint, show the user which item it is for and what the checkpoint needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides. The user can decide for several runs in one answer. Call the tool for each run with that run's own operationId, nodeId, runKey and expectedRerunCount. A decision cannot be changed by retrying. If the user does not decide, the run waits and keeps its hold. Remind the user once. Do not decide for them.
 19. Cancel a run with `cancel_space_run` only when the user asks.
-20. When a run ends, take its outputs from `get_space_run`. If they are absent, call `get_space_run_outputs`. Record each output with its label, type and link. `get_space_run` gives the credits the run used in millicredits. Divide by 1000.
+20. When a run ends, take its outputs from `get_space_run`. If they are absent, call `get_space_run_outputs`. Record each output with its label, type and link. Look at each image output with `view_asset`. `get_space_run` gives the credits the run used in millicredits. Divide by 1000.
 21. When every run of the round has settled, report the round: how many items succeeded out of how many ran, the items that succeeded with their outputs, the items that failed and why, and the credits the round used. After a test round of one item, ask the user to check the result before you plan the rest. Then plan the next round from the items that are left.
 
 ### Finish
@@ -87,6 +87,7 @@ Many Spaces take a brief or hook field. Their own steps expand it, so keep it sh
 - If a quote has a warning, tell the user what it says before they approve.
 - Plan at most 8 runs per round. Quote each run, show every expected cost and maximum hold with the round totals, and get one approval that names all of them. If the round total of maximum holds is more than the allowance left, do not run.
 - Wait for the user's approval of each quote. Changed inputs, another Space or an expired quote needs a new quote and a new approval.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Start each idempotency key with batch- and build it from the Space, the item id and the version. Use the same key when you retry the same run. Never reuse a key across different quotes or different items. Do not make a new key to retry.
 - If `get_space_run` shows the submission was rejected, nothing ran. Tell the user what the error says. Among retries, only this case and the real person case need a new quote, a new approval and a new key.
 - If a run fails because the service owner is unavailable, retry once with the same key. If it fails again, tell the user and move on to the next item.

@@ -7,7 +7,7 @@ description: Look up named motion effects for a video, an ad, a reel or a produc
 
 Use this skill to find and name motion effects. A moment in a film goes in. A short list of named effects comes out, each with its look, its timing and the skill that makes it. The other sloosh-motion skills read the same names, so the user can pick an effect here and ask for it by name there. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
-This skill costs nothing. It reads its own catalog and writes a plan in the chat. It needs no Sloosh connection. The producing skills quote their own work and ask for approval.
+This skill costs nothing. Tell the user so in your first reply. It reads its own catalog and writes a plan in the chat. It needs no Sloosh connection. The producing skills quote their own work and ask for approval.
 
 ## Before you start
 
@@ -26,7 +26,7 @@ If the user shares a video they saw and asks which effects it uses, hand off to 
 
 ## Rights
 
-- This skill reads no media and imports nothing. It names effects in words only.
+- This skill imports nothing. It reads only the files the user points to, such as a logo, to check the fit. It names effects in words only.
 - An effect is a move, not content. Never carry over a brand, logo, line of copy, track, voice or face from a reference the user describes, or from the catalog's sample words.
 - If an effect needs footage of a real person, a voice or a music track, tell the user that the producing skill will ask them to confirm they may use it and that any person shown agreed to appear. Never plan an effect around a child or a public figure.
 
@@ -61,7 +61,7 @@ Every entry names one producing skill:
 1. Read the moment the user describes. Write one line with the moment, the format, the length and the feeling.
 2. Pick the catalog file that matches the moment. For a whole film, start in `references/shotcraft-cards.md` and add seams from `references/cinetic-techniques-1.md`.
 3. Find three to five candidates. Search by group first, then by words such as reveal, logo, number, list, cursor or beat.
-4. Drop any candidate whose "avoid when" line matches the moment. Drop any candidate that needs content the user does not have, such as a real product screen or footage.
+4. Drop any candidate whose "avoid when" line matches the moment. Drop any candidate that needs content the user does not have, such as a real product screen or footage. If the brief points to a logo or an image file, look at it first. Check each "avoid when" line against what you see, such as thin strokes. Never describe its shapes or type without looking.
 5. Fit each timing to the film:
     - Convert frames to seconds. At 60 fps, 60 frames is 1 s. At 30 fps, 30 frames is 1 s.
     - A loop effect needs about 8 s. A cut-in card needs only its move.

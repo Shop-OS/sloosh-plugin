@@ -15,6 +15,7 @@ Use this skill to turn photos of a garment on a person, a hanger or a dummy into
 - Call `get_connection` once in the conversation if you have not called it yet. If spending is not enabled, give the user the settings link it returns and do no paid work.
 - If a brand kit exists, read it: a sloosh-brand.md file, Project knowledge, memory or pasted brand text. Use its background tone and image ratio.
 - Ask the user to confirm they may use the garment photos. Ask before any quote. If a photo shows a person, also ask them to confirm that the person agreed to AI edits of the photo. Do not use a photo that shows a child or a public figure. Ask for a hanger or flat-lay photo instead. If the user declines or cannot confirm, explain why and stop.
+- An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 - To show the garment on a person, follow the `virtual-try-on` or `fashion-lookbook-set` skill instead. For a non-apparel product on white, follow the `white-background-compliance` or `product-imagery` skill.
 
 ## Collect the brief
@@ -36,13 +37,13 @@ Use this skill to turn photos of a garment on a person, a hanger or a dummy into
 
 1. Call `list_spaces` with the search term ghost mannequin and output type image. Then try invisible mannequin, garment extraction and apparel catalogue.
 2. Call `get_space` on the best matches. Choose the one whose description turns a worn or hung garment into a filled-out shape on white. A cut-out Space fits only when the user wants a flat cut-out. Offer one to three options in plain words.
-3. If no Space fits, use the direct path. A Space often makes only the front view. Make the other views with the direct path.
+3. If no Space fits, use the direct path. Before you take the direct path, call `get_space` on the best one or two matches from `list_spaces`. Tell the user in one line why no Space fits. A Space often makes only the front view. Make the other views with the direct path.
 4. Call `get_space_input_schema` for the chosen Space. Map the front photo, and the back photo if the form takes one, to its field ids. Ask only for missing fields.
 5. Call `quote_space`. Tell the user the expected credits and the maximum the run can hold. If the quote has a warning, tell the user what it says.
 6. The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits. Compare the maximum hold with it. If the hold is more, give the user the settings link and do not run.
 7. Ask the user to approve this quote. Wait for the user.
 8. Call `run_space` with the quote and a stable idempotency key, for example `ecom-linen-shirt-ghost-front-3x4-v1`. Set confirmed=true only after the user approves this quote.
-9. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, poll `get_space_run` as its description says, until the run settles or stops at a checkpoint.
+9. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, check the status with `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
 10. If the run stops at a checkpoint, show the user what it needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides.
 11. When the run finishes, call `get_space_run_outputs`. Then go to the checks.
 
@@ -52,13 +53,13 @@ For checkpoints, holds and run states, read the `spaces` guide with `get_guide`.
 
 Use this path when no Space fits, or for the views the Space did not make. Work in two rounds. The back, inside-neck and detail views use the front result as a reference, so they wait for the next round.
 
-1. Call `list_models` with mode `image_gen`. Pick a model that takes at least two reference images and supports the ratio. Use one model for every view of a garment. Do not choose a model or estimate a price from memory.
+1. Call `list_models` with mode `image_gen`. Pick a model that takes at least two reference images and supports the ratio. Use one model for every view of a garment. Do not choose a model or estimate a price from memory. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
 2. Write one prompt per view with the template in `references/ghost-prompts.md`. Pass the photo of that view as reference 1.
 3. Round 1 is the front view of each garment. Skip it for a garment whose front a Space already made. Call `quote_generation` for each front view, with one output each. Show each view with its credits and the round's total.
 4. The allowance left from `get_connection` is in millicredits. Divide it by 1000 before you compare it with the round's total. Subtract the hold of any Space run in this conversation first. If the total is more, give the user the settings link and do not run.
 5. Ask for one approval of this round. Wait for the user.
 6. Call `generate` for each quote with its own stable idempotency key, for example `ecom-linen-shirt-ghost-front-3x4-v1`. Set confirmed=true only after the user approves this quote.
-7. If `show_generation` is available, call `show_generation` once after the last `generate` with all the operation ids, up to 8. If not, poll `get_generation` for each, as its description says, until the state is settled.
+7. If `show_generation` is available, call `show_generation` once after the last `generate` with all the operation ids, up to 8. If not, check the status with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
 8. Check each front image as below. Ask the user to approve the image. Do not start round 2 until the user approves the front.
 9. Round 2 is the back, inside-neck and detail views. Call `get_asset` on the approved front image. Pass its returned URL as reference 2, so the scale and light match. Repeat steps 3 to 7 for these views, with keys such as `ecom-linen-shirt-ghost-back-3x4-v1`.
 
@@ -66,7 +67,7 @@ For quote expiry, round limits or card actions, read the `generation` and `spend
 
 ## Check every image
 
-- Look at each image with `view_asset`. For a Space output, call `import_asset` with its URL first.
+- Look at each image with `view_asset`. For a Space output, call `import_asset` with its URL first. For a direct output, use kind generated and the output's generation id. Do not import a generated output only to look at it. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
 - Check that no body, skin, hand, hanger, clip or dummy part is in view.
 - Check that the shoulders and chest are filled out, the sleeves drape naturally and the hem is straight.
 - Check that the colour, the print placement, the seams, the buttons and the label match the photo.
@@ -88,6 +89,7 @@ For quote expiry, round limits or card actions, read the `generation` and `spend
 
 - Get a quote before any paid call. State its credits in plain words.
 - If the quote has a warning, tell the user what it says before they approve.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Plan at most 8 generations per round. Ask for one approval per round. A Space run is its own round. If the round's total or the Space hold is more than the allowance left, do not run.
 - Wait for the user's approval of each quote. A changed brief, another view, another model, another Space or an expired quote needs a new quote and a new approval.
 - Start each idempotency key with ecom- and build it from the garment, the view and the aspect ratio it makes. Use the same key when you retry the same item. Never reuse a key across different quotes. Do not make a new key to retry.

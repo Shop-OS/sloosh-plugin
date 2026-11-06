@@ -15,7 +15,7 @@ Shape, colours, materials, logo and every part stay identical to reference 1: [t
 | View | Camera words |
 |---|---|
 | Front | straight on, at the product's mid height, the logo face to camera |
-| Three-quarter | turned 45 degrees to the left, camera at mid height |
+| Three-quarter | turned 45 degrees to the left so the front and the left side both show, camera at mid height |
 | Side | a 90-degree side view from the [left / right], camera at mid height |
 | Back | directly from behind, camera at mid height, the back panel to camera |
 | Top-down | directly above, camera pointing straight down, product centred |

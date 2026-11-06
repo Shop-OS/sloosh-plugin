@@ -7,7 +7,7 @@ description: Run a multi-step Sloosh campaign in rounds, so a launch, a sale or 
 
 Use this skill to run a campaign as rounds of work. A brief and a plan go in. The producing skills quote each round. The user approves it once. Then the skills make it, you check it, and the passed items go to the next round. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
-This skill costs nothing. It plans the rounds, collects the quotes and checks the results. The producing skills quote their own work, ask for approval and do the paid work.
+This skill costs nothing. Tell the user so in your first reply. It plans the rounds, collects the quotes and checks the results. The producing skills quote their own work, ask for approval and do the paid work.
 
 ## Before you start
 
@@ -30,7 +30,7 @@ If the user has no plan yet, use the `launch-campaign-plan` skill first. If the 
 
 1. Collect the brief: product, photo, message, proof, tone, placements, deliverables and what must stay exact. Ask only for what is missing. Use only the proof, reviews and offers the user gives. Do not invent them.
 2. Find the product photo with `list_assets`. For a public or signed HTTPS URL, let the first producing skill import it. For a local file, let it follow the server's upload instruction. If `view_asset` is available, look at the photo with `view_asset`.
-3. Before any quote, ask the user to confirm they may use each person, third-party image, review, reference ad or style reference. Do not use a child or a public figure as a person reference. A decline is a hard stop for that step. Explain why and drop it.
+3. Before any quote, ask the user to confirm they may use the product photo and each person, third-party image, review, reference ad or style reference. Do not use a child or a public figure as a person reference. A decline is a hard stop for that step. Explain why and drop it. An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 4. Draft the rounds. A round holds everything that can be quoted now. A step that needs an asset that does not exist yet goes to a later round.
     - Round 1: stills that need only the product photo, such as the hero, packshots, plates and logo work.
     - Round 2: work built on round 1 outputs, such as ad layouts on the hero, clips that start from a round 1 still and new ratios.
@@ -42,9 +42,10 @@ If the user has no plan yet, use the `launch-campaign-plan` skill first. If the 
 9. Ask the user to approve the whole round once. Wait for the user. Then let each producing skill run its approved items with its own steps.
     - Each producing skill runs the exact quote the user approved. If a skill gets a new quote, or the credits change, show it to the user and wait for the user again.
     - Round approval does not approve a Space checkpoint. Ask the user for each checkpoint decision.
+    - Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 10. Check the round. If `view_asset` is available, look at each still with `view_asset`. Ask the user to watch each clip in its result card. If there is no card, call `get_asset` with the clip's kind and id and give the user its URL to watch. Use the checks in `references/round-plan.md`. Mark each item pass, fix or drop.
-11. Send each fix to the `creative-iteration` skill. Only passed items feed the next round.
-12. Write the handoff block from `references/round-plan.md`. Record each passed item's name, asset kind, asset id, type, ratio and idempotency key. Before the next round, call `get_asset` with each item's kind and id. Pass the kind, id, type and returned URL to the next round's producing skill. Never pass a URL from a card message.
+11. Send each fix to the `creative-iteration` skill. Tell the user which items go there. Only passed items feed the next round.
+12. Write the handoff block from `references/round-plan.md`. Record each passed item's name, asset kind, asset id, type, ratio and idempotency key. Before the next round, call `get_asset` with each item's kind and id. Pass the kind, id, type and returned URL to the next round's producing skill. Never pass a URL from a card message. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
 13. Repeat steps 7 to 12 for each round. Close with the delivery list from `references/round-plan.md`.
 
 ## Who makes what

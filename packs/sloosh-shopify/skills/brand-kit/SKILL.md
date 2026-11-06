@@ -16,6 +16,7 @@ Use this skill to build or update one brand kit file, sloosh-brand.md, for one s
 - Look for a brand kit first: a sloosh-brand.md file at the project root, a brand kit in the Project's knowledge, a brand kit in memory if memory is on, or brand kit text the user pasted. If you find one, use the update flow in step 9.
 - Keep one brand kit per store. If sloosh-brand.md exists and its Store section names a different store, tell the user. Ask them to use a separate project folder for each store. Do not overwrite another store's brand kit.
 - Before you import any image, ask the user to confirm that they own the store or have the right to use its product images and brand. If the brand kit Store section says rights confirmed yes, do not ask again. If the store is not theirs, explain that you cannot import its images. Stop unless they confirm permission. Write the answer in the Store section.
+- An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 
 ## Steps
 
@@ -30,7 +31,7 @@ Use this skill to build or update one brand kit file, sloosh-brand.md, for one s
     3. A coding agent that can fetch any URL. Read the store's public /products.json for titles, handles and image URLs. Password-protected or headless stores fail here. Move on.
     4. Ask the user to paste product page URLs or image URLs. Do not build URLs yourself.
 4. Ask only for what is still missing: voice and tone, colours, fonts, do and don't rules and target channels. Show what you found so the user can correct it.
-5. Import the logo, one main image for each hero product, and up to five style reference images with `import_asset`. Each needs a public HTTPS URL. If an image URL starts with //, add https: before it. Give each asset a name with the product handle, for example ocean-mug-main. For a local file, follow the server's upload instruction for this client. Record the kind and id of each asset. Put hero images under Hero products and style images under Sloosh assets. To check an image, look at it with `view_asset`.
+5. Import the logo, one main image for each hero product, and up to five style reference images with `import_asset`. Each needs a public HTTPS URL. If an image URL starts with //, add https: before it. Give each asset a name with the product handle, for example ocean-mug-main. For a local file, follow the server's upload instruction for this client. Record the kind and id of each asset. Put hero images under Hero products and style images under Sloosh assets. To check an image, look at it with `view_asset`. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `view_asset` returns asset not found, try once with the other kind.
 6. Write the brand kit with the headings and order in `references/brand-kit-template.md`. Do not add, rename or remove a heading. Map each channel to an aspect ratio:
     - Product page: 1:1 or 4:5.
     - Meta feeds: 4:5 or 1:1.
@@ -49,10 +50,10 @@ Use this skill to build or update one brand kit file, sloosh-brand.md, for one s
     - Keep asset ids that still apply. Add a line under the Updated heading with the date and what changed. Then save as in step 8.
     - On the Claude app, tell the user to remove the old sloosh-brand.md from the Project's knowledge and add the new one.
 10. Optional: offer one paid on-brand test image. It follows the `product-imagery` skill and has its own quote and approval. If another Sloosh for Shopify skill sent the user here, skip this step. Go back to that skill's next step after you save the brand kit.
-    - Use the brand kit's photo style and one reference asset. Call `list_models` with mode `image_gen`, then `quote_generation`. Do not choose a model or estimate a price from memory.
+    - Use the brand kit's photo style and one reference asset. Call `list_models` with mode `image_gen`, then `quote_generation`. Do not choose a model or estimate a price from memory. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
     - Tell the user the credits. Compare them with the daily allowance left from `get_connection`, which is in millicredits. If they are more, give the settings link from `get_connection` and do not run.
     - Wait for the user to approve. Call `generate` with a stable idempotency key, for example `shp-brand-ocean-mug-test-4x5-v1`. Set confirmed=true only after the user approves this quote.
-    - If `show_generation` is available, call `show_generation` once with the operation id. If not, check the result with `get_generation` when the user asks.
+    - If `show_generation` is available, call `show_generation` once with the operation id. If not, check the result with `get_generation` when the user asks. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation. Judge the image with `view_asset` only after it has finished.
 
 For imports and uploads, read the `assets` guide with `get_guide`. For the test image, read the `generation` guide.
 
@@ -68,6 +69,7 @@ For imports and uploads, read the `assets` guide with `get_guide`. For the test 
 - Only the optional test image is paid work. Get a quote before any paid call. State its credits in plain words.
 - If the quote has a warning, tell the user what it says before they approve.
 - Wait for the user's approval of that quote. A changed brief, another model or an expired quote needs a new quote and a new approval.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Start each idempotency key with shp- and build it from the image it makes. Never reuse a key for a different quote. Use the same key when you retry the same request. Do not make a new key to retry.
 - If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Only this case needs a new quote, a new approval and a new key.
 - If a call fails because the service owner is unavailable, retry once with the same key. If it fails again, tell the user and stop.

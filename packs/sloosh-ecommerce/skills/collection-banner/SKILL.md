@@ -16,6 +16,7 @@ Use this skill to make one wide store banner from two to four product photos. Th
 - The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits. Compare quotes with this number.
 - If a brand kit exists, read it: a sloosh-brand.md file, Project knowledge, memory or pasted brand text. Use its colours and photo style for the set and the light.
 - If a product photo comes from a store page or a third party, or it shows a person, ask the user to confirm they may use it before any quote. Do not use a photo of a child or a public figure. If the user declines or cannot confirm, explain why and stop.
+- An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 - For one product alone, use the `product-imagery` skill. For text in the image, use the `ad-variants` skill.
 
 ## Collect the brief
@@ -36,32 +37,33 @@ Use this skill to make one wide store banner from two to four product photos. Th
 ## Space path
 
 1. Call `list_spaces` with a search such as collection banner and output type image. Call `get_space` on the best matches. Choose one whose description makes a wide banner from several product photos with room for a headline. Describe it in plain words.
-2. If no Space fits the product count or the sizes, use the direct path. You can mix: the Space for desktop and the direct path for mobile.
+2. If no Space fits the product count or the sizes, use the direct path. Before you take the direct path, call `get_space` on the best one or two matches from `list_spaces`. Tell the user in one line why no Space fits. You can mix: the Space for desktop and the direct path for mobile.
 3. Call `get_space_input_schema`. Map the photos, the headline side and any size or style field to its field ids. Ask only for missing fields.
 4. Call `quote_space`. Tell the user the expected credits and the maximum the run can hold.
 5. Compare the maximum hold with the allowance left, in credits. If the hold is more, give the user the settings link and do not run.
 6. Ask the user to approve this quote. Wait for the user.
 7. Call `run_space` with the quote and a stable idempotency key, for example `ecom-summer-linen-banner-21x9-v1`. Set confirmed=true only after the user approves this quote.
-8. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, poll `get_space_run` as its description says, until the run settles or stops at a checkpoint.
+8. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, check the status with `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
 9. If the run stops at a checkpoint, show the user what it needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides.
 10. When the run finishes, call `get_space_run_outputs`. Then go to the checks.
 
 ## Direct path
 
-1. Call `list_models` with mode `image_gen`. Pick a model that takes as many reference images as you have products and supports the most sizes you need. For a desktop banner, choose the highest resolution the model lists, such as 2K. Use one model for the whole set. Do not choose a model or estimate a price from memory.
+1. Call `list_models` with mode `image_gen`. Pick a model that takes as many reference images as you have products and supports the most sizes you need. For a desktop banner, choose the highest resolution the model lists, such as 2K. Use one model for the whole set. Do not choose a model or estimate a price from memory. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
 2. If no model lists 21:9, follow the ratio fix in `references/banner-prompt.md`. In the prompt, keep the products in the middle band of the height, so a 21:9 crop does not cut them.
 3. Write one prompt per size with the structure and layouts in `references/banner-prompt.md`. Name each product by its reference number and true size. Name the empty side. End with no text and no extra products.
 4. Call `quote_generation` for each size, with up to 2 outputs and enhancePrompt false, so the server keeps the empty-zone and size lines. Pass every product photo as a reference asset, in prompt order. Show each size's credits and the total. Compare the total with the allowance left. For a later round, first subtract earlier rounds and any Space hold.
 5. Ask for one approval of this round. Wait for the user.
 6. Call `generate` for each quote with its own stable idempotency key, for example `ecom-summer-linen-banner-4x5-v1`. Set confirmed=true only after the user approves this quote.
-7. If `show_generation` is available, call `show_generation` once after the last `generate` with all the operation ids, up to 8. If not, poll `get_generation` for each, as its description says, until the state is settled.
+7. If `show_generation` is available, call `show_generation` once after the last `generate` with all the operation ids, up to 8. If not, check the status with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
 
 ## Check every banner
 
 - Check the banners when they have settled, the card shows them finished or the user says they are ready.
-- Direct path: read each operation once with `get_generation`. Call `view_asset` with kind generated and each output's generation id.
+- Direct path: read each operation once with `get_generation`. Call `view_asset` with kind generated and each output's generation id. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
 - Space path: call `import_asset` with each banner's URL. Then call `view_asset` with the returned kind and id.
-- Check that each product appears once, with its exact label and true size.
+- Check that each product appears once, with its exact label and true size. Compare the products' heights with the sizes the user gave.
+- Check that the set is the one in the brief, such as a shelf and not a table. Check that no extra object appeared, such as a plant or a prop, and that nothing reaches into the empty side.
 - Check that the headline side is empty, even and low in contrast.
 - Check that the light matches across the products and the colours match the kit.
 - If a check fails, use the fixes in `references/banner-prompt.md`. Offer a new quote for that size only, with the next version in its key, such as `ecom-summer-linen-banner-21x9-v2`.
@@ -75,6 +77,7 @@ Use this skill to make one wide store banner from two to four product photos. Th
 
 - Get a quote before any paid call. State its credits in plain words.
 - If the quote has a warning, tell the user what it says before they approve.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Plan at most 8 generations per round. Ask for one approval per round. A Space run is its own round. If the round's total or the Space hold is more than the allowance left, do not run.
 - Wait for the user's approval of each quote. A changed brief, another size, another model, another Space or an expired quote needs a new quote and a new approval.
 - Start each idempotency key with ecom- and build it from the product range, variant and aspect ratio it makes. Use the same key when you retry the same item. Never reuse a key across different quotes. Do not make a new key to retry.

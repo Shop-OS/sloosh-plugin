@@ -19,24 +19,24 @@ One Space run makes one recipe's outputs. The Space fixes its own models and ste
 
 ## Steps
 
-1. Call `list_spaces` with a search term from the request. Narrow by output type when you know it. Pass scope own when the user asks for their own Spaces. Without it, public Spaces from other workspaces appear too.
-2. Call `get_space` on the best matches. Describe one to three options in plain words and let the user choose. Choose by the description, the output type and what the form needs. Compare holds only after the quote.
+1. Call `list_spaces` with a search term from the request. Narrow by output type when you know it. Pass scope own when the user asks for their own Spaces. Without it, public Spaces from other workspaces appear too. Do not call those the user's Spaces.
+2. Call `get_space` on the best matches. Describe one to three options in plain words and let the user choose. Choose by the description, the output type and what the form needs. Call `get_space` before `get_space_input_schema`. Compare holds only after the quote. Quote only the options you described, and at most three.
 3. Note the runner from `get_space`. A legacy Space runs the same way, but it has no checkpoints.
 4. Call `get_space_input_schema` for the chosen Space. Ask for the inputs it needs, in the order the form lists them. Ask only for what is missing.
-5. Before you import or pass a person's photo, a third-party image, reviews, a reference ad or a style reference, ask the user to confirm they may use it. Ask before any quote. Do not use a photo of a child or of a public figure. If the user declines or cannot confirm, explain why and stop.
-6. For an image input, follow the server's upload instruction for a local file, use `import_asset` for a public URL, or reuse an asset from `list_assets`. Look at each image with `view_asset` before you pass it.
+5. Before you import or pass a person's photo, a third-party image, reviews, a reference ad or a style reference, ask the user to confirm they may use it. An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote. Do not use a photo of a child or of a public figure. If the user declines or cannot confirm, explain why and stop.
+6. For an image input, follow the server's upload instruction for a local file, use `import_asset` for a public URL, or reuse an asset from `list_assets`. Look at each image with `view_asset` before you pass it. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
 7. Fill a brief or hook field with the brief pattern below. For a select field, pick one of its options. Do not type free text into a select.
 8. Call `quote_space` with those inputs.
 9. Tell the user the expected credits and the maximum the run can hold. If the quote has a warning, tell the user what it says.
 10. The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits. If the hold is more than the allowance left, give the user the settings link from `get_connection` and do not run. Offer fewer inputs, a shorter duration or another Space.
 11. Ask the user to approve this quote. Wait for the user.
 12. Call `run_space` with the quote and a stable idempotency key, for example `spaces-ad-grid-citrus-can-1x1-v1`. Set confirmed=true only after the user approves this quote.
-13. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. The card follows the run, so do not poll only to wait. If not, poll `get_space_run` about every 15 seconds until the run settles or stops at a checkpoint. A slow run is not a failure.
+13. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. The card follows the run, so do not poll only to wait. If not, check the status with `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. A slow run is not a failure. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
 14. If `get_space_run` shows a pending checkpoint, show the user what the checkpoint output contains, such as its label and link, and what it needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides. Pass the run's operationId and the exact nodeId, runKey and expectedRerunCount of that checkpoint. A decision cannot be changed by retrying.
 15. If the user does not decide, the run waits. Remind the user once. Do not decide for them.
 16. Cancel a run with `cancel_space_run` only when the user asks.
-17. When the run finishes and the user wants the files, call `get_space_run_outputs`. List each output with its label, type and link. Tell the user the credits the run used. `get_space_run` gives them in millicredits. Divide by 1000.
-18. To change a finished result, follow the `creative-iteration` skill. If no Space fits, follow the `product-imagery` skill for a still or the `product-video` skill for a clip.
+17. When the run finishes and the user wants the files, call `get_space_run_outputs`. List each output with its label, type and link. Look at each image output with `view_asset`. Tell the user the credits the run used. `get_space_run` gives them in millicredits. Divide by 1000.
+18. To change a finished result, follow the `creative-iteration` skill. If no Space fits, use a direct path. Before you take the direct path, call `get_space` on the best one or two matches from `list_spaces`. Tell the user in one line why no Space fits. Then follow the `product-imagery` skill for a still or the `product-video` skill for a clip.
 
 For checkpoints, holds and run states, read the `spaces` guide with `get_guide`.
 
@@ -67,6 +67,7 @@ Many Spaces take a brief or hook field. Their own steps expand it, so keep it sh
 - If the quote has a warning, tell the user what it says before they approve.
 - Run one Space at a time. If the user wants several runs, plan at most 8. Quote each one, show every expected cost and maximum hold together, and get one approval that names all of them. If the total maximum hold is more than the allowance left, do not run.
 - Wait for the user's approval of each quote. Changed inputs, another Space or an expired quote needs a new quote and a new approval.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Start each idempotency key with spaces- and build it from the Space, product, variant and ratio. Use the same key when you retry the same run. Never reuse a key across different quotes. Do not make a new key to retry.
 - If `get_space_run` shows the submission was rejected, nothing ran. Tell the user what the error says. Among retries, only this case and the real person case need a new quote, a new approval and a new key.
 - If a run fails because the service owner is unavailable, retry once with the same key. If it fails again, tell the user and stop.

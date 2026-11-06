@@ -1,7 +1,7 @@
 {
     "generatedFrom": "Shop-OS/shopos-backend-ts apps/spacelab-mcp/plugins",
     "files": {
-        "packs/sloosh-image/.claude-plugin/plugin.json": "1e0c47eac39924741a1c9d3bc47d4206bbde898b4798a079f649249c8b92bc3d",
+        "packs/sloosh-image/.claude-plugin/plugin.json": "a75391f3782c00e49334c2e20e77cb20286f8d909a4002e51eaefd9f394acc85",
         "packs/sloosh-image/.mcp.json": "b221ca3a6962dcd6a3dcd08b9073f78d6f04507a2fbadfaaefad0dedbabd761f",
         "packs/sloosh-image/LICENSE": "c83345781c3f0bbfdbec98959117d197ea95712b141cc1f23f612fd62d7ed82f",
         "packs/sloosh-image/README.md": "20f67d47f4341d9c7690c3377f881275a5546adfed2495be998cf449e04b5c16",
@@ -128,16 +128,16 @@
         "packs/sloosh-image/evals/trigger-upscale-and-finish/mocks/sloosh/show_generation.md": "a5c99db01fe87fb433032e2d1165fe5880556969d4c5c186710c54a725b759e4",
         "packs/sloosh-image/evals/trigger-upscale-and-finish/mocks/sloosh/view_asset.md": "ef455e2af1c4c184d370c2f0024ce89579d7c92b3c68ae45fca9d79570640876",
         "packs/sloosh-image/evals/trigger-upscale-and-finish/prompt.md": "5d4962747fc4a0276cac73e7fb0e019fd80b671121778b1a3667ce420ed48de9",
-        "packs/sloosh-image/skills/background-swap-relight/SKILL.md": "400b1f9f408afe30e2c9c49364328e98f36b952c2e079f490bffc6a0f001064c",
+        "packs/sloosh-image/skills/background-swap-relight/SKILL.md": "fe2850bc8e4bca866bf247466a98c3e545239ca516a7f08451d7154f8fa7ec46",
         "packs/sloosh-image/skills/background-swap-relight/references/routes-and-prompts.md": "758434532c3281fb1460c11edf9cf724ca7e391f2cb7a70e2f9ea07b553b1bd4",
-        "packs/sloosh-image/skills/image-edit-retouch/SKILL.md": "32edeb2c32e80cf2902ad5c72196f765f3d3fbd766554559fa0a40e0583bf008",
+        "packs/sloosh-image/skills/image-edit-retouch/SKILL.md": "b1f606b36203e586666acbf2a26c82f13e6342005046c9fd1a7ec48898f5e2da",
         "packs/sloosh-image/skills/image-edit-retouch/references/edit-prompts.md": "49251e17a1bb4755ebd6eb81c8297f47e0986151c99db16aab272ba7a20d2a4c",
-        "packs/sloosh-image/skills/reframe-outpaint/SKILL.md": "cb4b6c6c18913652764e914e015025a43c41df70b6f77f771ad7db4d053a69fa",
+        "packs/sloosh-image/skills/reframe-outpaint/SKILL.md": "c6fcab9eeef7355a64f65d0b7ee11590a71ff27573996e11cf8ea569524b9b09",
         "packs/sloosh-image/skills/reframe-outpaint/references/placements.md": "ecdb25fdc30196e17e513f1e17f340aaf9dbb7d5974761f3e3e0928210731dd6",
         "packs/sloosh-image/skills/reframe-outpaint/references/prompt-patterns.md": "2868478407988459f6c4e0f38c77b2d2c4f65fe7671e63c90cee3f32038a92c2",
-        "packs/sloosh-image/skills/style-reference-transfer/SKILL.md": "d910d1c23377a681cddff8d0f3f8e0d1f63fcbc04e8209791d59a5bda04bc4bf",
+        "packs/sloosh-image/skills/style-reference-transfer/SKILL.md": "e420555c0b39ce7e3b74923519b4e7ea270afba45cadeb94048ea04b2162a939",
         "packs/sloosh-image/skills/style-reference-transfer/references/look-craft.md": "dd45a4fe898bae07f6f5bd887c79a416bf4b0196d45b00f92ed6e3cba23ea2a1",
-        "packs/sloosh-image/skills/upscale-and-finish/SKILL.md": "45ec38182d4e0523f4406bcd5c99d7bbb14d1b93b5ee69d801a85d2ab886dab9",
+        "packs/sloosh-image/skills/upscale-and-finish/SKILL.md": "8747d7e770adad5254ef8bca2d1a51663f2ee03e390e47a22f4f3c9e56b8c117",
         "packs/sloosh-image/skills/upscale-and-finish/references/finish-targets.md": "2aebe3411d4dbc36bcf0e6de27bfa61fcbdb264101d40163f15a8df2fe04bb35"
     }
 }

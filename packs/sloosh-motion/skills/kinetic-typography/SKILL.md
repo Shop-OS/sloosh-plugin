@@ -13,7 +13,8 @@ In this skill, <kinetic-typography> is this skill's folder. <director> is the fo
 
 - If you cannot run shell commands on the user's own computer (a remote sandbox does not count), tell the user that the film needs a coding agent that runs on their computer. Offer the `product-video` skill from the core Sloosh plugin for a single generated clip instead. Then stop.
 - The film needs python3 with numpy, opencv-python and scipy, Playwright with its Chromium browser, and ffmpeg. Check what is already there.
-- Ask the user before you install anything. Install Python modules into a virtual environment (python3 -m venv .venv). Never use --break-system-packages. Playwright and its browser need the user's approval too.
+- Ask the user before you install anything. Install only what is missing. Install Python modules into the film's virtual environment (python3 -m venv .venv). Every install command you show the user uses this virtual environment. Never use --break-system-packages. Playwright and its browser need the user's approval too.
+- If Playwright is missing, ask to install it into the film's virtual environment. If the user declines, stop at the HTML render step and name the missing tool. Do not write your own browser renderer. Look for tools only in the film folder, its virtual environment and the system path.
 - If the director folder is missing, the scripts print an install hint and stop. Tell the user to install the sloosh-motion plugin.
 - No script in this skill downloads anything. The director's new_film.sh copies the vendored fonts into the film folder.
 - If a brand kit exists (a sloosh-brand.md file, Project knowledge, memory or pasted text), read it. Take the brand colour, the fonts and any type rules from it.
@@ -66,7 +67,7 @@ Copy rules:
 6. Render the page: python3 lib/render_html.py ui/kt_<preset>.html --dur LEN --out frames/kt_<preset> --jobs 1.
 7. Run python3 edit.py out/sheet.jpg with 12 to 16 times: one still at every landing, wipe, hit and the zoom. Look at it.
 8. Run python3 audio.py, then python3 edit.py to make out/<name>_v1.mp4, then python3 audio.py out/<name>_v1.mp4 to mux. Keep the file under 30 MB.
-9. Check the film with `references/qa.md`. Make section sheets and deliver the way the director skill says.
+9. Check the film with `references/qa.md`. Make section sheets and deliver the way the director skill says. Compare the film with the approved treatment. If a word, a lockup or a font differs, tell the user in the final reply.
 
 Make other formats from the same tl.py (set W and H, then make a new sheet). Never crop.
 
@@ -82,7 +83,7 @@ Before a paid plate:
     - Claude Code: run /plugin install sloosh@sloosh, then run /mcp and sign in.
     - Claude app: open the plugin's Connectors tab and connect Sloosh. Or add a custom connector with the URL https://mcp.sloosh.ai/mcp.
 - A film without a plate or a morph needs none of the Sloosh steps. Make it with code only.
-- If a plate photo shows a person, ask the user to confirm that the person agreed to appear in an AI-made film. Ask before any quote.
+- If a plate photo shows a person, ask the user to confirm that the person agreed to appear in an AI-made film. An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 - Do not use a photo of a child or of a public figure. If the user declines or cannot confirm, explain why and stop.
 - Ask the user to confirm they may use the product photo and any reference video. If they cannot, stop.
 - Call `get_connection` once in the conversation if you have not called it yet. If spending is not enabled, give the user the settings link it returns and do no paid work.
@@ -93,13 +94,13 @@ Write the still's prompt from `references/plate.md`. Never name a brand, product
 
 Each paid step is one round. A round holds at most 8 generations; a plate round usually holds one.
 
-1. Call `list_models` with mode `image_gen` for the still. Pick a model that takes a reference image and supports the film's aspect ratio. For the animated plate, call `list_models` with mode `video_gen` and pick a model that takes a start frame. Do not choose a model or estimate a price from memory.
+1. Call `list_models` with mode `image_gen` for the still. Pick a model that takes a reference image and supports the film's aspect ratio. For the animated plate, call `list_models` with mode `video_gen` and pick a model that takes a start frame. Do not choose a model or estimate a price from memory. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
 2. Call `quote_generation` for each item of the round, at the film's aspect ratio. For the clip, use the approved still as the start frame, one slow camera move, and no generated audio.
 3. Show the user each item with its credits and the round's total. The allowance left from `get_connection` is in millicredits, so divide it by 1000 first. If the total is more, give the settings link and do not run the round. Otherwise ask for one approval of this round, and wait for the user.
 4. Call `generate` for each quote with its own stable idempotency key, for example `motion-kt-serum-plate-9x16-v1` or `motion-kt-serum-plateclip-9x16-v1`. Set confirmed=true only after the user approves this quote. The user's approval of the round covers each quote in that round.
 5. If `show_generation` is available, call `show_generation` once after the last `generate` of a round, with all its operation ids, up to 8. Show images and videos in separate calls. The card updates itself. When the user says the result is ready, call `get_generation` once to read its outputs.
-6. If not, poll `get_generation` with each operation id about every 5 seconds for a still and every 15 seconds for a clip until it settles.
-7. When a result is done, call `get_asset` with its kind and id. Download the file from the returned URL into plates/ (the still) or clips/ (the clip). Look at the still with `view_asset` before you use it.
+6. If not, check the status with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
+7. When a result is done, call `get_asset` with its kind and id. Download the file from the returned URL into plates/ (the still) or clips/ (the clip). Look at the still with `view_asset` before you use it. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind. For the clip, check that the output ratio and size match the brief. A start frame's ratio drives the clip, so match the start frame to the brief first.
 8. Run the cut-out and set PLATE or PLATE_CLIP as `references/plate.md` says.
 
 For card actions, model choice or generation errors, read the `generation` guide with `get_guide`. For imports and holds, read the `assets` and `spending` guides with `get_guide`.
@@ -126,6 +127,7 @@ The steps, the morph prompt and the checks are in `references/start-end-frames.m
 - Get a quote before any paid call. State its credits in plain words.
 - If a quote has a warning, tell the user what it says before they approve.
 - Plan at most 8 generations per round. Ask for one approval per round. If the round's total is more than the daily allowance left, do not run.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Wait for the user's approval of each round's quotes. A changed prompt, a changed input image or frame, another model or an expired quote needs a new quote and a new approval.
 - Start each idempotency key with motion- and build it from the product, the item and the aspect ratio. Increase the version when you make the same item again. Never use one key for two different quotes. Use the same key when you retry the same item. Do not make a new key to retry.
 - If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Among retries, only this case and the real person case need a new quote, a new approval and a new key.

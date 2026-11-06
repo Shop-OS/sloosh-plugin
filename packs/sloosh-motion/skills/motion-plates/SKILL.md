@@ -16,20 +16,20 @@ This skill makes stills only. It does not animate, edit or render a film.
     - Claude app: open the plugin's Connectors tab and connect Sloosh. Or add a custom connector with the URL https://mcp.sloosh.ai/mcp.
 - Call `get_connection` once in the conversation if you have not called it yet. If spending is not enabled, give the user the settings link it returns and do no paid work.
 - If a brand kit exists, read it: a sloosh-brand.md file, Project knowledge, memory or pasted brand text. Use its palette, its look and its never list.
-- Ask the user to confirm they may use the product photos, the logo and any material photo or style reference. Ask before any quote. If the user declines or cannot confirm, explain why and stop.
+- Ask the user to confirm they may use the product photos, the logo and any material photo or style reference. An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote. If the user declines or cannot confirm, explain why and stop.
 - Do not put people in a plate. Do not use a photo of a child or of a public figure as a reference.
 
 ## Steps
 
 1. Collect the plate list, from the plate rows of a motion brief when one exists. Ask only for what is missing.
-2. Write one spec line per plate: shot id, kind, ratio, empty zone for type, light, surface, must keep. Show the list to the user. This step costs nothing.
+2. Write one spec line per plate: shot id, kind, ratio, empty zone for type, light, surface, must keep. Show the list to the user. This step costs nothing. Do not skip it. Wait for the user to confirm the list before any quote.
 3. Use 16:9 as the master, 9:16 for a vertical film and 1:1 for square posts. Make each ratio as its own generation. Do not crop.
 4. Reuse an asset from `list_assets` when it exists. Call `import_asset` for a public HTTPS URL. For a local file, follow the server's upload instruction for this client. Look at each product photo and logo with `view_asset`. Note the shape, the label and the colours that must stay exact.
-5. Choose a path for each plate. Call `list_spaces` with a search term for the job: background remover for a cut-out, logo material for a logo, upscale for a 4K lift, aspect ratio for a new ratio, backdrop for a surface. Choose by the description from `list_spaces` or `get_space`. Offer one to three options. If no Space fits, use the direct path.
+5. Choose a path for each plate. Call `list_spaces` with a search term for the job: background remover for a cut-out, logo material for a logo, upscale for a 4K lift, aspect ratio for a new ratio, backdrop for a surface. Choose by the description from `list_spaces` or `get_space`. Offer one to three options. Before you take the direct path, call `get_space` on the best one or two matches from `list_spaces`. Tell the user in one line why no Space fits. If no Space fits, use the direct path.
 6. When the look is open, make drafts first: one prompt, up to four outputs, low resolution. Let the user pick a direction.
 7. Make the finals at 2K for a full-frame background and at 4K for a plate the camera pushes into, crops or match-cuts. Keep one model, one reference set and, if `list_models` shows a seed, one seed for the set.
 8. Check every plate with `view_asset`. Use the checks in `references/plate-prompts.md`.
-9. Call `get_asset` for each plate and use the returned URL. Name each file by shot id, ratio and size, such as bg01_16x9_4k.png. If you can write files on the user's computer, ask which folder to use. Suggest the project's public/sloosh/ folder. Give the user the handoff block from `references/plate-prompts.md`.
+9. Call `get_asset` for each plate and use the returned URL. Name each file by shot id, ratio and size, such as bg01_16x9_4k.png. Use the extension of the file you got. If the brief needs a PNG and the output is another type, tell the user. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind. If you can write files on the user's computer, ask which folder to use. Suggest the project's public/sloosh/ folder. Give the user the handoff block from `references/plate-prompts.md`.
 10. To build the film around the plates, follow the `sloosh-motion-director` skill. To put type over a plate, follow the `kinetic-typography` skill. To animate one plate as a clip, follow the `product-video` skill.
 
 ## Space path
@@ -39,7 +39,7 @@ This skill makes stills only. It does not animate, edit or render a film.
 3. The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits. Compare the maximum hold with it. If the hold is more, give the user the settings link and do not run.
 4. Ask the user to approve this quote. Wait for the user.
 5. Call `run_space` with the quote and a stable idempotency key, for example `motion-serum-cutout-1x1-v1`. Set confirmed=true only after the user approves this quote.
-6. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, poll `get_space_run` with the operation id until the run settles or stops at a checkpoint.
+6. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, check the status with `get_space_run` at the interval the server gives, until the run settles or stops at a checkpoint. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
 7. If `get_space_run` shows a checkpoint, show the user what it needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides.
 8. When the run finishes, call `get_space_run_outputs` for the files.
 
@@ -47,13 +47,13 @@ For checkpoints, holds and run states, read the `spaces` guide with `get_guide`.
 
 ## Direct path
 
-1. Call `list_models` with mode `image_gen`. Pick a model that supports the ratio, the resolution and the reference images you need. Do not choose a model or estimate a price from memory.
+1. Call `list_models` with mode `image_gen`. Pick a model that supports the ratio, the resolution and the reference images you need. Do not choose a model or estimate a price from memory. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
 2. Write each prompt with the grammar in `references/plate-prompts.md`. For a short or vague prompt, call `enhance_prompt`. It is free. Show the rewrite to the user. Quote the rewrite with enhancePrompt false.
 3. Call `quote_generation` for each plate and ratio. Pass the product photo or the logo as a reference asset.
 4. Show the round to the user: each quote with its credits, and the total. The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits. If the total is more, give the user the settings link and do not run.
 5. Ask the user to approve the quotes on this list. Wait for the user. An approval covers only the quotes on the list. A quote that is not on the list needs its own approval.
 6. Call `generate` for each quote with its own stable idempotency key, built from the product, the shot and the ratio, for example `motion-serum-hero-16x9-v1`. Add draft or final to the key, for example `motion-serum-bg01-16x9-draft-v1` and `motion-serum-bg01-16x9-final-v1`. Set confirmed=true only after the user approves this quote.
-7. If `show_generation` is available, call `show_generation` once after the last `generate` with all the round's operation ids. If not, poll `get_generation` with each operation id about every 5 seconds until the state is settled. Then go on to step 8.
+7. If `show_generation` is available, call `show_generation` once after the last `generate` with all the round's operation ids. If not, check the status with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation. Then go on to step 8.
 8. If you do not know whether a generation started, use `reconcile_generation` before you retry.
 
 For quote expiry and card actions, read the `generation` and `spending` guides with `get_guide`.
@@ -78,6 +78,7 @@ For quote expiry and card actions, read the `generation` and `spending` guides w
 - Get a quote before any paid call. State its credits in plain words.
 - If the quote has a warning, tell the user what it says before they approve.
 - Plan at most 8 generations per round. Ask for one approval per round. If the total or the maximum hold is more than the allowance left, do not run.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Wait for the user's approval of each quote. A changed plate list, another model, another Space, changed inputs or an expired quote needs a new quote and a new approval.
 - Start each idempotency key with motion- and build it from the product, variant, aspect ratio and stage (draft or final) it makes. Use the same key when you retry the same item. Never reuse a key across different quotes. Do not make a new key to retry.
 - If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Among retries, only this case and the real person case need a new quote, a new approval and a new key.

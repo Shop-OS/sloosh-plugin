@@ -17,6 +17,7 @@ This skill does not post or upload anything to an ad platform.
 - Call `get_connection` once in the conversation if you have not called it yet. If spending is not enabled, give the user the settings link it returns and do no paid work.
 - If a brand kit exists (a sloosh-brand.md file, the Project's knowledge, memory or pasted text), read it. Use its colours, logo, voice and photo style.
 - Ask the user to confirm that they own the product images and brand, or have the right to use them. If they decline, stop.
+- An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 
 ## The rows and the defamation guard
 
@@ -38,13 +39,13 @@ This skill does not post or upload anything to an ad platform.
 
 ### Space path (first choice)
 
-5. Search `list_spaces` for a comparison, us vs them or feature table Space. Call `get_space` on the best matches. Choose by its description. Describe the match in plain words.
+5. Search `list_spaces` for a comparison, us vs them or feature table Space. Call `get_space` on the best matches. Choose by its description. Describe the match in plain words. Before you take the direct path, call `get_space` on the best one or two matches from `list_spaces`. Tell the user in one line why no Space fits.
 6. Call `get_space_input_schema`. Fill the product image, rows, headline and ratio by the schema's fields. If the schema has no ratio field, tell the user which ratio the Space makes before you quote. If the schema has no field for the rows or the layout, use the direct path.
 7. Call `quote_space`. Tell the user the expected credits and the maximum the run can hold. If the quote has a warning, tell the user what it says.
 8. Compare the maximum hold with the daily allowance left. The allowance from `get_connection` is in millicredits. Convert it to credits before you compare. If the hold is more, give the settings link and do not run.
 9. Ask for approval and wait for the user.
 10. Call `run_space` with the quote and a stable idempotency key, for example `ads-comparison-greens-4x5-v1`. Set confirmed=true only after the user approves this quote.
-11. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, follow the run with `get_space_run` when the user asks.
+11. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, check the status with `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
 12. If the run stops at a checkpoint, show the user what it needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides.
 13. When the run finishes, call `get_space_run_outputs`.
 
@@ -52,20 +53,23 @@ The `published-spaces` skill has the full Space flow.
 
 ### Direct path (fallback)
 
-5. Call `list_models` with mode `image_gen`. Pick a model that renders text well, takes a reference image and supports the ratio. Judge by its `list_models` description. Do not choose a model from memory.
+5. Call `list_models` with mode `image_gen`. Pick a model that renders text well, takes a reference image and supports the ratio. Judge by its `list_models` description. Do not choose a model from memory. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
 6. Write the prompt from this shape. Fill every bracket.
 
     An editorial comparison ad, one frame, two columns. Left column titled "[their label]", desaturated grey, a plain generic [category object], a cross in each row. Right column titled "[brand]", full colour, the [product] from reference 1 at the top, a tick in each row in [brand colour]. [N] rows, each row one short line per side, exactly: "[row 1 left] | [row 1 right]" and so on. Headline across the top exactly: "[headline]". Clean sans typography. Keep the product label and colours exactly as reference 1. No other text.
 
+    If the product in reference 1 has no label, write "the unlabelled product from reference 1" and add "Do not add a label or any text to the product."
+
 7. Plan at most 8 generations per round. Call `quote_generation` for each item, with the product image as a reference asset. Show each item with its credits and the round's total. Compare the total with the allowance left, in credits. If the total is more than the allowance left, give the settings link and do not run. Ask for one approval of the round. Wait for the user.
 8. Call `generate` for each quote with its own stable idempotency key, for example `ads-comparison-greens-1x1-v1`. Set confirmed=true only after the user approves this quote.
-9. After the last `generate` of a round, if `show_generation` is available, call `show_generation` once with up to 8 operation ids. If not, check the results with `get_generation` when the user asks.
+9. After the last `generate` of a round, if `show_generation` is available, call `show_generation` once with up to 8 operation ids. If not, check the status with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
 
 For quotes, holds and card actions, read the `generation`, `spending` and `spaces` guides with `get_guide`. For imports, read the `assets` guide with `get_guide`.
 
 ## Check the result
 
-- Look at each image with `view_asset` before you hand it over.
+- Look at each image with `view_asset` before you hand it over. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `view_asset` returns asset not found, try once with the other kind.
+- If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
 - If a Space output has no asset id, import its URL with `import_asset` first. Then call `view_asset` with the returned kind and id.
 - Check that every row is spelled exactly, the ticks and crosses sit on the right sides and no row was added.
 - Check that the product label and colours match the reference, and that their side stays neutral.
@@ -83,6 +87,7 @@ For quotes, holds and card actions, read the `generation`, `spending` and `space
 - Get a quote before any paid call. State its credits in plain words.
 - If the quote has a warning, tell the user what it says before they approve.
 - Plan at most 8 generations per round. Ask for one approval per round. If the round's total or the Space's maximum hold is more than the daily allowance left, do not run.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Wait for the user's approval of each quote. Changed rows, another Space, another model or an expired quote needs a new quote and a new approval.
 - Start each idempotency key with ads- and build it from the product, variant and ratio it makes. Use the same key when you retry the same item. Never reuse a key across different quotes. Do not make a new key to retry.
 - If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. This case needs a new quote, a new approval and a new key.

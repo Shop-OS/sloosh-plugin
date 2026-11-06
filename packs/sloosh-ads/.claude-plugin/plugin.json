@@ -1,8 +1,8 @@
 {
     "name": "sloosh-ads",
     "displayName": "Sloosh performance ads",
-    "version": "0.1.0",
-    "description": "Plan, write, make and test performance ads with Sloosh: ad concepts, copy at volume, hook grids, before and after, comparison, testimonial, sale banner, reference remix and creator-style video ads, plus test plans and results retros. The assistant asks for your approval before any paid work.",
+    "version": "0.2.0",
+    "description": "Plan, write, make and test performance ads with Sloosh: ad concepts, copy at volume, short video scripts, hook grids, before and after, comparison, testimonial, sale banner, reference remix and creator-style video ads, plus test plans and results retros. The assistant asks for your approval before any paid work.",
     "author": {
         "name": "ShopOS",
         "url": "https://sloosh.ai"

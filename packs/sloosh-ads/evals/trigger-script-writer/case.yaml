@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-script-writer
+description: A request for a timed short-form video script with a hook and voiceover lines loads script-writer, and it writes the script without any Sloosh call.
+tags: [trigger]
+runs: 2
