@@ -81,6 +81,7 @@ Install a pack in Claude Code with /plugin install and the pack name, such as /p
 | `carousel-builder` | A swipe carousel of 4 to 10 slides for Instagram or LinkedIn | Paid |
 | `reels-shorts-clip` | One vertical clip for Reels, TikTok or Shorts, with a hook in the first 3 seconds | Paid |
 | `youtube-thumbnail` | YouTube thumbnails and Shorts or Reels cover images | Paid |
+| `social-post-remix` | Preview: a new video of the user's product in the structure of an Instagram or X post, made with the Calypso editor where the connection has it | Paid |
 
 ## sloosh-strategy: Sloosh strategy
 
@@ -107,7 +108,7 @@ These skills need a connected Shopify store.
 
 Most of these skills render on the user's computer. They need a coding agent that runs commands there, such as Claude Code. In the Claude app, only animated-chart, motion-plates and reference-to-motion work.
 
-Raw talking-to-camera footage that the user shot goes to auto-edit, not to talking-head-video or captions-subtitles (sloosh-video). auto-edit needs macOS on Apple Silicon for the full edit.
+Raw talking-to-camera footage that the user shot goes to auto-edit, not to talking-head-video or captions-subtitles (sloosh-video). auto-edit needs macOS on Apple Silicon for the full edit. A long recording the user owns, such as a podcast or a webinar, to cut into several shorts goes to long-video-to-shorts, which hands each short to auto-edit.
 
 | Skill | Use it for | Cost |
 |---|---|---|
@@ -124,4 +125,5 @@ Raw talking-to-camera footage that the user shot goes to auto-edit, not to talki
 | `motion-plates` | Still plates for a motion film: backgrounds, cut-outs and hero renders | Paid |
 | `motion-film-code` | A film built in code with no voice-over: a sting, a seamless loop or a scored 20 to 45 s film with exact UI and words, in Remotion or HTML pages | Paid |
 | `auto-edit` | A finished captioned cut of the user's own talking-to-camera footage: pauses and false starts cut, camera moves, kinetic type and a mastered mix | Paid |
+| `long-video-to-shorts` | Several vertical shorts cut from one long talking video the user owns: ranked best moments, a crop that follows the face, captions | Free |
 | `reel-export` | A vertical 1080x1920 file from a finished horizontal or square video | Paid |

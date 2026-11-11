@@ -7,7 +7,7 @@ description: Tear down competitor ads that the user pastes, or public pages they
 
 Use this skill to learn from competitor ads without copying them. Competitor ads go in. A pattern table and concept seeds in our own product and proof come out. The teardown borrows structure. It never borrows assets. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
-This skill costs nothing. It writes a plan in the chat. The producing skills quote their own work and ask for approval.
+This skill costs nothing. Tell the user so in your first reply. It writes a plan in the chat. The producing skills quote their own work and ask for approval.
 
 ## Before you start
 
@@ -30,7 +30,7 @@ This skill costs nothing. It writes a plan in the chat. The producing skills quo
 ## Steps
 
 1. Collect the ads. Ask for the placement of each ad and how long it has run, if the user knows. Ask for the brief too: our product, buyer and proof. Without our brief, rank the patterns by how often they repeat, not by fit.
-2. If our product image is already a Sloosh asset, find it with `list_assets`. If `view_asset` is available, look at it with `view_asset` (pass the kind and id from `list_assets`). Use it only for our own product. Describe only what the camera can really show.
+2. If our product image is already a Sloosh asset, find it with `list_assets`. If `view_asset` is available, look at it with `view_asset` (pass the kind and id from `list_assets`). A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `view_asset` returns asset not found, try once with the other kind. Use it only for our own product. Describe only what the camera can really show.
 3. Write the inventory: one row per ad with its label (Competitor A, ad 1), placement, format and run length.
 4. Read five things in each ad:
     - The hook: the hook move, and the first three seconds or the headline.
@@ -49,6 +49,7 @@ This skill costs nothing. It writes a plan in the chat. The producing skills quo
     - A creator-style video planned shot by shot: the `ugc-storyboard` skill.
     - A product clip or a feature in motion: the `product-video` skill.
     - Product photos or a gallery order: the `product-imagery` skill.
+    - A seed that needs a new still first: the `product-imagery` skill, then the skill that makes the ad.
     - A ready-made recipe such as an ad grid: the `published-spaces` skill.
     - The Sloosh Ads pack, if it is installed, has more: ad concepts, reference ad remix, comparison ad and UGC video ad. Name them in plain words.
     - Offer the pattern table and gaps to the `creative-strategy` skill for a full creative direction.

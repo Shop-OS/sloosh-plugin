@@ -7,7 +7,7 @@ description: Study a reference video, reel or ad that the user owns or may study
 
 Use this skill to turn a reference into a plan. A reference video goes in. A style guide, a shot list on the reference's beat grid and a list of what the new piece does not copy come out. Then another skill makes the piece. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
-This skill costs nothing. It writes a plan in the chat. The producing skills quote their own work and ask for approval.
+This skill costs nothing. Tell the user so in your first reply. It writes a plan in the chat. The producing skills quote their own work and ask for approval.
 
 The rule of this skill: take the grammar of the reference (rhythm, transitions, layout, camera, type behaviour). Never take its content, copy, logos, music, voice, faces or characters.
 
@@ -51,10 +51,10 @@ Ask this in one message with the intake questions, before you study the referenc
     - Image assets that are already in Sloosh. Find them with `list_assets`. If `view_asset` is available, look at each one with `view_asset` (pass the kind and id from `list_assets`).
     - A public HTTPS URL of a frame, a poster or a contact sheet, as a JPEG, PNG, WebP or GIF image. The URL must serve the image itself, not a web page. Call `import_asset` with the URL. Then look at it with `view_asset`. A new image can take about 15 seconds to get a preview, so wait and try once more. If `import_asset` returns an error, follow its instruction, or ask the user to attach the frame instead.
     - The user's description. `view_asset` shows JPEG, PNG, WebP and GIF images only. You cannot watch a video unless this app lets you. Ask for one frame per shot, the time of each cut if the user knows it, and one sentence per shot about the move and the sound.
-4. Do not import the reference video itself here. The producing skill imports it after its own rights check.
+4. Do not import the reference video itself here. The producing skill imports it after its own rights check. If you can run shell commands and write a helper script, for example to pull frames, put it in the working folder or your scratch folder, not in /tmp.
 5. Write the short breakdown first, in five lines: pace, change, type, colour and light, and the one idea. Use the terms in `references/style-guide-template.md`.
-6. Write the full style guide with the fields in `references/style-guide-template.md`. Mark each timing that you did not read from a frame as an estimate. Never invent a number.
-7. Write the shot list on the reference's beat grid, with the row shape in `references/style-guide-template.md`. Each row keeps the reference's timing, move and transition. If the planned length differs from the reference's length, scale every shot by the same ratio, keep the cuts on the beat and say so in the plan. Each row replaces the reference's content with the user's subject, words and brand.
+6. Write the full style guide with the fields in `references/style-guide-template.md`. Mark each timing that you did not read from a frame as an estimate. Mark each hex colour that you read from a reference frame as an estimate, also when you sampled its pixels. Never invent a number.
+7. Write the shot list on the reference's beat grid, with the row shape in `references/style-guide-template.md`. Each row keeps the reference's timing, move and transition. For 9:16, state the safe zone as the producing skills do: keep words and logos out of the top 14%, the bottom 35% and 6% at each side. Do not give it as pixel margins. If the planned length differs from the reference's length, scale every shot by the same ratio, keep the cuts on the beat and say so in the plan. Each row replaces the reference's content with the user's subject, words and brand.
 8. Give each row one route: code for type, UI, logos and charts; Sloosh still; Sloosh clip; the user's own footage; or motion copy for a shot where the user's subject performs the reference's moves.
 9. Write the list of what the new piece does not copy. Name each logo, line of copy, track, voice, face and character of the reference. Name each shot that only looks like theirs, and say how the new shot differs.
 10. Ask the user to approve or change the plan. Then hand off.

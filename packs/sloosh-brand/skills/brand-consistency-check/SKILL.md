@@ -7,7 +7,7 @@ description: Review finished images against the brand kit and return a pass or f
 
 Use this skill to check finished images against the brand kit and the placement. It says what to fix and which skill fixes it. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
-This skill costs nothing. It makes no images. It adds a file to the library only to view an image from a URL, a local file or a Space run. The skills that make the fixes quote their own work and ask for approval.
+This skill costs nothing. Tell the user this in your first reply. It makes no images. It adds a file to the library only to view an image from a URL, a local file or a Space run. The skills that make the fixes quote their own work and ask for approval.
 
 ## Before you start
 
@@ -23,25 +23,25 @@ If no brand kit exists and the user cannot paste one, offer the `brand-kit-extra
 
 1. Load the brand kit. List the checks it supports: colours, photo style, type, logo, the do and don't list, voice and channels. If a kit field is missing or says unknown, mark that check n.a. Never guess a brand rule.
 2. If only a logo exists, build a three-line minimal kit: colours from the logo, the don't list from the user, and the placement. Tell the user the check is partial.
-3. Collect the candidates. Ask only for what is missing.
+3. Collect the candidates. Ask only for what is missing. Do not tell the user a file is missing until you have looked for it.
     - Images attached in the chat: judge them as you see them.
     - Generated or workspace images: find them with `list_assets` by name. Search kind generated and kind workspace.
     - A kind and id from a handoff: call `get_asset` with them.
-    - A generation the user just ran: call `get_generation` with its operation id. If it has not settled, check again about every 5 seconds until it settles. Then check only the delivered outputs. Use kind generated and each output's generationId.
-    - A Space run: call `get_space_run_outputs` with its operation id. If final is false, the run has not ended. Check again about every 15 seconds, or check the finished outputs in nodes and say the set is not complete. For each image output, call `import_asset` with its url and a name. Then use the kind and id it returns.
+    - A generation the user just ran: call `get_generation` with its operation id. If it has not settled, check the status with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. Then check only the delivered outputs. Use kind generated and each output's generationId.
+    - A Space run: call `get_space_run_outputs` with its operation id. If final is false, the run has not ended. Check again at the interval the server gives, or check the finished outputs in nodes and say the set is not complete. Do not use a shell sleep to wait. For each image output, call `import_asset` with its url and a name. Then use the kind and id it returns.
     - A public HTTPS URL, signed URLs included: call `import_asset`. Then use the asset it returns.
     - For a local file, follow the server's upload instruction for this client.
     - An import adds the image to the library. If the import is refused, ask the user to attach the image.
 4. If the user has not said where each image will run, ask. Examples are a feed post, a story, a product page or a marketplace listing. Use the placement for the ratio, safe zone and text size checks in `references/placement-checks.md`.
-5. If `view_asset` is available, look at each image with `view_asset`. Pass its kind and id. If `view_asset` is not available, call `get_asset`. Then ask the user to open the link or attach the image.
+5. If `view_asset` is available, look at each image with `view_asset`. Pass its kind and id. If `view_asset` is not available, call `get_asset`. Then ask the user to open the link or attach the image. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
 6. Describe each image in one sentence before you judge it: what is in the frame and where the eye goes.
-7. Score each check as pass, fix or n.a.:
+7. Score each check as pass, fix or n.a. Drop is a verdict for the image, not a score for a check:
     - Palette: the main and accent colours sit inside the kit's colours. No colour the kit bans.
     - Photo style: light direction and quality, backgrounds, props and composition match the kit.
     - Type on the image: the feel and case match the kit's type. Every word is spelled right. The text is big enough for the placement.
     - Logo: present where the kit needs it, not stretched or redrawn, the right version, with clear space.
     - Don't list: none of the things the kit says the brand never does.
-    - Product fidelity: the label, colours and proportions match the product reference, if the user gave one.
+    - Product fidelity: the label, colours and proportions match the product reference, if the user gave one. With no product reference, mark it n.a.
     - Anatomy and artefacts: natural hands and faces, no extra limbs, no stray or invented text, and no product warp. A clear artefact is a fix. A broken subject is a drop.
     - Placement: the ratio fits, and the product and text stay out of the platform's interface zones.
     - Words: any claim, quote or rating on the image has a source the user can show.
@@ -69,9 +69,11 @@ Write one row per image in this shape:
 ```text
 Image: dewleaf-serum-hero-4x5-v2 (generated)
 Seen: amber bottle on slate, window light from the left, empty space at the top
-Palette: pass | Photo style: pass | Type: n.a. | Logo: fix (needs the white logo on a dark background) | Don't list: pass | Product: pass | Artefacts: pass | Placement: pass
+Palette: pass | Photo style: pass | Type: n.a. | Logo: fix (needs the white logo on a dark background) | Don't list: pass | Product: pass | Artefacts: pass | Placement: pass | Words: n.a.
 Verdict: fix. Route: the creative-iteration skill, as an edit. Brief: "Swap the logo for the white version. Keep everything else."
 ```
+
+Keep this shape for every row, also for a corrected row. Every fix or drop verdict names a route and a one-line brief.
 
 ## Videos and other files
 

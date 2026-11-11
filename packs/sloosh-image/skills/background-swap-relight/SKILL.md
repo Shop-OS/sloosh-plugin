@@ -16,6 +16,7 @@ Use this skill to move a product or a person from an existing photo into a new s
 - If a brand kit exists, read it: a sloosh-brand.md file, Project knowledge, memory or pasted brand text. Use its settings, palette and light mood.
 - If any photo shows a person (the subject, a model reference, the scene photo or the light reference), ask the user to confirm that the person agreed to an AI-made edit. Ask before any quote. Do not use a photo of a child or of a public figure. If the user declines or cannot confirm, explain why and stop.
 - If the subject photo, the scene photo or the light reference is not the user's own, ask the user to confirm they may use it. Ask before any quote. If they decline or cannot confirm, stop.
+- An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 
 ## Steps
 
@@ -23,7 +24,7 @@ Use this skill to move a product or a person from an existing photo into a new s
 2. Get each image. Reuse an asset from `list_assets` when it exists. Call `import_asset` for a public HTTPS URL. For a local file, follow the server's upload instruction for this client. For a generated image, call `get_asset` and use the returned URL.
 3. Look at the subject with `view_asset`. Note the light direction it has now. Note the parts that must stay exact, such as the label, the logo or the face. A subject on a plain background works best.
 4. Choose the route and the Space search term from the table in `references/routes-and-prompts.md`.
-5. Call `list_spaces` with that search and output type image. Choose by each Space's description from `list_spaces` or `get_space`. Offer one to three options in plain words. Let the user choose. If no Space fits, use the direct path below.
+5. Call `list_spaces` with that search and output type image. Choose by each Space's description from `list_spaces` or `get_space`. Offer one to three options in plain words. Let the user choose. If no Space fits, use the direct path below. Before you take the direct path, call `get_space` on the best one or two matches from `list_spaces`. Tell the user in one line why no Space fits.
 
 ## Space path
 
@@ -32,7 +33,7 @@ Use this skill to move a product or a person from an existing photo into a new s
 3. The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits. Compare the maximum hold with it. If the hold is more, give the user the settings link and do not run.
 4. Ask the user to approve this quote. Wait for the user.
 5. Call `run_space` with the quote and a stable idempotency key, for example `image-candle-bathroom-4x5-v1`. Set confirmed=true only after the user approves this quote.
-6. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, poll `get_space_run` with the operation id until the run settles or stops at a checkpoint.
+6. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, check the status with `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
 7. If `get_space_run` shows a checkpoint, show the user what it needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides.
 8. When the run finishes and the user wants the files, call `get_space_run_outputs`.
 
@@ -40,11 +41,11 @@ For checkpoints, holds and run states, read the `spaces` guide with `get_guide`.
 
 ## Direct path
 
-1. Call `list_models` with mode `image_gen`. Pick a model that takes reference images and supports the ratio you need. Pick one that takes as many references as the route needs. Do not choose a model or estimate a price from memory.
+1. Call `list_models` with mode `image_gen`. Pick a model that takes reference images and supports the ratio you need. Pick one that takes as many references as the route needs. Do not choose a model or estimate a price from memory. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
 2. Write one prompt from the template in `references/routes-and-prompts.md`. The subject is reference 1 in the quote. The scene photo or the light reference is the next one.
 3. Call `quote_generation` with the prompt, the chosen model, the ratio and the reference assets in order. Show the credits. Divide the allowance left by 1000 and compare it with the quote. Wait for the user to approve.
 4. Call `generate` with a stable idempotency key, for example `image-candle-marble-4x5-v1`. Set confirmed=true only after the user approves this quote.
-5. If `show_generation` is available, call `show_generation` once with the operation id. If not, poll `get_generation` with the operation id until the run settles.
+5. If `show_generation` is available, call `show_generation` once with the operation id. If not, check the status with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
 
 For quote expiry, model choice and card actions, read the `generation` and `spending` guides with `get_guide`.
 
@@ -52,6 +53,8 @@ For quote expiry, model choice and card actions, read the `generation` and `spen
 
 - Direct path: read the outputs with `get_generation`. Then call `view_asset` with kind generated and each output's generation id.
 - Space path: call `import_asset` with each output url from `get_space_run_outputs`. Then call `view_asset` with the kind and id it returns. If the import fails, ask the user to check the result in the card.
+- A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
+- If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
 
 Check the quality bar in `references/routes-and-prompts.md`: shadow direction, colour temperature, contact shadow, scale and an unchanged subject. Tell the user which points you could not judge from a preview. For 9:16 placements, keep the product and any text out of the top 14%, the bottom 35% and 6% at each side of the frame.
 
@@ -76,6 +79,7 @@ Check the quality bar in `references/routes-and-prompts.md`: shadow direction, c
 - If the quote has a warning, tell the user what it says before they approve.
 - Plan at most 8 generations per round. Ask for one approval per round. If the total or the maximum hold is more than the allowance left, do not run.
 - Wait for the user's approval of each quote. A changed brief, another Space, another model, changed inputs or an expired quote needs a new quote and a new approval.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Start each idempotency key with image- and build it from the product, variant and aspect ratio it makes. Use the same key when you retry the same item. Never reuse a key across different quotes. Do not make a new key to retry.
 - If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Among retries, only this case and the real person case need a new quote, a new approval and a new key.
 - If a call fails because the service owner is unavailable, retry once with the same key. If it fails again, tell the user and stop.

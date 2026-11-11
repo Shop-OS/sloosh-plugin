@@ -17,15 +17,16 @@ Use this skill to show a product worn by the person in the user's photo. The fac
 - Before any quote, ask the user to confirm that the real person in the photo agreed to an AI edit that shows them wearing the product. If the user declines or cannot confirm, stop.
 - Do not use a photo of a child or of a public figure. Ask the user to confirm they may use the product photo and any pose photo. If not, stop.
 - A customer's own photo is only for the preview that customer asked for.
+- An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 
 ## Steps
 
 1. Collect the person photo, the product photo, the product type and, for a new pose, the pose photo. A pose-only request needs no product photo. Ask only for what is missing.
 2. Tell the user what stays (the face, the hair, the pose, the framing and the background) and what changes (the product). For a new pose, the pose changes and the clothes stay.
-3. Get each image. Reuse an asset from `list_assets` when it exists. Call `import_asset` for a public HTTPS URL. For a local file, follow the server's upload instruction for this client. For a result card image, call `get_asset` and use the returned URL.
+3. Get each image. Get the consent in 'Before you start' before you import a photo of a person. Reuse an asset from `list_assets` when it exists. Call `import_asset` for a public HTTPS URL. For a local file, follow the server's upload instruction for this client. For a result card image, call `get_asset` and use the returned URL.
 4. Look at each image with `view_asset`. Note the pose, the light direction and the product's colour, print and trims.
 5. Choose the route by product type from `references/try-on-prompts.md`. Call `list_spaces` with output type image and search for what the table names, such as virtual try-on, glasses try-on or pose transfer.
-6. Choose by each Space's description from `list_spaces` or `get_space`. The Space must take the person photo and the product photo, or the pose photo for a new pose, and keep the face. Offer one or two options. If none fits, use the direct path.
+6. Choose by each Space's description from `list_spaces` or `get_space`. The Space must take the person photo and the product photo, or the pose photo for a new pose, and keep the face. Offer one or two options. If a Space fits, offer it beside the direct path, even when the user asks for the lowest price. Quote both if the user wants to compare. If none fits, use the direct path. Before you take the direct path, call `get_space` on the best one or two matches from `list_spaces`. Tell the user in one line why no Space fits.
 
 ## Space path
 
@@ -34,7 +35,7 @@ Use this skill to show a product worn by the person in the user's photo. The fac
 3. The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits. If the maximum hold is more, give the user the settings link and do not run.
 4. Ask the user to approve this quote. Wait for the user.
 5. Call `run_space` with the quote and a stable idempotency key, for example `ecom-kurta-tryon-4x5-v1`. Set confirmed=true only after the user approves this quote.
-6. If `show_generation` is available, call `show_generation` once with the run's operation id, on its own. If not, poll `get_space_run` until the run settles or stops at a checkpoint.
+6. If `show_generation` is available, call `show_generation` once with the run's operation id, on its own. If not, check the status with `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
 7. At a checkpoint, show the user what it needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides.
 8. When the run finishes, call `get_space_run_outputs`.
 
@@ -42,19 +43,19 @@ For checkpoints, holds and run states, read the `spaces` guide with `get_guide`.
 
 ## Direct path
 
-1. Call `list_models` with mode `image_gen`. Pick a model that takes as many reference images as you pass and supports the ratio of the person photo. Do not choose a model or estimate a price from memory.
+1. Call `list_models` with mode `image_gen`. Pick a model that takes as many reference images as you pass and supports the ratio of the person photo. Do not choose a model or estimate a price from memory. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
 2. Write the prompt from the skeleton for the product type in `references/try-on-prompts.md`.
 3. Call `quote_generation` with the prompt, the model and the ratio of the person photo. Ask for two outputs. Pass the person photo as the first reference and the product photo next. For a new pose, pass the pose photo as the last reference. Set enhancePrompt to false.
 4. Show the credits. Divide the allowance left from `get_connection` by 1000 and compare it with the quote. If the quote is more, give the user the settings link and do not run.
 5. Ask the user to approve this quote. Wait for the user.
 6. Call `generate` with a stable idempotency key, for example `ecom-sunglasses-tryon-1x1-v1`. Set confirmed=true only after the user approves this quote.
-7. If `show_generation` is available, call `show_generation` once with the operation id. If not, read the result with `get_generation`.
+7. If `show_generation` is available, call `show_generation` once with the operation id. If not, check the status with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
 
 For quote expiry and card actions, read the `generation` and `spending` guides with `get_guide`.
 
 ## Check the result
 
-- Direct path: call `view_asset` with kind generated and each output's generation id.
+- Direct path: call `view_asset` with kind generated and each output's generation id. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
 - Space path: call `import_asset` with each output's URL first. Then call `view_asset` with the kind and id it returns.
 - Compare each output with the source photos by the checklist in `references/try-on-prompts.md`. Say plainly if the face, the colour or the print changed.
 - Hand off each output with its asset id, the source ids and the consent the user confirmed.
@@ -78,6 +79,7 @@ For quote expiry and card actions, read the `generation` and `spending` guides w
 
 - Get a quote before any paid call. State its credits in plain words.
 - If the quote has a warning, tell the user what it says before they approve.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Plan at most 8 generations per round. Ask for one approval per round. If the total or the maximum hold is more than the allowance left, do not run.
 - Wait for the user's approval of each quote. Changed inputs, another model, another Space or an expired quote needs a new quote and a new approval.
 - Start each idempotency key with ecom- and build it from the product, variant and aspect ratio. Use the same key when you retry the same item. Never reuse a key across different quotes. Do not make a new key to retry.

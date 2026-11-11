@@ -7,7 +7,7 @@ description: Turn a product, its buyers and the proof behind it into a ranked sh
 
 Use this skill to plan which ads to make. A brief and some evidence go in. A ranked concept sheet comes out. Each concept is one hypothesis the team can make and measure, with the Sloosh skill that makes it. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
-This skill costs nothing. It writes a plan in the chat. The producing skills quote their own work and ask for approval.
+This skill costs nothing. Tell the user so in your first reply. It writes a plan in the chat. The producing skills quote their own work and ask for approval.
 
 ## Before you start
 
@@ -35,13 +35,13 @@ If the concept already exists and the user wants copy, use the `ad-copy-variatio
 
     Then write one line with the product, the buyer, the single motivation and the objective.
 2. Ask for evidence: reviews, comments, support themes, sales-call phrases and past winning ads. Verbatim text beats a summary. If the user has none, say so and mark every concept as a hunch.
-3. If the product image is already a Sloosh asset, find it with `list_assets`. If `view_asset` is available, look at it with `view_asset` (pass the kind and id from `list_assets`). Describe only features, textures and labels the camera can really show. If there is no product image, the concepts still work. Tell the user that renders stay illustrative until a real photo arrives.
+3. If the product image is already a Sloosh asset, find it with `list_assets`. If `view_asset` is available, look at it with `view_asset` (pass the kind and id from `list_assets`). A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `view_asset` returns asset not found, try once with the other kind. Describe only features, textures and labels the camera can really show. If there is no product image, the concepts still work. Tell the user that renders stay illustrative until a real photo arrives.
 4. Build the evidence sheet. List each phrase or fact with its source. Mark it as language evidence (a complaint or a wish) or claim evidence (a measured result). A complaint supports a pain angle. It never supports a number.
 5. Pick the account state:
     - Exploration: nothing converts yet. Go wide with new segments and angles.
     - Scaling: a winner exists. Make visually different versions of it, plus a small exploration lane.
 6. Fill the matrix of segment, motivation and format. Put one concept in each cell. Cover at least four cells before you go deep on any one. Take formats from `references/format-tiers.md`.
-7. Give each concept these fields: name, segment, motivation with its verbatim source, awareness stage, format, hook family, visual direction, producing skill and cost tier. Spread the hook families. Do not let one family fill the sheet.
+7. Give each concept these fields: name, segment, motivation with its verbatim source, awareness stage, format, hook family, visual direction, producing skill and cost tier. Spread the hook families. Do not let one family fill the sheet. Give every concept a headline idea, a video concept too. The headline idea must fit its hook family. For example, a question family needs a question.
 8. Write a visual direction that a renderer can follow: setting, product position, light, props and where the headline sits. For Reels, Stories and TikTok, keep the product and the text out of the top 14%, the bottom 35% and 6% at each side of the frame.
 9. Rank the concepts by evidence tier:
     - 1: the account's own winner.
