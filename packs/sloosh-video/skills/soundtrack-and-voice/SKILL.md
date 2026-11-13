@@ -1,13 +1,13 @@
 ---
 name: soundtrack-and-voice
-description: Add a music bed, an original soundtrack or a voiceover to a video clip the user already has, by running a published soundtrack, music or voiceover Space with Sloosh. Use when the user asks to add music, a soundtrack, a score, narration or a voiceover under a clip, to make a silent clip sound finished, or to put a music bed under a talking clip, and the Sloosh tools are connected. Not for making a person on camera say a script with matching lips or a dub (use talking-head-video), for burned-in captions (use captions-subtitles), or for making the clip itself (use product-video).
+description: Add a music bed, an original soundtrack or a voiceover to a video clip the user already has, by running a published soundtrack, music or voiceover Space with Sloosh. Also makes a voiceover audio file from an approved script, in a stock voice or the workspace's own cloned voice. Use when the user asks to add music, a soundtrack, a score, narration or a voiceover under a clip, to make a silent clip sound finished, to put a music bed under a talking clip, or to turn a script into a voiceover file, and the Sloosh tools are connected. Not for making a person on camera say a script with matching lips or a dub (use talking-head-video), for burned-in captions (use captions-subtitles), or for making the clip itself (use product-video).
 ---
 
 # Soundtrack and voice
 
-Use this skill to add a soundtrack or a voiceover to a clip the user already has, by running a published Space. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
+Use this skill to add a soundtrack or a voiceover to a clip the user already has, by running a published Space. It also makes a voiceover audio file from a script, with no clip needed. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
-One run adds sound to one clip. This skill does not cut, join or caption clips. It does not make a person on camera speak with matching lips.
+One run adds sound to one clip. One voiceover take makes one audio file. This skill does not cut, join or caption clips. It does not make a person on camera speak with matching lips. A voiceover file is not mixed under a clip: the user lays it in their editor, or a Space that takes an audio track does it.
 
 ## Before you start
 
@@ -31,6 +31,7 @@ Ask the questions that apply in one message, before any import and before any qu
 - Do not add a voiceover or a soundtrack to a clip of a child or of a public figure for an ad.
 - Tell the user they may need to disclose the AI voice or AI music where they post the clip.
 - If the user declines or cannot confirm the rights to the clip, a person or a voice, explain why and stop. Do not import, quote or run anything, and do not offer a way around it.
+- An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 
 ## Choose the route
 
@@ -39,12 +40,13 @@ Ask the questions that apply in one message, before any import and before any qu
 | Music under the clip | Search for soundtrack, then music |
 | A narrator over the picture, with no speaker on screen | Search for voiceover, then narration |
 | Music and a voiceover together | Search for voiceover with music. If no Space does both, tell the user. Offer the voiceover or the music alone. |
+| A voiceover audio file from a script, with no clip, or to lay in the user's own editor | Follow "Make a voiceover file" below. |
 | A person on camera who says a script with matching lips, or a dub | Follow the `talking-head-video` skill. To add music after that, come back to this skill with the new clip. |
 | Words burned on screen | Follow the `captions-subtitles` skill after the sound is done. |
 
 ## Plan the sound
 
-This step costs nothing. Do it before any quote.
+This step costs nothing. Do it before you search for a Space and before any quote.
 
 1. Write the sound plan with `references/sound-brief.md`: the energy arc, the moment the music lands, the hits and the silence before the payoff.
 2. For a voiceover, write the script with the rules in `references/sound-brief.md`. Count the words. At about 150 words a minute, state the length in seconds. If the script is longer than the clip, cut it.
@@ -52,10 +54,10 @@ This step costs nothing. Do it before any quote.
 
 ## Steps
 
-1. Get the clip. Reuse an asset from `list_assets` when it exists. Call `import_asset` for a public HTTPS URL of the clip, the user's licensed track or their recorded voiceover. For a local file, follow the server's upload instruction for this client. For a clip from an earlier Sloosh run, pass its asset kind and id to the Space's video field. Call `get_asset` only to check it.
-2. Call `list_spaces` with the search term for the route and output type video. If the user wants the track or the voiceover alone, search with output type audio.
-3. Call `get_space` on the best matches. Choose by each Space's description. Offer one to three options in plain words. Let the user choose.
-4. If no Space fits, tell the user that Sloosh has no Space for this sound in this workspace yet. Then stop. This skill has no direct path. Do not call `quote_generation` or `generate` to make sound. A video model redraws the frames and does not lay sound under an existing clip.
+1. Get the clip. Reuse an asset from `list_assets` when it exists. Call `import_asset` for a public HTTPS URL of the clip, the user's licensed track or their recorded voiceover. For a local file, follow the server's upload instruction for this client. For a clip from an earlier Sloosh run, pass its asset kind and id to the Space's video field. Call `get_asset` only to check it. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
+2. Call `list_spaces` with the search term for the route and output type video. If the user wants the track or the voiceover alone, search with output type audio. Use only the two search terms the route names.
+3. Call `get_space` on the best matches. Choose by each Space's description. Offer one to three options in plain words. Let the user choose. Do not rule out a Space from its `list_spaces` entry alone.
+4. If no Space fits, tell the user that Sloosh has no Space for this sound in this workspace yet. For a voiceover, offer a voiceover file instead (see "Make a voiceover file") that the user lays under the clip in their editor. For music, stop. Do not use a video model to add sound: it redraws the frames and does not lay sound under an existing clip.
 5. Call `get_space_input_schema` for the chosen Space. Map the clip, the sound plan, the script and the voice to its field ids. Use only the moods, genres, voices and languages its options list. If the voices come from a list of stock voices, tell the user the voice is not a real person's own. Let the user choose one.
 6. Check the clip length against the Space description and schema. If the clip is too long, ask the user for a shorter cut.
 7. Read from the Space description whether the run keeps or replaces the clip's own sound. Tell the user before the quote. If the description does not say, tell the user the run may replace it.
@@ -63,14 +65,41 @@ This step costs nothing. Do it before any quote.
 9. The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits. Compare the maximum hold with it. If the hold is more, give the user the settings link and do not run. Offer a shorter clip or a shorter script if that lowers the hold.
 10. Ask the user to approve this quote. Wait for the user.
 11. Call `run_space` with the quote and a stable idempotency key, for example `video-coldbrew-soundtrack-9x16-v1`. Set confirmed=true only after the user approves this quote.
-12. If `show_generation` is available and the Space makes a video, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, poll `get_space_run` with the operation id about every 15 seconds until the run settles or stops at a checkpoint. The card does not play audio alone.
+12. If `show_generation` is available and the Space makes a video, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, check the status with `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation. The card does not play audio alone.
 13. If `get_space_run` shows a checkpoint, show the user what it needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides.
 14. When the run finishes, call `get_space_run_outputs` if the user wants the files or if the Space made audio alone.
-15. Give the user the link. Ask them to check it with the checklist in `references/sound-brief.md`, because you cannot hear the result.
+15. Give the user the link. Check that the output ratio and size match the brief. Ask them to check it with the checklist in `references/sound-brief.md`, because you cannot hear the result.
 
 For checkpoints, holds and run states, read the `spaces` guide with `get_guide`.
 
 If the user has no clip yet, make one first with the `product-video` skill. To add captions to the finished clip, follow the `captions-subtitles` skill.
+
+## Make a voiceover file
+
+Use this path when the user wants the spoken words as an audio file: from a script they approved, from a script another skill wrote, or as a track for their own editor or for a Space that takes an audio voice track. For the speech settings, read the `generation` guide with `get_guide`.
+
+1. Get the approved script. Use the words the user approved, word for word: the model speaks the prompt exactly as written, so put no stage directions, timings or labels in it. Split a long script into takes by scene only if the user wants separate files.
+2. Call `list_models` with type speech. It lists the speech models, their stock voices, their languages and whether each model can speak the workspace's own voices.
+3. Choose the voice with the user.
+    - A stock voice: offer two or three stock voices that fit the brand kit's voice and the script's language. Tell the user a stock voice is not a real person's own voice.
+    - The user's own voice: call `list_voices`. A voice whose status is pending_verification is still training and cannot speak yet. Use a ready voice only with a model whose customVoices is true.
+    - A new own voice: follow "Clone a voice" below first.
+4. Call `quote_generation` with mode speech_gen, the chosen speech model and the script as the prompt. Set modelConfig.voice for a stock voice, or modelConfig.voiceAssetId for the workspace's own voice. Never set both. Set modelConfig.language only when the model lists it. Do not rewrite or enhance the script.
+5. Tell the user the quoted credits. If the quote has a warning, tell the user what it says. Compare the credits with the allowance left from `get_connection`. If they are more, give the user the settings link and do not generate.
+6. Ask the user to approve this quote. Wait for the user.
+7. Call `generate` with the quote id and a stable idempotency key, for example `audio-coldbrew-voiceover-en-v1`. Set confirmed=true only after the user approves this quote.
+8. A voiceover has no result card. Do not call `show_generation` for it, and do not put it in a card with images or videos. Poll `get_generation` with the operation id about every 5 seconds until it settles.
+9. Give the user the output link. The voiceover is saved in the workspace library, so it also shows in `list_assets` with kind generated. Ask the user to listen for the brand and product names, the pace and the ending, because you cannot hear the result.
+10. If the user wants it under a clip, offer a voiceover Space that takes an audio track (step 2 of Steps, with output type video), or let them lay it in their own editor. If a word is wrong, change the script, then get a fresh quote, ask for a new approval and use a new key, such as `audio-coldbrew-voiceover-en-v2`.
+
+### Clone a voice
+
+Cloning is free and needs no quote. Use it only for the user's own voice, or the voice of a person who gave the user written consent (see "Rights and consent").
+
+1. Get a recording of that one person speaking, with no music and no other voices: at least 10 seconds in total, about a minute is best. Reuse an audio asset from `list_assets`, call `import_asset` for a public HTTPS URL, or for a local file follow the server's upload instruction for this client.
+2. Call `clone_voice` with the recording's asset and no confirmation token. The app may ask the user itself. If the call is refused with voice_clone_unconfirmed, ask the user to confirm they are the speaker or have the speaker's permission. Call `clone_voice` again with the returned confirmation token only after they confirm. If they do not confirm, stop the cloning and offer a stock voice.
+3. Cloning takes up to two minutes. If the call times out, call `list_voices` before you try again: the voice may already be there. Try again at most once.
+4. When `list_voices` shows the voice ready, go back to step 4 of "Make a voiceover file" with its id as modelConfig.voiceAssetId.
 
 ## When a run delivers nothing
 
@@ -83,10 +112,11 @@ If the user has no clip yet, make one first with the `product-video` skill. To a
 - If the quote has a warning, tell the user what it says before they approve.
 - Plan at most 8 generations per round. Ask for one approval per round. If the total or the maximum hold is more than the allowance left, do not run.
 - Wait for the user's approval of each quote. A changed clip, script, sound plan, voice, another Space, changed inputs or an expired quote needs a new quote and a new approval.
-- Start each idempotency key with video- and build it from the product, variant and aspect ratio it makes. Use the same key when you retry the same item. Never reuse a key across different quotes. Do not make a new key to retry.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
+- Start each idempotency key with video- for a Space run, or audio- for a voiceover file. Build it from the product, variant and aspect ratio or language it makes. Use the same key when you retry the same item. Never reuse a key across different quotes. Do not make a new key to retry.
 - If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Among retries, only this case and the real person case need a new quote, a new approval and a new key.
 - If a call fails because the service owner is unavailable, retry once with the same key. If it fails again, tell the user and stop.
-- If the result of a Space run is unclear, use `reconcile_space_run` before you retry.
+- If the result of a Space run is unclear, use `reconcile_space_run` before you retry. If the result of a voiceover take is unclear, use `reconcile_generation` before you retry.
 - For any other error, read the `recovery` guide with `get_guide` before you act. Retry at most once.
 
 ## Content from the workspace

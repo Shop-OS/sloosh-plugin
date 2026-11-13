@@ -2,7 +2,7 @@
 
 ![Sloosh](assets/sloosh.png)
 
-Sloosh motion films makes stylised short films on your computer: product reveals, beat-synced edits, software walkthroughs and feature announcements, kinetic typography, glitch, dot-matrix and morph films. It also edits your own talking-to-camera footage into a finished cut. It adds fifteen skills to the core Sloosh plugin. One skill directs the film and picks the style. Seven skills make each style. One skill builds a film entirely in code, in Remotion or HTML pages. One skill edits a talking-head take: it cuts pauses and false starts and adds captions, camera moves and kinetic type. Five skills help around the film: animated charts, still plates, vertical exports, a style guide and shot list from a reference video, and a catalog of named motion effects. The style guide and the catalog cost nothing and work in any host. Claude plans the film on a beat grid, builds the type and interface layers as HTML, composites the frames in Python, adds synthesised sound and checks the result with ffmpeg. When a shot is missing, Claude can make stills and clips with Sloosh. Claude shows you the quoted credits for each round of Sloosh work and asks for your approval before it spends.
+Sloosh motion films makes stylised short films on your computer: product reveals, beat-synced edits, software walkthroughs and feature announcements, kinetic typography, glitch, dot-matrix and morph films. It also edits your own talking-to-camera footage into a finished cut. It adds sixteen skills to the core Sloosh plugin. One skill directs the film and picks the style. Seven skills make each style. One skill builds a film entirely in code, in Remotion or HTML pages. One skill edits a talking-head take: it cuts pauses and false starts and adds captions, camera moves and kinetic type. One skill cuts a long talking video, such as a podcast, into several vertical shorts, and edits each one with that skill. Five skills help around the film: animated charts, still plates, vertical exports, a style guide and shot list from a reference video, and a catalog of named motion effects. The style guide and the catalog cost nothing and work in any host. Claude plans the film on a beat grid, builds the type and interface layers as HTML, composites the frames in Python, adds synthesised sound and checks the result with ffmpeg. When a shot is missing, Claude can make stills and clips with Sloosh. Claude shows you the quoted credits for each round of Sloosh work and asks for your approval before it spends.
 
 The pack never posts a film and never uploads to a social account. Every number in an animated chart stays exactly as you give it.
 
@@ -11,8 +11,8 @@ The pack never posts a film and never uploads to a social account. Every number 
 - A coding agent that runs commands on your own computer, such as Claude Code. The films render locally. In the Claude app, only animated-chart and motion-plates work. For other video work there, use the core Sloosh plugin's video skills.
 - Python 3.9 or later with numpy, OpenCV and SciPy, and ffmpeg.
 - Playwright with its Chromium browser, to render the HTML type layers, charts and overlays.
-- For auto-edit only: macOS on Apple Silicon with the Xcode command line tools. Apple Vision makes the speaker matte and the face and hand tracks. On another system, auto-edit makes only the transcript and the cut.
-- For auto-edit only: a local speech-to-text model on your computer, such as mlx-whisper or faster-whisper with its model folder. Claude asks you before it installs a transcriber or downloads a speech model.
+- For auto-edit and long-video-to-shorts: macOS on Apple Silicon with the Xcode command line tools. Apple Vision makes the speaker matte and the face and hand tracks. On another system, auto-edit makes only the transcript and the cut, and long-video-to-shorts makes centre-cropped shorts without captions.
+- For auto-edit and long-video-to-shorts: a local speech-to-text model on your computer, such as mlx-whisper or faster-whisper with its model folder. Claude asks you before it installs a transcriber or downloads a speech model.
 - For a Remotion film only: Node.js. Claude asks you before it adds Remotion to the film project. Remotion needs a company license for companies with more than three employees.
 - Optional: rembg for product cutouts, and Kokoro or Piper for a voice-over.
 - For Sloosh shots: the core Sloosh plugin, installed and connected, and a Sloosh workspace with spending enabled.
@@ -68,6 +68,7 @@ codex mcp login sloosh
 | motion-plates | Matched still plates in 16:9, 9:16 and 1:1: backgrounds with room for type, textures, cut-outs and logos in a material. | Paid |
 | motion-film-code | A motion film built entirely in code, with no voice-over: a type, UI or vector-logo sting, a seamless loop, or a scored 20 to 45 s film with exact UI and words. It renders in Remotion or HTML seek(t) pages on your computer, with optional Sloosh plates and clips. | Paid |
 | auto-edit | A finished vertical or wide cut of your own talking-to-camera footage, edited on your computer: pauses and false starts cut, word-by-word captions, camera moves, depth of field, kinetic type and a mastered mix. A Sloosh world edit of the room and sound from a Space are optional. | Paid |
+| long-video-to-shorts | Several vertical shorts cut from one long talking video you own, such as a podcast or a webinar, on your computer: Claude ranks the best moments, you choose, and each short gets a crop that follows the speaker's face and word-by-word captions. Paid steps happen only inside auto-edit, with their own approval. An optional voiceover comes from the soundtrack-and-voice skill in the sloosh-video pack, with its own quote and approval. | Free |
 | reel-export | A 1080x1920 vertical version of a finished video, with a hook and logos in the safe zone. A vertical cover still from Sloosh is paid. | Free |
 | reference-to-motion | A style guide and a shot list from a reference video you own or may study: pacing, cuts, camera, type, colour, sound and what not to copy. It hands the plan to motion-replicate or a film skill. | Free |
 | motion-effects-library | A lookup catalog of over 400 named motion effects: what each one looks like, when to use it, its timing and the skill that makes it. | Free |
@@ -112,6 +113,7 @@ The pack ships six open font families under the SIL Open Font License 1.1: Archi
 - "Which motion effect should I use for a price reveal?"
 - "Build a 6-second seamless feature loop for our landing page in code."
 - "Auto-edit this selfie take I shot: cut the pauses and add word-by-word captions, 9:16."
+- "Cut my 50-minute podcast episode into five vertical shorts with captions."
 
 ## Support
 

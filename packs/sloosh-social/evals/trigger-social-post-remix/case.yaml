@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-social-post-remix
+description: A request to turn an Instagram Reel into a new video for the user's own product loads social-post-remix.
+tags: [trigger]
+runs: 2

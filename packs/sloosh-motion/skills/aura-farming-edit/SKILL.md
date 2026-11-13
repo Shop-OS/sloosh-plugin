@@ -24,11 +24,11 @@ Before you start:
     - Claude app: open the plugin's Connectors tab and connect Sloosh. Or add a custom connector with the URL https://mcp.sloosh.ai/mcp.
 - Call `get_connection` once in the conversation if you have not called it yet. If spending is not enabled, give the user the settings link it returns and do no paid work. The placeholders still let you build and show the edit.
 
-This skill runs on the user's computer. Check that you can run shell commands and that these are installed: Python 3 with numpy, opencv-python and scipy; ffmpeg; and Playwright for Python with its Chromium browser (lib/render_html.py renders the type page with it). Without Playwright, the picture-only sheets still run, but the type and the final film cannot render.
+This skill runs on the user's computer. Check that you can run shell commands and that these are installed: Python 3 with numpy, opencv-python and scipy; ffmpeg; and Playwright for Python with its Chromium browser (lib/render_html.py renders the type page with it). Without Playwright, the picture-only sheets still run, but the type and the final film cannot render. If Playwright is missing, ask to install it into the film's virtual environment. If the user declines, stop at the HTML render step and name the missing tool. Do not write your own browser renderer.
 
 - If you cannot run shell commands on the user's own computer (a remote sandbox does not count), tell the user that the film needs a coding agent that runs on their computer. Offer the `product-video` skill from the core Sloosh plugin for a single generated clip instead. Then stop.
 - If the director skill is missing next to this skill, `bash scripts/new_aura_film.sh` stops with an install hint. Tell the user to install the full sloosh-motion pack.
-- Ask the user before you install anything: Python modules, Playwright or its browser. Prefer a virtual environment (`python3 -m venv .venv`, then install into it). Never use the system-packages override flag.
+- Ask the user before you install anything: Python modules, Playwright or its browser. Install into the film's virtual environment (`python3 -m venv .venv`, then install into it). Every install command you show the user, also in the final advice, uses this virtual environment. Never use the system-packages override flag.
 - The scripts download nothing. The fonts come vendored with the director skill, and new_film.sh copies them into the film.
 - Voice lines are optional. They use only a text-to-speech voice that is already on this computer. audio.py never downloads a voice. With no local voice, it builds the mix without voice and says so. Ask the user before you install a voice engine or a voice.
 
@@ -125,7 +125,7 @@ tl.py also holds TYPE (the cue times), COPY (the words), ACCENT and the other co
 
 - **One identity, one wardrobe, one set, one light** from the first still to the last. That is what makes the edit read as one shoot.
 - **The identity sheet comes first** (1 image). It is the second reference on every face still, together with the user's best face photo. Prepare that photo as a JPG of the head and shoulders, about 1500 px on the long side. Keep each input image under the server's size limit.
-- **Faces need consent.** Get it at intake. If the video model refuses a face clip because a reference shows a real person who is not verified yet, follow the When a run delivers nothing section instead. Otherwise retry once with the start frame only, a smaller JPG and slightly wider framing. This is a new quote: show it, wait for the user's approval, and use the next key version (for example -v2). If it refuses again, tell the user and stop. The skill allows at most one paid retry per refused face clip.
+- **Faces need consent.** Get it at intake. An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote. If the video model refuses a face clip because a reference shows a real person who is not verified yet, follow the When a run delivers nothing section instead. Otherwise retry once with the start frame only, a smaller JPG and slightly wider framing. This is a new quote: show it, wait for the user's approval, and use the next key version (for example -v2). If it refuses again, tell the user and stop. The skill allows at most one paid retry per refused face clip.
 - **Frame for the type:**
   - The GESTURE still puts the eyes at about 22% of the height, with the torso in the centre, so the echo stack sits on the chest.
   - Shots under the echo and the slams show no face (crowd, hands, macro, wide, machine).
@@ -203,16 +203,16 @@ After each clip, run `python3 lib/sheets.py clip clips/cNN.mp4` in the film fold
 
 1. Check the connection from Before you start. If spending is not enabled, do no paid work and build the edit on the placeholders.
 2. Bring in the user's photos. For a local file, follow the server's upload instruction for this client. For a public HTTPS URL, call `import_asset`. Look at each image with `view_asset`.
-3. Do not choose a model or estimate a price from memory. Call `list_models` with mode `image_gen` for the sheet and the stills, and with mode `video_gen` for the clips. Pick a model that takes reference images (for stills) or a start frame (for clips).
+3. Do not choose a model or estimate a price from memory. Call `list_models` with mode `image_gen` for the sheet and the stills, and with mode `video_gen` for the clips. Pick a model that takes reference images (for stills) or a start frame (for clips). Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
 4. Plan the rounds. A round holds at most 8 generations:
    - Round 1: the identity sheet alone. The stills depend on it.
    - Then the stills in edit-chain order. Each still references the previous approved one, so a still waits for the one before it. Quote the stills that are ready in one round, or one at a time.
    - Then the clips, up to 8 per round, each from its approved still.
 5. For each round, call `quote_generation` for each item. Show the user a list of each item with its credits and the round's total. Compare the total with the daily allowance left from `get_connection`. That value is in millicredits, so divide it by 1000 first. If the total is more than the allowance left, give the settings link and do not run the round. Otherwise ask for one approval of this round, and wait for the user.
 6. Call `generate` for each quote with its own stable idempotency key, for example `motion-aura-<subject>-sheet-9x16-v1`, `motion-aura-<subject>-k05-9x16-v1` or `motion-aura-<subject>-c05-9x16-v1`. Set confirmed=true only after the user approves this quote. The user's approval of the round covers each quote in that round.
-7. After the last `generate` of a round, if `show_generation` is available, call `show_generation` once with all the operation ids of the round, up to 8. Show images and videos in separate calls. If not, poll `get_generation` about every 5 seconds for an image and every 15 seconds for a video until it says settled. When you need the files, read each output's kind and id from `get_generation` (or from the card's message), then call `get_asset`.
+7. After the last `generate` of a round, if `show_generation` is available, call `show_generation` once with all the operation ids of the round, up to 8. Show images and videos in separate calls. If not, check the status with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation. When you need the files, read each output's kind and id from `get_generation` (or from the card's message), then call `get_asset`.
 8. Look at each still with `view_asset`. To check the face and wardrobe at full size, download it with `get_asset` (step 9) and open the local plates/kNN.jpg before you approve it for the chain. Check the face, wardrobe, set and light against the sheet. Redo only the still that drifts, with a new quote and a new key version.
-9. When a result is ready, call `get_asset` with its kind and id, and download the file from the returned URL into plates/ or clips/ of the film folder. Save stills as plates/kNN.jpg and clips as clips/cNN.mp4, under the names the placeholders use. Check that each file is not empty.
+9. When a result is ready, call `get_asset` with its kind and id, and download the file from the returned URL into plates/ or clips/ of the film folder. Save stills as plates/kNN.jpg and clips as clips/cNN.mp4, under the names the placeholders use. Check that each file is not empty. Check that the output ratio and size match the brief. A start frame's ratio drives the clip, so match the start frame to the brief first. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
 
 For card actions, model choice or generation errors, read the `generation` guide with `get_guide`. For imports and holds, read the `assets` and `spending` guides with `get_guide`.
 
@@ -346,13 +346,13 @@ Voice lines go through the director's text-to-speech helper, then a voice effect
    python3 edit.py out/sheet.jpg 0.5,1.5,3.2,4.75,5.9,7.1,7.42,8.4,9.3,9.8,11.2,12.15,13.3,15.3,16.6,17.45
    python3 lib/render_html.py ui/type.html --dur <LEN> --out frames/type --jobs 1
    ```
-   If render_html.py says that the playwright module is missing, ask the user before you install it (see Requirements).
+   If render_html.py says that the playwright module is missing, follow the Playwright rule in Requirements.
 6. Save each approved still and clip as plates/kNN.jpg and clips/cNN.mp4. Run `python3 lib/sheets.py clip clips/cNN.mp4` on each clip and look at the sheet. Then set the in points in SHOTS and the FACES list in edit.py.
 7. Render the sheet again and look at it (section 10). Fix, then render the sheet again.
 8. Run `python3 audio.py` and read the voice and loudness printouts.
 9. Run `python3 edit.py`. Then run `python3 lib/sheets.py film out/<name>_v1.mp4 6.5 9.5 --fps 5` and the same for 11.5 to 13. Then run `python3 audio.py out/<name>_v1.mp4` to mux the sound.
 10. Run `python3 <director>/scripts/qa.py out/<name>_v1_final.mp4` and look at its sheets.
-11. Deliver the file. Say what changed, what needs the user's ears, and one next step. Make a new version; never overwrite one.
+11. Deliver the file. Say what changed, what needs the user's ears, and one next step. If the user must finish a step, give the virtual environment install command and `<director>/scripts/qa.py` for the check. There is no lib/qa.py. Make a new version; never overwrite one.
 
 ## 10. QA checklist and fixes
 
@@ -403,6 +403,7 @@ Set each preset's colours in tl.py (ACCENT, INK, RULE, SMEAR) and its sound in G
 - Get a quote before any paid call. State its credits in plain words.
 - If a quote has a warning, tell the user what it says before they approve.
 - Plan at most 8 generations per round. Ask for one approval per round. If the round's total is more than the daily allowance left, do not run.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Wait for the user's approval of each round's quotes. A changed treatment, another model or an expired quote needs a new quote and a new approval.
 - Build each idempotency key from the subject, the item, the aspect ratio and a version, with the motion-aura- prefix, for example `motion-aura-<subject>-k05-9x16-v1`. Never use one key for two different quotes. Use the same key when you resend the identical request for the same quote, such as after a timeout or an unavailable owner. Do not make a new key to retry. A reshoot or a retry with changed inputs (a drifted still, the face-refusal retry, a changed prompt) is not the same request: it is a new quote, needs a new approval and takes the next key version (-v2, -v3).
 - If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Among retries of the same request, only this case and the real person case need a new quote, a new approval and a new key.

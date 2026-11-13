@@ -7,7 +7,7 @@ description: Turn a vague creative request into a confirmed brief, then into thr
 
 Use this skill to find the big idea before production. A request goes in. A confirmed brief and three to five territories come out. Each territory is a world the brand could own, with the proof behind it, what gets made and which Sloosh skills make it. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
-This skill costs nothing. It writes a brief and a plan in the chat. The producing skills quote their own work and ask for approval.
+This skill costs nothing. Tell the user so in your first reply. It writes a brief and a plan in the chat. The producing skills quote their own work and ask for approval.
 
 ## Before you start
 
@@ -32,9 +32,9 @@ Use it when a launch, a season or a repositioning needs a direction, or the team
     - What must stay exact, and what must never appear?
     - How many variations?
     - Is there a budget, a deadline or a legal limit?
-3. Check the rights before you capture the product image. Ask the user to confirm that they own the image or have the right to use it. If a real person is in the photo, also ask the user to confirm that person's consent. If the user does not confirm, do not import or use that photo. Ask for a photo without the person, or continue without a photo. Record the rights status in the brief.
+3. Check the rights before you capture the product image. Ask the user to confirm that they own the image or have the right to use it. If a real person is in the photo, also ask the user to confirm that person's consent. If the user does not confirm, do not import or use that photo. Ask for a photo without the person, or continue without a photo. Record the rights status in the brief. An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before you capture or look at the image.
 4. Capture the product image. If it is already a Sloosh asset, find it with `list_assets`. For a public HTTPS URL, use `import_asset`. It is free. For a local file, follow the server's upload instruction.
-5. If `view_asset` is available, look at the product with `view_asset` (pass the kind and id). Add what you can see to must-keep, such as the label text, the cap colour and the bottle shape. A new image can take about 15 seconds to get a preview. If there is no preview yet, wait and try once more. If there is still none, or the file is not JPEG, PNG, WebP or GIF, ask the user to describe the label and the details that must stay exact.
+5. If `view_asset` is available, look at the product with `view_asset` (pass the kind and id). A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `view_asset` returns asset not found, try once with the other kind. Add what you can see to must-keep, such as the label text, the cap colour and the bottle shape. A new image can take about 15 seconds to get a preview. If there is no preview yet, wait and try once more. If there is still none, or the file is not JPEG, PNG, WebP or GIF, ask the user to describe the label and the details that must stay exact.
 6. If the user shares references, ask the user to confirm they may use each one. Look at each confirmed one with `view_asset`. Name what they admire: the light, the pace, the type and the world.
 7. Translate each placement into deliverables with a ratio, a count, a length and audio. Use the placement table in `references/brief-schema.md`. State each default you apply.
 8. Record the budget the user states as the budget comfort, or mark it unknown. Read the allowance left from `get_connection` (the budget's remaining units). It is in millicredits. Divide it by 1000 to get credits and say it in plain words. Record it as the allowance left.
@@ -50,7 +50,7 @@ If the user says "just make it", apply the defaults, show the brief and ask for 
 4. Give each territory every field of the card: name, idea, visual world, hook family, proof, deliverables with their producing skills, cost tier and main risk.
 5. For Reels, Stories and TikTok, write the world so the product and the text stay out of the top 14%, the bottom 35% and 6% at each side of the frame.
 6. Check which territories can lean on a ready-made Space. Search `list_spaces` for the format, such as UGC, ad grid, lookbook or product animation. Choose by its description. Do not run it here.
-7. Score each territory against the brief: fit, distinctiveness, what Sloosh can make today and cost. Recommend one. Name a second as a cheap first test.
+7. Score each territory against the brief: fit, distinctiveness, what Sloosh can make today and cost. Recommend one. Name a second as a cheap first test. Do not give a price for the test. The producing skill gives the real quote.
 
 ## Producing skills and cost tiers
 

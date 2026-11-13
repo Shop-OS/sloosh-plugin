@@ -1,7 +1,7 @@
 {
     "name": "sloosh-strategy",
     "displayName": "Sloosh strategy",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Plan creative work with Sloosh: a creative strategy from a brief, competitor creative teardowns, launch campaign plans and a campaign run across rounds. The assistant asks for your approval before any paid work.",
     "author": {
         "name": "ShopOS",

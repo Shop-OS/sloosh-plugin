@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: trigger-soundtrack-and-voice-script
+description: Turning an approved ad script into a voiceover audio file, with no clip, loads soundtrack-and-voice and quotes speech before any spend.
+tags: [trigger]
+runs: 2

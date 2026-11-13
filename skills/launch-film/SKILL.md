@@ -14,6 +14,7 @@ The method was proven on the Sloosh launch film (see `references/examples/`). It
 This skill runs on the user's computer. Before you start, check that you can run shell commands and that these are installed: Node.js with `npx`, `ffmpeg`, and Python 3 with numpy and Pillow. `scripts/transcribe.sh` needs `whisper-cli` and a speech model at `${WHISPER_MODELS:-~/.cache/whisper-cpp}/ggml-small.en.bin`; it stops with setup steps when either is missing. Ask the user before you install whisper-cpp (`brew install whisper-cpp` on macOS) or download the model from https://huggingface.co/ggerganov/whisper.cpp.
 
 - If you cannot run shell commands on the user's own computer (a remote sandbox does not count), tell the user that the film needs a coding agent that runs on their computer. Offer the `product-video` skill for a single generated clip instead.
+- Ask before any install. If Node.js, `npx` or the Remotion packages are missing and the user does not allow the install, tell the user that steps 6 to 9 need them. Do steps 1 to 5, then stop and name the missing tool. Do not write your own renderer or master in place of the scripts.
 - Remotion is free for individuals, non-profits and companies with up to three employees. Larger for-profit companies need a Remotion company license. Tell the user this once before you scaffold the project.
 - For Remotion API details beyond this skill, Remotion publishes its own agent skills (`npx skills add remotion-dev/skills`). Suggest them; do not install them unasked.
 
@@ -46,7 +47,7 @@ Do these steps in order. Each step names the script or reference to use.
 Open the website and follow `references/brand-capture.md` to get exact fonts, colours, radii and button styles. Read the page text for real copy and real feature and workflow names. Rebuild UI as React components; never paste screenshots, because rebuilt UI stays crisp under 3D camera moves and can animate. Never show the user's account data (credits, avatar, private items); use neutral placeholders.
 
 ### 3. Transcribe the voiceover; never trust the script document
-`bash scripts/transcribe.sh <vo.mp3> <out_dir> [offset_seconds]` writes word timestamps, cross-checks phrase boundaries with `silencedetect`, and writes `phrases.json` plus a ready-to-paste `timeline.ts` block. Recorded voiceovers often differ from the script document; the transcription is the source of truth. Leave about 0.5 s before the first word.
+`bash scripts/transcribe.sh <vo.mp3> <out_dir> [offset_seconds]` writes word timestamps, cross-checks phrase boundaries with `silencedetect`, and writes `phrases.json` plus a ready-to-paste `timeline.ts` block. Recorded voiceovers often differ from the script document; the transcription is the source of truth. Leave about 0.5 s before the first word. If there is no voiceover, time each phrase from the script at reading speed. Tell the user that you did this.
 
 ### 4. Write the shot plan before any code
 Create `shot-plan.md` in the project: one row per spoken phrase with its time range, the picture, the match cut into the next shot, and the SFX on that cut. Use the catalogue in `references/match-cuts.md`; every boundary is one of those cuts or a continuous camera. Map each phrase to the image that literally shows it (for example, "your cake" goes to the cake photo). Mix modes for rhythm: editorial grid frames, full-bleed photo or clip moments, 3D UI fly-overs, and giant punctuation words (3 to 6 frames on a solid brand colour). See "Craft rules" below.
@@ -85,11 +86,11 @@ Sloosh can make a missing product image or a short clip for a shot. Each one is 
 
 1. Call `get_connection` once in the conversation if you have not called it yet. If spending is not enabled, give the user the settings link it returns and use mocks.
 2. List the shots that need imagery and what each image must show. For a still, follow the `product-imagery` skill. For a clip, follow the `product-video` skill.
-3. Call `list_models` with mode `image_gen` or `video_gen`, then call `quote_generation` for the brief.
+3. Call `list_models` with mode `image_gen` or `video_gen`. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user. Then call `quote_generation` for the brief.
 4. Tell the user the credits and what they will get. Wait for the user to approve.
 5. Call `generate` with the quote and a stable idempotency key, for example `launch-film-cake-hero-v1`. Set confirmed=true only after the user approves this quote.
-6. If `show_generation` is available, call `show_generation` once with the operation id. If not, check the result with `get_generation` when the user asks.
-7. When the result is ready, call `get_asset` with its kind and id, download the file from the returned URL into the project's `public/pack` or `public/clips` folder, and prepare it like any other asset.
+6. If `show_generation` is available, call `show_generation` once with the operation id. If not, check the status with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
+7. When the result is ready, call `get_asset` with its kind and id, download the file from the returned URL into the project's `public/pack` or `public/clips` folder, and prepare it like any other asset. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
 
 For model choice or generation errors, read the `generation` guide with `get_guide`.
 
@@ -98,6 +99,7 @@ For model choice or generation errors, read the `generation` guide with `get_gui
 - Get a quote before any paid call. State its credits in plain words.
 - If the quote has a warning, tell the user what it says before they approve.
 - Wait for the user's approval of that quote. A changed brief, another model or an expired quote needs a new quote and a new approval.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Build the idempotency key from the request. Use the same key when you retry the same request. Do not make a new key to retry.
 - If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Only this case needs a new quote, a new approval and a new key.
 - If a call fails because the service owner is unavailable, retry once with the same key. If it fails again, tell the user and stop.

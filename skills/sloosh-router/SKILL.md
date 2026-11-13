@@ -7,7 +7,7 @@ description: Pick the one Sloosh skill that fits a creative request when the use
 
 Use this skill to choose the Sloosh skill for a request. A request goes in. One skill comes out, or a short ordered list of skills, with the inputs each one needs. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
 
-This skill costs nothing. It never asks for a quote and never starts paid work. The chosen skill quotes its own work and asks the user for approval.
+This skill costs nothing. Tell the user so in your first reply. It never asks for a quote and never starts paid work. The chosen skill quotes its own work and asks the user for approval.
 
 ## Before you start
 
@@ -16,6 +16,7 @@ This skill costs nothing. It never asks for a quote and never starts paid work. 
     - Claude app: open the plugin's Connectors tab and connect Sloosh. Or add a custom connector with the URL https://mcp.sloosh.ai/mcp.
 - Call `get_connection` once in the conversation if you have not called it yet. If spending is not enabled, tell the user that the paid skills will need the settings link it returns.
 - If a brand kit exists (a sloosh-brand.md file, the Project's knowledge, memory or brand kit text the user pasted), note it. The chosen skill reads it.
+- If you look at an asset the user names, call `get_asset` or `view_asset` with its kind and id. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind. Do not tell the user an asset cannot be opened until you have tried both kinds.
 
 ## When to use it
 
@@ -46,7 +47,7 @@ If the user names a skill or asks for one clear output, go straight to that skil
 9. For a request with three or more steps that feed each other, route to campaign-orchestrator in the sloosh-strategy pack. It runs the steps in rounds, with one approval for each round. If that pack is not installed, list the skills in order, one line each. Then run them one at a time. Each skill asks for its own approval.
 10. If the request uses a real person, a voice, music, reviews or media the user did not make, follow "Rights and consent" below before you hand off.
 11. If no skill fits, say so in plain words. Offer the nearest skill. Do not invent a skill. See "What no skill makes yet" below.
-12. Hand off. Tell the user the skill, why it fits in one line, the inputs it still needs and whether it is free or paid. If the fit is clear, load the chosen skill and follow it. If two skills could fit, ask the user one question to choose.
+12. Hand off. Tell the user the skill, why it fits in one line, the inputs it still needs and whether it is free or paid. If the fit is clear, load the chosen skill and follow it. If two skills could fit, ask the user one question to choose. Keep the reply to eight lines or fewer.
 13. Never ask for a quote from this skill. The chosen skill does that.
 
 ## Core skills

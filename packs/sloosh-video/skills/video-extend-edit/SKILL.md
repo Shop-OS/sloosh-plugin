@@ -18,12 +18,13 @@ Use this skill to extend, edit or restyle one existing clip with Sloosh. It does
 - If the clip shows a person, ask the user to confirm that the person agreed to an AI edit of the clip. Do not edit a clip of a child or of a public figure. A decline is a hard stop.
 - For a restyle from a reference still, ask the user to confirm they may use that still as a style reference. Ask before any quote. If they decline or cannot confirm, do not view or use the still. Ask the user to describe the look in words.
 - Do not remove a watermark, a credit or a rights mark from a clip. If the user asks for this, say no and stop that edit.
+- An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 
 ## Steps
 
-1. Get the source clip as one video the workspace owns. Reuse an asset from `list_assets`. Call `import_asset` for a public HTTPS URL. For a local file, follow the server's upload instruction. Call `get_asset` to get its current URL. Ask the user for the clip's length and aspect ratio if you do not know them.
+1. Get the source clip as one video the workspace owns. Reuse an asset from `list_assets`. Call `import_asset` for a public HTTPS URL. For a local file, follow the server's upload instruction. Call `get_asset` to get its current URL before any quote. Do not quote with a URL the user pasted. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind. Ask the user for the clip's length and aspect ratio if you do not know them.
 2. Choose the branch and collect the change, as `references/edit-prompts.md` says. Ask only for what is missing.
-3. For an extend or a restyle, look for a published Space first. Call `list_spaces` for video. Search for extend video, scene transformation or palette transfer. Choose by the description from `get_space`. Otherwise use the direct path.
+3. For an extend or a restyle, look for a published Space first. Call `list_spaces` for video. Search for extend video, scene transformation or palette transfer. Choose by the description from `get_space`. Otherwise use the direct path. Before you take the direct path, call `get_space` on the best one or two matches from `list_spaces`. Tell the user in one line why no Space fits.
 
 ## Space path
 
@@ -32,7 +33,7 @@ Use this skill to extend, edit or restyle one existing clip with Sloosh. It does
 3. The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits. If the maximum hold is more than that, give the user the settings link and do not run.
 4. Ask the user to approve this quote. Wait for the user.
 5. Call `run_space` with the quote and a stable idempotency key, for example `video-serum-restyle-9x16-v1`. Set confirmed=true only after the user approves this quote.
-6. If `show_generation` is available, call `show_generation` once with the run's operation id, on its own. If not, poll `get_space_run` until the run settles or stops at a checkpoint.
+6. If `show_generation` is available, call `show_generation` once with the run's operation id, on its own. If not, check the status with `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
 7. If `get_space_run` shows a checkpoint, show the user what it needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides.
 8. When the run finishes and the user wants the files, call `get_space_run_outputs`.
 
@@ -41,7 +42,7 @@ For checkpoints, holds and run states, read the `spaces` guide with `get_guide`.
 ## Direct path
 
 1. Call `list_models` with mode `video_extend` for an extend. Use mode `video_edit` for an edit or a restyle. Do not pick a model or a price from memory.
-2. Pick a model whose limits fit. Compare the clip length with its minVideoSeconds and maxVideoSeconds. Check its reference limit, its duration choices and its audio control. If no model takes the clip's length, ask for a shorter cut.
+2. Pick a model whose limits fit. Compare the clip length with its minVideoSeconds and maxVideoSeconds. Check its reference limit, its duration choices and its audio control. If no model takes the clip's length, ask for a shorter cut. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
 3. Write the full prompt yourself from `references/edit-prompts.md`. The prompt enhancer does not take these modes. Quote with enhancePrompt false.
 4. Call `quote_generation` with the mode, the prompt, the chosen model and exactly one source video in uploadedAssets. For an extend, set the duration to the seconds to add. To keep the product exact, add the product photo as a reference when the model takes references. For a restyle with a reference still, add the still after the source video with role reference. Use its kind, id and URL from `get_asset`.
 5. An extend adds a fixed number of seconds that the model sets. If the user's request is not one of them, tell the user the closest value before you quote. If the source clip has sound, ask whether the added part needs sound. Set audio to match.
@@ -60,7 +61,7 @@ For model limits and quote expiry, read the `generation` and `spending` guides w
 
 ## Check the result
 
-You cannot watch the video. Ask the user to watch the result in the card or at its link. Ask them to check the points in `references/edit-prompts.md`. Tell the user the expected length: the source length plus the seconds added.
+If you can run shell commands, use ffmpeg to extract the first, middle and last frames and look at them. Else ask the user to watch the clip. Check that the output ratio and size match the brief. Black bars or a cut-off product after the join mean the ratio changed. Ask the user to check the points in `references/edit-prompts.md`. Tell the user the expected length: the source length plus the seconds added.
 
 ## When a run delivers nothing
 
@@ -73,6 +74,7 @@ You cannot watch the video. Ask the user to watch the result in the card or at i
 - If the quote has a warning, tell the user what it says before they approve.
 - Plan at most 8 generations per round. Ask for one approval per round. If the total or the maximum hold is more than the allowance left, do not run.
 - Wait for the user's approval of each quote. A changed request, model, Space or input, or an expired quote, needs a new quote and a new approval.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Start each idempotency key with video- and build it from the product, the branch or variant and the aspect ratio, for example `video-serum-hero-4x5-v1`. Use the same key when you retry the same item. Never reuse a key across different quotes. Do not make a new key to retry.
 - If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Among retries, only this case and the real person case need a new quote, a new approval and a new key.
 - If a call fails because the service owner is unavailable, retry once with the same key. If it fails again, tell the user and stop.

@@ -19,6 +19,7 @@ The result is a visualisation, not a measured plan. Tell the user this with the 
 - Ask the user to confirm they may use the product photo and the room photo. A room photo from a customer or a third party needs that person's agreement. Ask before any quote. If the user declines or cannot confirm, explain why and stop.
 - If the room photo shows a person, ask the user to confirm that the person agreed to an AI edit of the photo, or offer to use a photo without people. Ask before any quote. Do not use a photo of a child or of a public figure. If the user declines or cannot confirm, explain why and stop.
 - A customer's room photo is personal content. Use it only for this request. Do not reuse it for other work or suggest it as a sample.
+- An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 
 ## Steps
 
@@ -27,7 +28,7 @@ The result is a visualisation, not a measured plan. Tell the user this with the 
 3. Get the images. Reuse an asset from `list_assets` when it exists. Call `import_asset` for a public HTTPS URL. For a local file, follow the server's upload instruction for this client. For a generated image from a result card, call `get_asset` with its kind and id and use the returned URL.
 4. Look at the images with `view_asset`. With a room photo, note the room's light direction, the floor plane, the camera height and one reference object for scale, such as a door, a window sill or a sofa. A product on white works best. If the packshot is cluttered, ask the user for a cleaner photo on a plain background. Or offer to make a clean packshot first with the `white-background-compliance` skill.
 5. Choose the route. A Space fits one product into one room photo, a room restyle, or small decor that needs relighting. The direct path fits an exact placement, two or more products, or a room the user only describes.
-6. For a Space, call `list_spaces` with output type image. Search for product in room, room restyle or product in scene relight. Choose by each Space's description from `list_spaces` or `get_space`. The Space must take a room photo and a product photo and keep the room's camera and walls. If none fits, use the direct path.
+6. For a Space, call `list_spaces` with output type image. Search for product in room, room restyle or product in scene relight. Choose by each Space's description from `list_spaces` or `get_space`. The Space must take a room photo and a product photo and keep the room's camera and walls. If none fits, use the direct path. Before you take the direct path, call `get_space` on the best one or two matches from `list_spaces`. Tell the user in one line why no Space fits.
 
 ## Space path
 
@@ -36,7 +37,7 @@ The result is a visualisation, not a measured plan. Tell the user this with the 
 3. The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits. Compare the maximum hold with it. If the hold is more, give the user the settings link and do not run.
 4. Ask the user to approve this quote. Wait for the user.
 5. Call `run_space` with the quote and a stable idempotency key, for example `ecom-sofa-livingroom-4x3-v1`. Set confirmed=true only after the user approves this quote.
-6. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, poll `get_space_run` with the operation id until the run settles or stops at a checkpoint.
+6. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, check the status with `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
 7. If `get_space_run` shows a checkpoint, show the user what it needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides.
 8. When the run finishes and the user wants the files, call `get_space_run_outputs`.
 
@@ -44,19 +45,19 @@ For checkpoints, holds and run states, read the `spaces` guide with `get_guide`.
 
 ## Direct path
 
-1. Call `list_models` with mode `image_gen`. Pick a model that takes two or more reference images, keeps a reference scene and supports the ratio. For a described room, one reference image is enough. Do not choose a model or estimate a price from memory.
-2. Write the prompt from `references/room-prompts.md`. With a room photo, use the placement or restyle skeleton. Give the room as reference 1 and the product as reference 2. If the user has no room photo, use the described room skeleton. Give two scale cues: the size in cm and a reference object in the room.
+1. Call `list_models` with mode `image_gen`. Pick a model that takes two or more reference images, keeps a reference scene and supports the ratio. For a described room, one reference image is enough. Do not choose a model or estimate a price from memory. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
+2. Write the prompt from `references/room-prompts.md`. With a room photo, use the placement or restyle skeleton. Give the room as reference 1 and the product as reference 2. If the user has no room photo, use the described room skeleton. Give two scale cues: the size in cm and a reference object in the room. Base each cue on a size the user gave. If the user gave no size for the reference object or a hanging height, do not state a ratio or a height for it.
 3. Call `quote_generation` with the prompt, the chosen model and the ratio. Ask for two outputs. With a room photo, use the room's ratio and pass the room first and the product second as reference assets. For a described room, use the ratio the user chose and pass the product as the only reference asset. Set enhancePrompt to false so the scale and keep words stay word for word.
 4. Show the credits. The allowance left from `get_connection` is in millicredits. Divide it by 1000 and compare it with the quote. If the quote is more, give the user the settings link and do not run.
 5. Ask the user to approve this quote. Wait for the user.
 6. Call `generate` with a stable idempotency key, for example `ecom-floorlamp-reading-corner-3x4-v1`. Set confirmed=true only after the user approves this quote.
-7. If `show_generation` is available, call `show_generation` once with the operation id. If not, poll `get_generation` with the operation id, as its description says, until the state is settled.
+7. If `show_generation` is available, call `show_generation` once with the operation id. If not, check the status with `get_generation` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
 
 For quote expiry and card actions, read the `generation` and `spending` guides with `get_guide`.
 
 ## Check the result
 
-- Look at each output with `view_asset`. Compare it with the packshot and, if there is one, the room photo.
+- Look at each output with `view_asset`. Compare it with the packshot and, if there is one, the room photo. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
 - Scale is right against the door, the window sill and other furniture.
 - The product's lines follow the room's perspective. The feet touch the floor.
 - The shadow falls away from the window or the main light. A soft contact shadow sits under the product.
@@ -89,6 +90,7 @@ For quote expiry and card actions, read the `generation` and `spending` guides w
 
 - Get a quote before any paid call. State its credits in plain words.
 - If the quote has a warning, tell the user what it says before they approve.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Plan at most 8 generations per round. Ask for one approval per round. If the total or the maximum hold is more than the allowance left, do not run.
 - Wait for the user's approval of each quote. A changed brief, another model, another Space, changed inputs or an expired quote needs a new quote and a new approval.
 - Start each idempotency key with ecom- and build it from the product, variant and aspect ratio it makes. Use the same key when you retry the same item. Never reuse a key across different quotes. Do not make a new key to retry.

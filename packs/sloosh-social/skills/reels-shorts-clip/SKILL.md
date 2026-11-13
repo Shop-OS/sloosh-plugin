@@ -18,6 +18,7 @@ One clip is up to 15 seconds. Captions and music come only from published Spaces
 - If a brand kit exists, read it: a sloosh-brand.md file, Project knowledge, memory or pasted brand text. Use its voice, colours and channels.
 - Ask the user to confirm they may use the product photo. Ask before any quote. If they decline or cannot confirm, explain why and stop.
 - If the clip shows a person, such as a spoken hook with lips, ask the user to confirm that the person agreed to an AI-made clip of them. Ask before any quote. Do not use a photo of a child or of a public figure. A decline is a hard stop.
+- An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask the user and wait for a clear answer before any quote.
 
 ## Steps
 
@@ -27,19 +28,19 @@ One clip is up to 15 seconds. Captions and music come only from published Spaces
 4. Call `list_spaces` with output type video three times: for a vertical product clip, for captions and for a soundtrack. Read each match with `get_space`. Choose by its description, not its name. Describe one to three options in plain words. Say when a Space comes from another workspace. Let the user choose.
 5. If no captions Space fits, tell the user. Give the caption words for the platform's editor. If no soundtrack Space fits, tell the user. Suggest the platform's music library. Do not offer an audio mix.
 6. Tell the user that each paid step has its own quote and approval: the clip, then captions, then music.
-7. Make the clip. If a clip Space fits, use the Space path below. If not, use the direct path below.
-8. Wait until each paid step has settled before the next one. With the result card, wait for the user to say it is done. Without the card, poll `get_generation` or `get_space_run` about every 15 seconds.
-9. Get the clip's URL. For a direct clip, take the output's generation id from `get_generation`. Call `get_asset` with kind generated and that id. For a Space clip, take its url from `get_space_run_outputs`.
+7. Make the clip. If a clip Space fits, use the Space path below. If not, use the direct path below. Before you take the direct path, call `get_space` on the best one or two matches from `list_spaces`. Tell the user in one line why no Space fits.
+8. Wait until each paid step has settled before the next one. With the result card, wait for the user to say it is done. Without the card, check the status with `get_generation` or `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
+9. Get the clip's URL. For a direct clip, take the output's generation id from `get_generation`. Call `get_asset` with kind generated and that id. For a Space clip, take its url from `get_space_run_outputs`. A Sloosh output has kind generated. A file the user uploaded or imported has kind workspace. If `get_asset` or `view_asset` returns asset not found, try once with the other kind.
 10. For captions, pass that URL to the captions Space's video field on the Space path.
 11. For music, take the captioned clip's url from `get_space_run_outputs`, or the clip's URL when there are no captions. Run the soundtrack Space on it with the music mood from the plan.
-12. Ask the user to watch the clip in the result card or at its link. Give them the checklist in `references/clip-craft.md`. Do not claim a check you could not make. If the clip is longer than 15 seconds, offer a shorter one with a new quote.
+12. If you can run shell commands, use ffmpeg to extract the first, middle and last frames and look at them. Else ask the user to watch the clip in the result card or at its link. Check that the output ratio and size match the brief. Give the user the checklist in `references/clip-craft.md`. Do not claim a check you could not make. If the clip is longer than 15 seconds, offer a shorter one with a new quote. If the user asks to see a result again, give its link or look at it with `view_asset`. Do not call `show_generation` again for the same operation.
 13. For a cover image, offer the `youtube-thumbnail` skill.
 
 ## Direct path for the clip
 
-1. Call `list_models` with mode `video_gen`. Pick a model that supports 9:16, the length you need and a start frame or reference images. If the user wants a spoken line or room sound, pick a model that lists audio. Do not choose a model or estimate a price from memory.
+1. Call `list_models` with mode `video_gen`. Pick a model that supports 9:16, the length you need and a start frame or reference images. If the user wants a spoken line or room sound, pick a model that lists audio. Do not choose a model or estimate a price from memory. Pick by the limits the brief needs. Do not call a model cheap, fast or best because of its description. To compare price, quote two or three models that fit with the same settings, and say a model is cheapest only among the models you quoted. For a round, compare on one item, then quote the rest with the chosen model only. If a quote is rate limited, stop quoting and tell the user.
 2. Write the prompt from the template in `references/clip-craft.md`, with no on-screen text. If the prompt is short, call `enhance_prompt` with the prompt, mode `video_gen`, the model settings and the number of reference images. Show the rewrite. Quote the rewrite with enhancePrompt false.
-3. Call `quote_generation` with mode `video_gen`, the prompt and the model settings: the chosen model, aspect ratio 9:16 and a duration the model lists. Pass the image with role start_frame when the clip must open on that exact still. Otherwise pass it with role reference. If the plan has a spoken line or room sound and the model's generateAudio control is optional, set generateAudio true in the quote.
+3. Call `quote_generation` with mode `video_gen`, the prompt and the model settings: the chosen model, aspect ratio 9:16 and a duration the model lists. Pass the image with role start_frame when the clip must open on that exact still. Otherwise pass it with role reference. A start frame's ratio drives the clip, so match the start frame to the brief first. If the still is not 9:16, offer to reframe it to 9:16 before you quote, for example with the reframe skill in the Sloosh image pack if it is installed. That reframe has its own quote and approval. If the plan has a spoken line or room sound and the model's generateAudio control is optional, set generateAudio true in the quote.
 4. Show the credits. The allowance left from `get_connection` is in millicredits. Divide it by 1000 to get credits. Subtract the credits of earlier steps, such as an image from the `product-imagery` skill. If the quote is more, give the user the settings link and do not run.
 5. Ask the user to approve this quote. Wait for the user.
 6. Call `generate` with the quote and a stable idempotency key, for example `social-candle-reel-9x16-v1`. Set confirmed=true only after the user approves this quote.
@@ -54,7 +55,7 @@ For quote expiry and model limits, read the `generation` and `spending` guides w
 3. Divide the allowance left from `get_connection` by 1000 to get credits. Subtract the credits of earlier steps. If the maximum hold is more, give the user the settings link and do not run.
 4. Ask the user to approve this quote. Wait for the user.
 5. Use a Space from another workspace only after the user chooses it. Call `run_space` with the quote and a stable idempotency key, for example `social-candle-reel-captions-9x16-v1`. Set confirmed=true only after the user approves this quote.
-6. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, poll `get_space_run` until the run settles or stops at a checkpoint.
+6. If `show_generation` is available, call `show_generation` once with the run's operation id. Show the Space run on its own. If not, check the status with `get_space_run` at the interval the server gives. Do not use a shell sleep to wait. If it is still running after a few checks, tell the user and check again when they reply.
 7. If the run stops at a checkpoint, show the user what it needs. Call `approve_space_checkpoint` or `reject_space_checkpoint` only when the user decides.
 8. When the run finishes, call `get_space_run_outputs` for its files.
 
@@ -77,6 +78,7 @@ For checkpoints, holds and run states, read the `spaces` guide with `get_guide`.
 - If the quote has a warning, tell the user what it says before they approve.
 - Plan at most 8 generations per round. Ask for one approval per round. If the total or the maximum hold is more than the allowance left, do not run.
 - Wait for the user's approval of each quote. A changed plan, another model, another Space, changed inputs or an expired quote needs a new quote and a new approval.
+- Only a clear yes to the quote you showed is approval. A request to make something, a condition such as 'after you submit' or 'go ahead if it is cheap', or a yes to an earlier quote is not approval. If a quote expires, get a new quote and ask again. Never promise to run a new quote without a new approval.
 - Start each idempotency key with social- and build it from the product, variant and aspect ratio it makes. Use the same key when you retry the same item. Never reuse a key across different quotes. Do not make a new key to retry.
 - If the owner phase is rejected, nothing ran and nothing was charged. Follow the notice in the result. Among retries, only this case and the real person case need a new quote, a new approval and a new key.
 - If a call fails because the service owner is unavailable, retry once with the same key. If it fails again, tell the user and stop.
