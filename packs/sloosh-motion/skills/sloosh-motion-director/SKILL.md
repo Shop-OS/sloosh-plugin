@@ -1,6 +1,6 @@
 ---
 name: sloosh-motion-director
-description: Direct a stylised short motion film (6-30 s) on the user's computer: a beat-synced promo or teaser, a hype edit, a software film, kinetic type, glitch, morph or dot matrix, or a film that matches a reference video. It picks one of the seven sloosh-motion style skills and runs the shared engine. It writes a treatment with a beat map, builds type and UI layers in HTML, composites in Python, synthesises the sound, checks every frame, and makes missing shots with Sloosh in quoted rounds. Needs a coding agent on the user's computer with Python 3, ffmpeg and Playwright. Use when the user asks for a stylised motion film, a reel cut to a track, a film that mixes several looks, or make it like this reference, and the Sloosh tools are connected. Not for one generated photo or clip (product-imagery or product-video), a voice-over launch film over 30 s (launch-film), a code-built film with no voice-over (motion-film-code), raw talking-head footage (auto-edit) or a vertical version of a finished video (reel-export).
+description: Direct a stylised short motion film (6-30 s) on the user's computer: a beat-synced promo or teaser, a hype edit, a software film, kinetic type, glitch, morph or dot matrix, or a film that matches a reference video. It picks one of the seven sloosh-motion style skills. It writes a treatment with a beat map, builds type and UI layers in HTML, composites in Python, synthesises the sound, checks every frame, and makes missing shots with Sloosh in quoted rounds. Needs a coding agent on the user's computer with Python 3, ffmpeg and Playwright. Use when the user asks for a stylised motion film, a reel cut to a track, a film that mixes several looks, or make it like this reference, and the Sloosh tools are connected. Not for one generated photo or clip (product-imagery or product-video), a voice-over launch film over 30 s (sloosh-launch-film pack), a code-built film with no voice-over (motion-film-code), raw talking-head footage (auto-edit) or a vertical version of a finished video (reel-export).
 ---
 
 # Motion director
@@ -45,7 +45,7 @@ Pick one base style with the table in `references/engine-choice.md`. With no nam
 - Send plates for another editor to the `motion-plates` skill.
 - Send a vertical cut of a finished film to the `reel-export` skill.
 - Send raw talking-head or selfie footage the user shot, to cut into a captioned edit, to the `auto-edit` skill.
-- Send a voice-over-led film over 30 s, or a scene in the user's existing Remotion project, to the `launch-film` skill.
+- Send a voice-over-led film over 30 s, or a scene in the user's existing Remotion project, to launch-film in the sloosh-launch-film pack.
 - Send a film built in code with no voice-over, such as a new Remotion film, a seamless loop or a sting with exact UI and words, to the motion-film-code skill.
 
 ## 2. Intake and treatment

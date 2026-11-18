@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: no-trigger-single-clip
+description: One short product clip from a photo does not load the launch film skill.
+tags: [trigger, negative]
+runs: 2

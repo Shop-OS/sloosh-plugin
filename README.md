@@ -2,12 +2,13 @@
 
 ![Sloosh](assets/sloosh.png)
 
-Sloosh makes product images, ad variants and short product videos, and runs the published Sloosh Spaces in your workspace. This plugin connects Claude to your Sloosh workspace and adds eleven skills: product imagery, ad variants, published Spaces, product video, UGC storyboards, video remixes, launch films, creative iteration, batch runs, asset management and a skill router. Creative iteration takes the next round on a Sloosh result you have seen. Batch runs run one published Space over a list of items. The router picks the skill for a request that names none.
+Sloosh makes product images, ad variants and short product videos, and runs the published Sloosh Spaces in your workspace. This plugin connects Claude to your Sloosh workspace and adds ten skills: product imagery, ad variants, published Spaces, product video, UGC storyboards, video remixes, creative iteration, batch runs, asset management and a skill router. Creative iteration takes the next round on a Sloosh result you have seen. Batch runs run one published Space over a list of items. The router picks the skill for a request that names none.
 
-This marketplace also has nine packs. Each pack is a separate plugin that needs this core plugin:
+This marketplace also has ten packs. Each pack is a separate plugin that needs this core plugin:
 
 - [Sloosh for Shopify stores](#sloosh-for-shopify-stores) (`sloosh-shopify`) makes catalog images, launch ads with copy and short product page videos for the products in a Shopify store.
 - [Sloosh motion films](#sloosh-motion-films) (`sloosh-motion`) makes stylised short films on your computer, such as product reveals, beat-synced edits and software walkthroughs, with a style guide from a reference video and a catalog of named motion effects.
+- [Sloosh launch films](#sloosh-launch-films) (`sloosh-launch-film`) directs and renders a SaaS or product launch film with Remotion on your computer, cut to your voiceover.
 - [Sloosh performance ads](#sloosh-performance-ads) (`sloosh-ads`) plans, writes, makes and tests performance ads, such as hook grids, comparison ads, seasonal creatives and creative test plans.
 - [Sloosh video](#more-packs) (`sloosh-video`) makes product films, product animations, morphs, motion copies, talking-head clips, captions, soundtracks and voiceovers, upscales and edits or extensions of your clips.
 - [Sloosh image editing](#more-packs) (`sloosh-image`) retouches, swaps and relights backgrounds, reframes and outpaints, transfers a reference style and upscales your images.
@@ -79,15 +80,14 @@ Always name the agents with `-a`. Without it, the CLI installs the skills into e
 
 Some skills hand work to other skills. Install them together:
 
-- `product-video`, `ad-variants`, `ugc-storyboard`, `remix-video` and `launch-film` use `product-imagery`.
-- `ugc-storyboard` and `launch-film` use `product-video`.
+- `product-video`, `ad-variants`, `ugc-storyboard` and `remix-video` use `product-imagery`.
+- `ugc-storyboard` uses `product-video`.
 - `ad-variants` and `ugc-storyboard` can use `published-spaces`.
 - `product-imagery`, `product-video`, `ad-variants` and `published-spaces` hand changes to a result you have seen to `creative-iteration`.
-- `launch-film` needs its whole folder, with its scripts, assets and references folders. See the Launch films section below for what it needs on your computer.
 
 ### Install the plugin in Codex
 
-Codex can install the whole plugin from this repository, with the eleven skills and the Sloosh server:
+Codex can install the whole plugin from this repository, with the ten skills and the Sloosh server:
 
 ```
 codex plugin marketplace add Shop-OS/sloosh-plugin
@@ -99,10 +99,6 @@ codex mcp login sloosh
 
 The remix skill runs the Shadow Clone Space on a short clip you give it. Your character takes the place of the person in the clip, with the same motion, camera and timing. The clip must be 4 to 30 seconds long and at most 64 MiB, as an .mp4 or .mov file. Upload the file, share a direct link to it, or paste a link to a public Instagram Reel or post or an X post, and Sloosh imports the clip. TikTok and YouTube links do not work yet: save the clip with the platform's own option first.
 
-## Launch films
-
-The launch film skill directs and renders a SaaS or product launch film with Remotion on your computer, cut to your voiceover. It runs in a coding agent that can run commands on your computer, such as Claude Code. It needs Node.js, ffmpeg, and Python 3 with numpy and Pillow. It transcribes the voiceover with whisper-cpp and a speech model. The agent asks you before it installs either. It can use Sloosh images and clips for missing shots after you approve each quote. Remotion is free for individuals, non-profits and for-profit companies with up to three employees. Larger for-profit companies need a Remotion company license.
-
 ## Sloosh for Shopify stores
 
 Sloosh for Shopify stores turns the products in a Shopify store into catalog images, launch ads with copy and short product page videos, from a brand kit that it saves once. It reads products and basic shop information only and never changes the store. It needs this core plugin. Install it after the core plugin:
@@ -111,7 +107,7 @@ Sloosh for Shopify stores turns the products in a Shopify store into catalog ima
 /plugin install sloosh-shopify@sloosh
 ```
 
-In Codex, run `codex plugin add sloosh-shopify@sloosh`. See [packs/sloosh-shopify/README.md](packs/sloosh-shopify/README.md) for its skills and how it gets products.
+In Codex, run `codex plugin add sloosh-shopify@sloosh`. See [packs/sloosh-shopify/README.md](https://github.com/Shop-OS/sloosh-plugin/blob/main/packs/sloosh-shopify/README.md) for its skills and how it gets products.
 
 ## Sloosh motion films
 
@@ -121,7 +117,17 @@ Sloosh motion films makes stylised short films on your computer: product reveals
 /plugin install sloosh-motion@sloosh
 ```
 
-In Codex, run `codex plugin add sloosh-motion@sloosh`. See [packs/sloosh-motion/README.md](packs/sloosh-motion/README.md) for its skills and how a film is made.
+In Codex, run `codex plugin add sloosh-motion@sloosh`. See [packs/sloosh-motion/README.md](https://github.com/Shop-OS/sloosh-plugin/blob/main/packs/sloosh-motion/README.md) for its skills and how a film is made.
+
+## Sloosh launch films
+
+Sloosh launch films directs and renders a SaaS or product launch film with Remotion on your computer, cut to your voiceover, with a match cut on every scene change. It runs in a coding agent that can run commands on your computer, such as Claude Code. It needs Node.js, ffmpeg, and Python 3 with numpy and Pillow. It transcribes the voiceover with whisper-cpp and a speech model. The agent asks you before it installs either. It can use Sloosh images and clips for missing shots after you approve each quote. Remotion is free for individuals, non-profits and for-profit companies with up to three employees. Larger for-profit companies need a Remotion company license. It needs this core plugin. Install it after the core plugin:
+
+```
+/plugin install sloosh-launch-film@sloosh
+```
+
+In Codex, run `codex plugin add sloosh-launch-film@sloosh`. See [packs/sloosh-launch-film/README.md](https://github.com/Shop-OS/sloosh-plugin/blob/main/packs/sloosh-launch-film/README.md) for what it needs and how a film is made.
 
 ## Sloosh performance ads
 
@@ -131,7 +137,7 @@ Sloosh performance ads plans, writes, makes and tests performance ads. Its plann
 /plugin install sloosh-ads@sloosh
 ```
 
-In Codex, run `codex plugin add sloosh-ads@sloosh`. See [packs/sloosh-ads/README.md](packs/sloosh-ads/README.md) for its skills.
+In Codex, run `codex plugin add sloosh-ads@sloosh`. See [packs/sloosh-ads/README.md](https://github.com/Shop-OS/sloosh-plugin/blob/main/packs/sloosh-ads/README.md) for its skills.
 
 ## More packs
 
@@ -143,16 +149,16 @@ These packs each need this core plugin. Install the ones you want after the core
 
 In Codex, run `codex plugin add <pack>@sloosh`. Each pack's README lists its skills:
 
-- `sloosh-video`: [packs/sloosh-video/README.md](packs/sloosh-video/README.md)
-- `sloosh-image`: [packs/sloosh-image/README.md](packs/sloosh-image/README.md)
-- `sloosh-ecommerce`: [packs/sloosh-ecommerce/README.md](packs/sloosh-ecommerce/README.md)
-- `sloosh-brand`: [packs/sloosh-brand/README.md](packs/sloosh-brand/README.md)
-- `sloosh-social`: [packs/sloosh-social/README.md](packs/sloosh-social/README.md)
-- `sloosh-strategy`: [packs/sloosh-strategy/README.md](packs/sloosh-strategy/README.md). Its skills plan work and cost nothing.
+- `sloosh-video`: [packs/sloosh-video/README.md](https://github.com/Shop-OS/sloosh-plugin/blob/main/packs/sloosh-video/README.md)
+- `sloosh-image`: [packs/sloosh-image/README.md](https://github.com/Shop-OS/sloosh-plugin/blob/main/packs/sloosh-image/README.md)
+- `sloosh-ecommerce`: [packs/sloosh-ecommerce/README.md](https://github.com/Shop-OS/sloosh-plugin/blob/main/packs/sloosh-ecommerce/README.md)
+- `sloosh-brand`: [packs/sloosh-brand/README.md](https://github.com/Shop-OS/sloosh-plugin/blob/main/packs/sloosh-brand/README.md)
+- `sloosh-social`: [packs/sloosh-social/README.md](https://github.com/Shop-OS/sloosh-plugin/blob/main/packs/sloosh-social/README.md)
+- `sloosh-strategy`: [packs/sloosh-strategy/README.md](https://github.com/Shop-OS/sloosh-plugin/blob/main/packs/sloosh-strategy/README.md). Its skills plan work and cost nothing.
 
 ## What the plugin sends
 
-The plugin runs no code on its own. The launch film skill includes scripts and a Remotion project template that run on your computer only when you ask for a film. Claude calls the Sloosh server at https://mcp.sloosh.ai/mcp with the prompts, images and choices you give it, using the access you grant when you connect. Sloosh stores the images and videos it makes in your workspace. Each pack's README says what that pack sends and reads.
+The plugin runs no code on its own and ships no scripts. Claude calls the Sloosh server at https://mcp.sloosh.ai/mcp with the prompts, images and choices you give it, using the access you grant when you connect. Sloosh stores the images and videos it makes in your workspace. Each pack's README says what that pack sends and reads.
 
 ## Example prompts
 
@@ -162,7 +168,6 @@ The plugin runs no code on its own. The launch film skill includes scripts and a
 - "Turn my latest product image into a short video clip."
 - "Write a UGC storyboard for my face serum and make the shots."
 - "Remix this 15-second dance clip with my brand character."
-- "Make a 30-second launch film for our app from PART 1.mp3 and our website."
 - "The label on that last image is wrong. Fix it and keep the rest."
 
 ## Support

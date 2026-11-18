@@ -104,6 +104,14 @@ These skills need a connected Shopify store.
 | `launch-ads` | Launch, sale or new-collection ads for store products, with copy for each placement | Paid |
 | `pdp-video` | One product page or social clip for each of several store products | Paid |
 
+## sloosh-launch-film: Sloosh launch films
+
+This skill renders on the user's computer. It needs a coding agent that runs commands there, such as Claude Code. In the Claude app, route a clip to the `product-video` skill and a multi-shot film to cinematic-product-film in the sloosh-video pack.
+
+| Skill | Use it for | Cost |
+|---|---|---|
+| `launch-film` | A SaaS or product launch film that Remotion renders, cut to the user's voiceover, with a match cut on every scene change | Paid |
+
 ## sloosh-motion: Sloosh motion films
 
 Most of these skills render on the user's computer. They need a coding agent that runs commands there, such as Claude Code. In the Claude app, only animated-chart, motion-plates and reference-to-motion work.

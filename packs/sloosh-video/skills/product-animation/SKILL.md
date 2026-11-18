@@ -1,6 +1,6 @@
 ---
 name: product-animation
-description: Animate the product itself in one short effect clip with Sloosh, from one product photo, such as an exploded view of its parts, a 360 spin, feature callouts on an orbit, a zero-gravity float, a splash, a tear-away reveal, a stop-motion unpack or a squish, or a seamless loop of one of these effects. Use when the user wants the product's parts, spin, float or another named product effect animated and the Sloosh tools are connected. Not for a plain clip, a plain product page loop or a camera move with no product effect (use product-video). Not for a film of several shots (use cinematic-product-film, or launch-film for a film rendered on the user's computer).
+description: Animate the product itself in one short effect clip with Sloosh, from one product photo, such as an exploded view of its parts, a 360 spin, feature callouts on an orbit, a zero-gravity float, a splash, a tear-away reveal, a stop-motion unpack or a squish, or a seamless loop of one of these effects. Use when the user wants the product's parts, spin, float or another named product effect animated and the Sloosh tools are connected. Not for a plain clip, a plain product page loop or a camera move with no product effect (use product-video). Not for a film of several shots (use cinematic-product-film, or launch-film in the sloosh-launch-film pack for a film rendered on the user's computer).
 ---
 
 # Product animation

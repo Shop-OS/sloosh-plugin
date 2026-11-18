@@ -1,6 +1,6 @@
 ---
 name: cinematic-product-film
-description: Plan and generate a multi-shot cinematic product film with Sloosh, all in the chat with no local render. It writes a 4 to 8 shot storyboard, makes one keyframe still per shot, then animates each shot from its keyframe with one look carried through every shot, and delivers the clips in order for the user's editor. Use when the user wants a 15 to 60 second commercial or brand film made of several generated shots that cut together, from product photos and a mood brief, and the Sloosh tools are connected. Not for one clip (use product-video), a single move from one still to another (use transitions-and-morphs), a creator-style UGC ad (use ugc-storyboard), or a code-rendered film with typography on the user's computer (use launch-film, or product-reveal in the sloosh-motion pack).
+description: Plan and generate a multi-shot cinematic product film with Sloosh, all in the chat with no local render. It writes a 4 to 8 shot storyboard, makes one keyframe still per shot, then animates each shot from its keyframe with one look carried through every shot, and delivers the clips in order for the user's editor. Use when the user wants a 15 to 60 second commercial or brand film made of several generated shots that cut together, from product photos and a mood brief, and the Sloosh tools are connected. Not for one clip (use product-video), a single move from one still to another (use transitions-and-morphs), a creator-style UGC ad (use ugc-storyboard), or a code-rendered film with typography on the user's computer (use launch-film in the sloosh-launch-film pack, or product-reveal in the sloosh-motion pack).
 ---
 
 # Cinematic product film
@@ -70,7 +70,7 @@ For checkpoints, holds and run states, read the `spaces` guide with `get_guide`.
 - Shared references help the product stay the same. Sloosh does not promise it. Name the shots that drift.
 - A re-shoot is new paid work: a fresh quote, a new approval and a new key, such as `video-perfume-shot3-16x9-v2`.
 - Deliver the clips in shot order with clip names, seconds per shot and the audio choice.
-- For typography in a local shell, follow the `launch-film` skill. For captions on a cut with speech, follow the `captions-subtitles` skill. For one more clip, follow the `product-video` skill. With no product photo, offer the `product-imagery` skill first.
+- For typography in a local shell, use launch-film in the sloosh-launch-film pack. For captions on a cut with speech, follow the `captions-subtitles` skill. For one more clip, follow the `product-video` skill. With no product photo, offer the `product-imagery` skill first.
 
 For quote expiry and card actions, read the `generation` and `spending` guides with `get_guide`.
 

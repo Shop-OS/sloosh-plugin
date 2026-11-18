@@ -1,0 +1,24 @@
+{
+    "name": "sloosh-launch-film",
+    "displayName": "Sloosh launch films",
+    "version": "0.1.0",
+    "description": "Direct and render a SaaS or product launch film with Remotion on your own computer, cut to your voiceover, with a match cut on every scene change. Sloosh makes the missing stills and clips, and the assistant asks for your approval before any paid work. Needs a coding agent that runs local commands.",
+    "author": {
+        "name": "ShopOS",
+        "url": "https://sloosh.ai"
+    },
+    "homepage": "https://sloosh.ai/mcp",
+    "license": "MIT",
+    "keywords": [
+        "sloosh",
+        "launch-video",
+        "remotion",
+        "product-video",
+        "motion-graphics",
+        "voiceover"
+    ],
+    "icon": "./assets/sloosh.png",
+    "repository": "https://github.com/Shop-OS/sloosh-plugin",
+    "privacyPolicyUrl": "https://sloosh.ai/privacy-policy",
+    "dependencies": ["sloosh"]
+}

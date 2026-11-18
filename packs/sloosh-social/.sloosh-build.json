@@ -1,7 +1,7 @@
 {
     "generatedFrom": "Shop-OS/shopos-backend-ts apps/spacelab-mcp/plugins",
     "files": {
-        "packs/sloosh-social/.claude-plugin/plugin.json": "4b7b98c32a822995de9fae1ed1c103345c258961f2ed8fd3c49cf20ada64bbda",
+        "packs/sloosh-social/.claude-plugin/plugin.json": "a3a123f88953579bad7d16a5df758bd8b402cfd7209544fa72852a5d6712e104",
         "packs/sloosh-social/.mcp.json": "b221ca3a6962dcd6a3dcd08b9073f78d6f04507a2fbadfaaefad0dedbabd761f",
         "packs/sloosh-social/LICENSE": "c83345781c3f0bbfdbec98959117d197ea95712b141cc1f23f612fd62d7ed82f",
         "packs/sloosh-social/README.md": "66b71907de6f26b94e6bbded6a8e40c1791e0f524fe395757434ee140ab3c87e",
@@ -113,7 +113,7 @@
         "packs/sloosh-social/evals/trigger-youtube-thumbnail/prompt.md": "c67dda836ded6873df45ad4bb3352a8f339f89db27addb92364fa1eb9a96d9fa",
         "packs/sloosh-social/skills/carousel-builder/SKILL.md": "57461a0d3933763e7ab285934309ca61ee5cec8d6301ca1ce454244e6ccd7b1c",
         "packs/sloosh-social/skills/carousel-builder/references/carousel-frameworks.md": "2730eaf67112096742c4006402593a278b0d2e16da9c500cbccedd6f47138d8e",
-        "packs/sloosh-social/skills/reels-shorts-clip/SKILL.md": "c6eaba35b88d985356a4912b30a14b54d6a9fd688bb5e20a55fe812f8ea1257a",
+        "packs/sloosh-social/skills/reels-shorts-clip/SKILL.md": "f32af4327b6db5aa7160b4c9da5a77d76b0190da62927aa1f411757b8872a0e0",
         "packs/sloosh-social/skills/reels-shorts-clip/references/clip-craft.md": "46af6e4e04796b6b1eecb21c9c83cf887536fc7fb61ef99ef765e6681cd47ce3",
         "packs/sloosh-social/skills/social-post-remix/SKILL.md": "c4bd54e734d4ca13ecada12b68033b8f726c6ec3ac39b5aa68f6daf098b7d6a3",
         "packs/sloosh-social/skills/youtube-thumbnail/SKILL.md": "1d4fdfe7a20de4662edb3da1e1db0213cdb18d181056afbb459ec5e24c0015f9",

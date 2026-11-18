@@ -16,7 +16,7 @@ Pick one row. It sets the length, the cut pace and the word budget. The style sk
 | Logo sting or end card | 6-8 s | 100-128 BPM | the mark stays vector, built in code |
 | Social vertical | 9-15 s | per style | the hook lands inside the first second |
 
-The engine renders 30 fps by default (24 for some 16:9 films). A film over 30 s, or one led by a voice-over, is a job for the `launch-film` skill of the core plugin.
+The engine renders 30 fps by default (24 for some 16:9 films). A film over 30 s, or one led by a voice-over, is a job for launch-film in the sloosh-launch-film pack.
 
 **Word budget:** at most 35 words per 30 s, at most 5 words per line and at most 2 lines on screen at once. Cut words before you shrink type.
 

@@ -47,7 +47,7 @@ Cost tiers: none (no paid work), low (one or two image rounds), medium (short vi
 | Logo sting | logo-animation | Sloosh brand pack | medium, or varies through a Space |
 | Tease or reveal film of one physical product | product-reveal | Sloosh motion pack, needs Claude Code on the user's computer | high |
 | Rendered motion piece | sloosh-motion-director | Sloosh motion pack, needs Claude Code on the user's computer | high |
-| Launch film | launch-film | core, needs Claude Code on the user's computer | high |
+| Launch film | launch-film | Sloosh launch films pack, needs Claude Code on the user's computer | high |
 | Any ready-made recipe, such as an ad grid | published-spaces | core | varies |
 
 ## Testing and review

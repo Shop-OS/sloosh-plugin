@@ -1,6 +1,6 @@
 ---
 name: motion-film-code
-description: Build and render a code-driven motion film on the user's computer, with no voice-over: a type, UI or own-vector-logo sting, a seamless loop or a scored 20 to 45 s film with exact UI, numbers and words. Every frame comes from code, in Remotion (added only after the user approves) or in plain HTML pages driven by a seek(t) function, captured with Playwright and joined with ffmpeg, on the sloosh-motion-director engine. Sloosh plates and clips are optional, in quoted rounds. Use when the user asks for a film built in code, a programmatic video, a new standalone Remotion film from scratch or an HTML or seek(t) animation rendered to MP4, and a coding agent runs on their computer. Not for a voice-over launch film or a scene in the user's existing Remotion project (launch-film), a generated logo reveal (logo-animation), a glitch or morph look (glitch-fx, morph-shapeshift), a tour from real app screens (saas-product-video), a type-only preset film (kinetic-typography) or one generated clip (product-video).
+description: Build and render a code-driven motion film on the user's computer, with no voice-over: a type, UI or own-vector-logo sting, a seamless loop or a scored 20 to 45 s film with exact UI, numbers and words. Every frame comes from code, in Remotion (added only after the user approves) or in plain HTML pages driven by a seek(t) function, captured with Playwright and joined with ffmpeg, on the sloosh-motion-director engine. Sloosh plates and clips are optional, in quoted rounds. Use when the user asks for a film built in code, a programmatic video, a new Remotion film from scratch or an HTML or seek(t) animation rendered to MP4, and a coding agent runs on their computer. Not for a voice-over launch film or a scene in the user's existing Remotion project (sloosh-launch-film pack), a generated logo reveal (logo-animation), a glitch or morph look (glitch-fx, morph-shapeshift), a tour from real app screens (saas-product-video), a type-only preset film (kinetic-typography) or one generated clip (product-video).
 ---
 
 # Motion Film in Code
@@ -25,7 +25,7 @@ Use this skill to build a motion film whose every frame comes from code, and to 
 | A logo sting, a kinetic-type sting or a seamless loop built in code | this skill, HTML route |
 | A scored 20 to 45 s film with exact UI, exact numbers or many scenes, built in code | this skill, Remotion route |
 | A film that the user asks to build in Remotion or in HTML, with no voice-over | this skill |
-| A voice-over-led launch film, match cuts to a voice-over, a site fly-over, or a new scene in the user's existing Remotion project | the `launch-film` skill |
+| A voice-over-led launch film, match cuts to a voice-over, a site fly-over, or a new scene in the user's existing Remotion project | launch-film in the sloosh-launch-film pack |
 | A product tour or a feature announcement rebuilt from the app's real screens | the `saas-product-video` skill |
 | A type-only film in one of six type presets, or captions on the beat | the `kinetic-typography` skill |
 | A launch film for one physical product with a packshot | the `product-reveal` skill |

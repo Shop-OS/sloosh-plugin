@@ -1,7 +1,7 @@
 {
     "name": "sloosh-social",
     "displayName": "Sloosh social",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "description": "Make social content with Sloosh: carousels, Reels and Shorts clips, YouTube thumbnails and remixes of social posts. The assistant asks for your approval before any paid work.",
     "author": {
         "name": "ShopOS",
