@@ -61,7 +61,7 @@ Map each deliverable to one of these skills:
 - One short product clip: the `product-video` skill.
 - A creator-led or founder-led video: the `ugc-storyboard` skill.
 - A ready-made recipe, such as an ad grid: the `published-spaces` skill.
-- A code-rendered launch film on the user's computer: the `launch-film` skill.
+- A code-rendered launch film on the user's computer: launch-film in the sloosh-launch-film pack.
 - Individual ad concepts from the chosen territory: the ad concepts skill in the Sloosh ads pack, if it is installed.
 
 Set the cost tier by the territory's shape, with the tiers in `references/territory-card.md`. The producing skill gives the real quote. If the budget is tight or the allowance left is small, recommend the low-tier territory.

@@ -1,7 +1,7 @@
 {
     "generatedFrom": "Shop-OS/shopos-backend-ts apps/spacelab-mcp/plugins",
     "files": {
-        "packs/sloosh-brand/.claude-plugin/plugin.json": "e3853ad539cd0ae01663caf5816a05715f1df9d67c28dabff5e7055e09ee62a6",
+        "packs/sloosh-brand/.claude-plugin/plugin.json": "2f50013ae5e2d39498025d81fc8e4151f69896b5699fb71c90c70e137d1aa070",
         "packs/sloosh-brand/.mcp.json": "b221ca3a6962dcd6a3dcd08b9073f78d6f04507a2fbadfaaefad0dedbabd761f",
         "packs/sloosh-brand/LICENSE": "c83345781c3f0bbfdbec98959117d197ea95712b141cc1f23f612fd62d7ed82f",
         "packs/sloosh-brand/README.md": "3e449124de50f74664c3fb2a4e0189474d2855c77b5ba28687729394b0ae8ffe",
@@ -213,7 +213,7 @@
         "packs/sloosh-brand/skills/brand-icon-set/references/icon-prompts.md": "a3847b746c339a61eb1eb54f42c0f2337ee9e69436b5bd6d36c4b7eced9b1ff7",
         "packs/sloosh-brand/skills/brand-kit-extract/SKILL.md": "09f48c2617f93685c310c428b23eca8339dd2bb65892256f74c642117841b9ec",
         "packs/sloosh-brand/skills/brand-kit-extract/references/brand-kit-template.md": "62aad625e609a0e69d8256229d408b4660c49639f7aced41a2fde71aed86ff07",
-        "packs/sloosh-brand/skills/logo-animation/SKILL.md": "206b47f0d2971bbfa58f2f01435810291426f40375120169848400b413a1127d",
+        "packs/sloosh-brand/skills/logo-animation/SKILL.md": "6d2094304bd817bc54ab060908192bdb24fef788405472b3aac5fb3195979c5f",
         "packs/sloosh-brand/skills/logo-animation/references/reveal-recipes.md": "04c45be4acb00237a40f64260f01dfb752387ff15cb5b477007ffffddc826689",
         "packs/sloosh-brand/skills/logo-from-brief/SKILL.md": "a724497a3d8c0dc0bb7c87aee96390c150dc139fd44cdfba034c6050c1f2b0c0",
         "packs/sloosh-brand/skills/logo-from-brief/references/logo-prompts.md": "609d487f1a5336f856bf6b1552b59e367278bbce3d7a07cfbcd03e1cc0721766",

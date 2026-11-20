@@ -1,6 +1,6 @@
 ---
 name: logo-animation
-description: Animate an existing logo with Sloosh into a short reveal clip of about 3 to 8 seconds, such as an intro or outro sting, a brand bumper, a light sweep across a material version of the mark, a 3D logo reveal or an icon that grows into the full wordmark lockup. Use when the user has a logo file and asks for a logo animation, logo reveal, logo sting, animated wordmark or brand bumper, and the Sloosh tools are connected. Not for designing a new logo (use logo-from-brief), a still brand board (use brand-board), a product clip (use product-video) or a longer launch film (use launch-film). Not for a logo morph or glitch sting rendered in code on the user's computer (use the Sloosh Motion pack if it is installed).
+description: Animate an existing logo with Sloosh into a short reveal clip of about 3 to 8 seconds, such as an intro or outro sting, a brand bumper, a light sweep across a material version of the mark, a 3D logo reveal or an icon that grows into the full wordmark lockup. Use when the user has a logo file and asks for a logo animation, logo reveal, logo sting, animated wordmark or brand bumper, and the Sloosh tools are connected. Not for designing a new logo (use logo-from-brief), a still brand board (use brand-board), a product clip (use product-video) or a longer launch film (use launch-film in the sloosh-launch-film pack). Not for a logo morph or glitch sting rendered in code on the user's computer (use the Sloosh Motion pack if it is installed).
 ---
 
 # Logo animation
@@ -29,7 +29,7 @@ Ask one question if the answer is not clear: must the mark stay exactly as drawn
 - A material look such as brass or glass: make a material still first, with a Space or `image_gen`. Then animate it on the direct path.
 - A light sweep or an icon that grows into the lockup: use the direct path.
 - A mark that must stay pixel exact, or a transparent background: a code build keeps the mark sharp. Say so in plain words. The Sloosh Motion pack does this, if it is installed.
-- A logo that ends a longer product film: use the `launch-film` skill.
+- A logo that ends a longer product film: use launch-film in the sloosh-launch-film pack.
 
 `references/reveal-recipes.md` has the route table, the reveal moves, the prompts and the checks.
 

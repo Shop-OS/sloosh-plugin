@@ -1,7 +1,7 @@
 {
     "generatedFrom": "Shop-OS/shopos-backend-ts apps/spacelab-mcp/plugins",
     "files": {
-        "packs/sloosh-strategy/.claude-plugin/plugin.json": "131c13c6bb75ba71892c68227b09bef4f1bfa8cdea8a42f44af7320283b28a29",
+        "packs/sloosh-strategy/.claude-plugin/plugin.json": "4e7fd3a46cc69915783bad746ab44e2fcc2d7e0e5743077444d92e86aa9af8b6",
         "packs/sloosh-strategy/.mcp.json": "b221ca3a6962dcd6a3dcd08b9073f78d6f04507a2fbadfaaefad0dedbabd761f",
         "packs/sloosh-strategy/LICENSE": "c83345781c3f0bbfdbec98959117d197ea95712b141cc1f23f612fd62d7ed82f",
         "packs/sloosh-strategy/README.md": "c697f0e7a9a5c63c8e3006d73c434a0155d0af3f9311899676120713671d907d",
@@ -91,15 +91,15 @@
         "packs/sloosh-strategy/evals/trigger-launch-campaign-plan/mocks/sloosh/show_generation.md": "a5c99db01fe87fb433032e2d1165fe5880556969d4c5c186710c54a725b759e4",
         "packs/sloosh-strategy/evals/trigger-launch-campaign-plan/mocks/sloosh/view_asset.md": "a192c5d7d873bf69844fee873f61a20ce56e4be63a69cf43c77f343490c77948",
         "packs/sloosh-strategy/evals/trigger-launch-campaign-plan/prompt.md": "b07f836d8ae746923e9666a6f2e56706ccdbcf7552a0b270af9198675b702083",
-        "packs/sloosh-strategy/skills/campaign-orchestrator/SKILL.md": "dbddea2b51b578ba396471a85216261e1243cfc94e73dd402ee48124ba5a20bb",
+        "packs/sloosh-strategy/skills/campaign-orchestrator/SKILL.md": "e5e6ff5e7318eb8d0ea957e439436b4ce97da13807732b38c4c769da4ca75048",
         "packs/sloosh-strategy/skills/campaign-orchestrator/references/other-packs.md": "555026dd1c4288201a1be0a9d4ef6bbd2369f11b7de4451942afb27caf6857aa",
         "packs/sloosh-strategy/skills/campaign-orchestrator/references/round-plan.md": "f32350225447f0d72b5c24e613dc324fb88d1ea4150a44a9da5a9f9b7746925c",
         "packs/sloosh-strategy/skills/competitor-creative-teardown/SKILL.md": "6beb835b7d67fabd60117d50fbc9b5532556c511fefac14306a52ba5a4444b2f",
         "packs/sloosh-strategy/skills/competitor-creative-teardown/references/teardown-guide.md": "7e1b93e6e61f16ade95605536c27b6c9b6040939066c6571d4c88bc9b38a32af",
-        "packs/sloosh-strategy/skills/creative-strategy/SKILL.md": "2d7afbd3fe1e6d293d01f29feb7f8efe6c9b80f8b030576e3d1f36f6dafef225",
+        "packs/sloosh-strategy/skills/creative-strategy/SKILL.md": "c73865d4a2ac2a84ef5494173a2b86ac66a48b0273a426a47e41a0d09ce1d6d8",
         "packs/sloosh-strategy/skills/creative-strategy/references/brief-schema.md": "23a16ef88fcd5096a85b582ed1a3b826c06ac101c10bc7c71434f929dc37dda6",
         "packs/sloosh-strategy/skills/creative-strategy/references/territory-card.md": "58c513e1f5882bd6611db7d2657ec10341a6da89c6738fd4a9a6b2629ca9213c",
-        "packs/sloosh-strategy/skills/launch-campaign-plan/SKILL.md": "22558c1c85dd04d416019541e7263565fa349911cca5ac182557a90c1f60e537",
-        "packs/sloosh-strategy/skills/launch-campaign-plan/references/asset-matrix.md": "09798509cfbda7bbd419b41bd5b2e7c01d88de35aed058d786423ebb5c30df28"
+        "packs/sloosh-strategy/skills/launch-campaign-plan/SKILL.md": "9d4efd580c1ef271728e01a905b0164b6648483b50df980cbf31782c49b118fa",
+        "packs/sloosh-strategy/skills/launch-campaign-plan/references/asset-matrix.md": "8f33a9f2f4f128599f90e984ded85bdea3ff3d15202a7f0e5f32bdec5a5144a1"
     }
 }

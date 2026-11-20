@@ -5,13 +5,13 @@
         "url": "https://sloosh.ai"
     },
     "metadata": {
-        "description": "The Sloosh plugins for Claude: product images, ad variants, product videos, Sloosh Spaces, launch films and creative iteration, plus packs for Shopify stores, stylised motion films, performance ads, video, image editing, ecommerce and marketplace images, brand, social content and creative strategy."
+        "description": "The Sloosh plugins for Claude: product images, ad variants, product videos, Sloosh Spaces and creative iteration, plus packs for Shopify stores, stylised motion films, launch films, performance ads, video, image editing, ecommerce and marketplace images, brand, social content and creative strategy."
     },
     "plugins": [
         {
             "name": "sloosh",
-            "source": "./",
-            "description": "Create product images, ad variants, short videos and voiceovers, run and build Sloosh Spaces from chat, edit videos with Calypso, and direct a product launch film with Remotion in a coding agent. The assistant asks for your approval before any paid work."
+            "source": "./plugins/sloosh",
+            "description": "Create product images, ad variants, short videos and voiceovers, run and build Sloosh Spaces from chat and edit videos with Calypso. The assistant asks for your approval before any paid work."
         },
         {
             "name": "sloosh-ads",
@@ -32,6 +32,11 @@
             "name": "sloosh-image",
             "source": "./packs/sloosh-image",
             "description": "Edit and finish your images with Sloosh: retouch, swap and relight backgrounds, reframe and outpaint, transfer a reference style, and upscale. The assistant asks for your approval before any paid work."
+        },
+        {
+            "name": "sloosh-launch-film",
+            "source": "./packs/sloosh-launch-film",
+            "description": "Direct and render a SaaS or product launch film with Remotion on your own computer, cut to your voiceover, with a match cut on every scene change. Sloosh makes the missing stills and clips, and the assistant asks for your approval before any paid work. Needs a coding agent that runs local commands."
         },
         {
             "name": "sloosh-motion",

@@ -47,7 +47,7 @@ Most films are hybrid: a code film with Sloosh stills and clips as layers. The d
 | Backgrounds, textures and cut-outs for another editor | the `motion-plates` skill | matched plate sets by shot id |
 | Raw talking-head or selfie footage the user shot, cut into a captioned edit | the `auto-edit` skill | it cuts on whole words and mattes the speaker |
 | A finished wide film that needs a vertical version | the `reel-export` skill | safe-zone hook and a clean upload encode |
-| A voice-over-led launch film over 30 s, or a Remotion project | the `launch-film` skill of the core plugin | it owns Remotion and match cuts |
+| A voice-over-led launch film over 30 s, or a Remotion project | launch-film in the sloosh-launch-film pack | it owns Remotion and match cuts |
 | One generated clip of a product, with no edit | the `product-video` skill of the core plugin | no film needed |
 | A published Space that already makes the whole piece, and exact type is not needed | the `published-spaces` skill of the core plugin | one run, no local build |
 

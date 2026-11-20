@@ -43,7 +43,7 @@ If the user names a skill or asks for one clear output, go straight to that skil
     - In a host that cannot install the pack, offer the nearest core skill only.
 6. If the request sounds like a known ready-made recipe, such as an ad grid, an unboxing, a try-on, a room makeover or a logo reveal, call `list_spaces` with a short search term. Choose by the Space description. If a Space fits and no pack skill owns that kind of Space, offer the `published-spaces` skill. Do not run the Space here.
 7. If a pack skill owns that kind of Space, route to the pack skill. Examples are a UGC ad from a creator photo, sale banners, testimonial, comparison or before and after ads, and seasonal creatives.
-8. Check where the chosen skill runs. The `launch-film` skill and most sloosh-motion skills render films on the user's computer. They need a coding agent that runs commands there, such as Claude Code. In the Claude app, route a clip to the `product-video` skill and a multi-shot film to cinematic-product-film in the sloosh-video pack.
+8. Check where the chosen skill runs. launch-film in the sloosh-launch-film pack and most sloosh-motion skills render films on the user's computer. They need a coding agent that runs commands there, such as Claude Code. In the Claude app, route a clip to the `product-video` skill and a multi-shot film to cinematic-product-film in the sloosh-video pack.
 9. For a request with three or more steps that feed each other, route to campaign-orchestrator in the sloosh-strategy pack. It runs the steps in rounds, with one approval for each round. If that pack is not installed, list the skills in order, one line each. Then run them one at a time. Each skill asks for its own approval.
 10. If the request uses a real person, a voice, music, reviews or media the user did not make, follow "Rights and consent" below before you hand off.
 11. If no skill fits, say so in plain words. Offer the nearest skill. Do not invent a skill. See "What no skill makes yet" below.
@@ -63,11 +63,10 @@ These come with the core Sloosh plugin.
 | A remix of a short clip, such as a Reel or a TikTok, with the user's own character | `remix-video` | Paid |
 | A named Space or a ready-made recipe, such as an ad grid or a catalogue pack | `published-spaces` | Paid |
 | Changes to a Sloosh result the user has seen, such as "the label is wrong" | `creative-iteration` | Paid |
-| A launch or promo film that Remotion renders on the user's computer | `launch-film` | Paid |
 | The same Space on many products, photos or table rows, in rounds | `batch-pipeline` | Paid |
 | Find, bring in or check a file in Sloosh, such as "the logo I uploaded last week" | `asset-manager` | Free |
 
-For a short request that fits one row, follow the `product-imagery` skill, the `ad-variants` skill, the `product-video` skill, the `ugc-storyboard` skill, the `remix-video` skill, the `published-spaces` skill, the `creative-iteration` skill, the `launch-film` skill, the `batch-pipeline` skill or the `asset-manager` skill directly.
+For a short request that fits one row, follow the `product-imagery` skill, the `ad-variants` skill, the `product-video` skill, the `ugc-storyboard` skill, the `remix-video` skill, the `published-spaces` skill, the `creative-iteration` skill, the `batch-pipeline` skill or the `asset-manager` skill directly.
 
 ## Common chains
 

@@ -1,6 +1,6 @@
 ---
 name: transitions-and-morphs
-description: Make one short generated clip with Sloosh that moves from a start frame to an end frame. Use it for a colourway change, a before-and-after, a day-to-dusk shift, a pose-to-pose move or a match-cut bridge between two shots. Use when the user has or wants two frames and asks for the motion between them or a morph from frame A to frame B, and the Sloosh tools are connected. Not for animating a single image (use product-video), a multi-look morph film or a shape, logo or UI morph rendered in code on the user's computer (use morph-shapeshift in the sloosh-motion pack), or planning and joining the cuts of a film (use launch-film).
+description: Make one short generated clip with Sloosh that moves from a start frame to an end frame. Use it for a colourway change, a before-and-after, a day-to-dusk shift, a pose-to-pose move or a match-cut bridge between two shots. Use when the user has or wants two frames and asks for the motion between them or a morph from frame A to frame B, and the Sloosh tools are connected. Not for animating a single image (use product-video), a multi-look morph film or a shape, logo or UI morph rendered in code on the user's computer (use morph-shapeshift in the sloosh-motion pack), or planning and joining the cuts of a film (use launch-film in the sloosh-launch-film pack).
 ---
 
 # Transitions and morphs
@@ -66,7 +66,7 @@ Start with "Start exactly on frame A and end exactly on frame B." Then say what 
 - No object appears mid-way. No text appears.
 - For a 9:16 ad placement, keep the product and any text out of the top 14%, the bottom 35% and 6% at each side of the frame.
 - Tell the user that the model does not guarantee a frame-exact landing. Offer a hard cut to frame B in the edit as the safe fallback.
-- To cut the bridge into a launch film, follow the `launch-film` skill. To animate one still instead, follow the `product-video` skill. To lengthen or change the finished clip, follow the `video-extend-edit` skill.
+- To cut the bridge into a launch film, use launch-film in the sloosh-launch-film pack. To animate one still instead, follow the `product-video` skill. To lengthen or change the finished clip, follow the `video-extend-edit` skill.
 
 ## When a run delivers nothing
 

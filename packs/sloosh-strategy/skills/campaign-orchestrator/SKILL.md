@@ -55,7 +55,7 @@ If the user has no plan yet, use the `launch-campaign-plan` skill first. If the 
 - One clip from a still or a prompt: the `product-video` skill.
 - A creator-style video planned shot by shot: the `ugc-storyboard` skill.
 - A ready-made recipe through a published Space: the `published-spaces` skill.
-- A launch film rendered on the user's own computer: the `launch-film` skill. It needs a host that runs local commands.
+- A launch film rendered on the user's own computer: launch-film in the sloosh-launch-film pack. It needs a host that runs local commands.
 - A fix to one result: the `creative-iteration` skill.
 
 Other Sloosh packs add more producing skills. Read `references/other-packs.md` for what each pack makes.
