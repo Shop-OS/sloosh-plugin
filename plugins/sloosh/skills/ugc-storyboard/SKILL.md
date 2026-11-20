@@ -5,7 +5,7 @@ description: Plan a short UGC-style product video as a storyboard, then make its
 
 # UGC storyboard
 
-Use this skill to plan a short UGC-style video and make its shots with Sloosh. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
+Use this skill to plan a short UGC-style video and make its shots with Sloosh. Tool descriptions and server guides give the exact parameters and limits; use them for those.
 
 Tell the user what this makes: separate images and clips, one for each shot. Sloosh does not join the clips, add a voice-over or mix audio in this flow. The user puts the shots together in their own editor.
 

@@ -5,7 +5,7 @@ description: Pick the one Sloosh skill that fits a creative request when the use
 
 # Sloosh router
 
-Use this skill to choose the Sloosh skill for a request. A request goes in. One skill comes out, or a short ordered list of skills, with the inputs each one needs. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
+Use this skill to choose the Sloosh skill for a request. A request goes in. One skill comes out, or a short ordered list of skills, with the inputs each one needs. Tool descriptions and server guides give the exact parameters and limits; use them for those.
 
 This skill costs nothing. Tell the user so in your first reply. It never asks for a quote and never starts paid work. The chosen skill quotes its own work and asks the user for approval.
 

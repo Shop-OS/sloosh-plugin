@@ -1,11 +1,11 @@
 ---
 name: product-imagery
-description: Make new product photos with Sloosh, such as studio packshots, lifestyle scenes and hero shots of the user's own product, with the label, logo, colour and shape kept exact. Use when the user asks for a product image, a packshot, a lifestyle shot, a hero image, to put their product in a new scene or to improve an image prompt, and the Sloosh tools are connected. Not for ad sets with copy or several placement sizes (use ad-variants), for video (use product-video) or for changes to an image Sloosh already made (use creative-iteration). For shots of several products from a Shopify store, use the sloosh-shopify catalog-shoot skill if it is installed. For angle sets, colourways or marketplace white-background checks, use the sloosh-ecommerce skills if they are installed. To place a photo into a supplied scene photo and relight it, to shoot in the look of style references, or to edit, reframe or upscale an existing image, use the sloosh-image skills if they are installed.
+description: Make new product photos with Sloosh, such as studio packshots, lifestyle scenes and hero shots of the user's own product, with the label, logo, colour and shape kept exact. Use when the user asks for a product image, a packshot, a lifestyle shot, a hero image, to put their product in a new scene or to improve an image prompt, and the Sloosh tools are connected. Not for ad sets with copy or several placement sizes (use ad-variants), for video (use product-video) or for changes to an image Sloosh already made (use creative-iteration). Not for a whole store catalog, angle sets, colourways, marketplace white-background checks, or editing, relighting, reframing or upscaling an existing image; those are Sloosh pack skills (see sloosh-router).
 ---
 
 # Product imagery
 
-Use this skill to plan a Sloosh image request: one to four product photos, such as a packshot, a lifestyle scene or a hero shot. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
+Use this skill to plan a Sloosh image request: one to four product photos, such as a packshot, a lifestyle scene or a hero shot. Tool descriptions and server guides give the exact parameters and limits; use them for those.
 
 ## Before you start
 

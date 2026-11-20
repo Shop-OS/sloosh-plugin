@@ -5,7 +5,7 @@ description: Find, import, check and name the images, videos and audio files in 
 
 # Asset manager
 
-Use this skill to find, import, look at and name assets in the user's Sloosh workspace. An asset reference is a kind and an id. Kind workspace is the library. Kind generated is a Sloosh output. Other skills pass these references to their tools. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
+Use this skill to find, import, look at and name assets in the user's Sloosh workspace. An asset reference is a kind and an id. Kind workspace is the library. Kind generated is a Sloosh output. Other skills pass these references to their tools. Tool descriptions and server guides give the exact parameters and limits; use them for those.
 
 This skill costs nothing. Tell the user so in your first reply. It finds, imports and reads assets. It starts no generation and no Space run. The skill that makes something quotes its own work and asks for approval.
 

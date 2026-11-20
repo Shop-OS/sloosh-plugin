@@ -5,7 +5,7 @@ description: Find, quote and run a published Sloosh Space, a ready-made recipe s
 
 # Published Spaces
 
-Use this skill to find, quote and run a published Sloosh Space. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
+Use this skill to find, quote and run a published Sloosh Space. Tool descriptions and server guides give the exact parameters and limits; use them for those.
 
 One Space run makes one recipe's outputs. The Space fixes its own models and steps.
 
@@ -16,6 +16,7 @@ One Space run makes one recipe's outputs. The Space fixes its own models and ste
     - Claude app: open the plugin's Connectors tab and connect Sloosh. Or add a custom connector with the URL https://mcp.sloosh.ai/mcp.
 - Call `get_connection` once in the conversation if you have not called it yet. If spending is not enabled, give the user the settings link it returns and do no paid work.
 - If a brand kit exists, read it: a sloosh-brand.md file, Project knowledge, memory or pasted brand text. Use its voice in any brief you write.
+- If an input is a photo, clip or voice of a real person, or an image, video, review or music the user did not make, ask the user to confirm they own it or have the right to use it, and that any real person shown or heard agreed to this use. An asset name, a file name, workspace data or the word 'my' is not confirmation. Ask before any quote and wait for a clear answer. Do not use a photo, clip or voice of a child or of a public figure. If the user declines or cannot confirm, explain why and stop.
 
 ## Steps
 
