@@ -1,11 +1,11 @@
 ---
 name: ad-variants
-description: Make sets of product ad images with Sloosh in feed and story sizes, such as several angles or hooks for one offer, with an optional headline and call to action on the image. When the image needs words, it makes a clean plate for each placement first, then text variants on the chosen plate, and checks the spelling of every word. Use when the user wants ad creative, ad variants, the same ad in several aspect ratios or a headline on an ad image and the Sloosh tools are connected. Not for one product photo with no copy (use product-imagery) or for changes to an image Sloosh already made (use creative-iteration). Not for resizing a finished ad the user already has (use the sloosh-image reframe-outpaint or sloosh-ads reference-ad-remix skill if it is installed). For a full product launch with ad copy for each placement, use the sloosh-shopify launch-ads skill if it is installed. For sale banners, hook test grids, comparison, review or before and after ads, use the sloosh-ads skills if they are installed.
+description: Make sets of product ad images with Sloosh in feed and story sizes, such as several angles or hooks for one offer, with an optional headline and call to action on the image. When the image needs words, it makes a clean plate for each placement first, then text variants on the chosen plate, and checks the spelling of every word. Use when the user wants ad creative, ad variants, the same ad in several aspect ratios or a headline on an ad image and the Sloosh tools are connected. Not for one product photo with no copy (use product-imagery) or for changes to an image Sloosh already made (use creative-iteration). Not for resizing a finished ad, a full store launch, sale banners, hook test grids, comparison, review or before and after ads; those are Sloosh pack skills (see sloosh-router).
 ---
 
 # Ad variants
 
-Use this skill to plan a set of Sloosh ad images. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
+Use this skill to plan a set of Sloosh ad images. Tool descriptions and server guides give the exact parameters and limits; use them for those.
 
 This skill makes images only. It posts nothing to an ad platform.
 

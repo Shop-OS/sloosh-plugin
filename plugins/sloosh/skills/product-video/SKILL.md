@@ -1,11 +1,11 @@
 ---
 name: product-video
-description: Make one short product clip with Sloosh from a prompt or a product image, such as a hero clip, a short ad shot or a plain product page loop. It can open on the user's exact still and add only motion, or use product photos as references. Use when the user asks for a product video, a clip, or to animate a product image, make a photo move or bring a still to life, and the Sloosh tools are connected. Not for a creator-style UGC ad (use ugc-storyboard) or a launch film rendered on the user's computer (use the sloosh-launch-film pack if installed). Not for a named product effect such as an exploded view, a 360 spin, a float or a splash, a person speaking to camera, several shots cut into one film, a change to a clip the user already has or a morph between two stills (use the sloosh-video pack). For a 9:16 Reel, TikTok or Short with a hook, use the sloosh-social reels-shorts-clip skill if it is installed. For product page videos for several store products, use the sloosh-shopify pdp-video skill if it is installed.
+description: Make one short product clip with Sloosh from a prompt or a product image, such as a hero clip, a short ad shot or a plain product page loop. It can open on the user's exact still and add only motion, or use product photos as references. Use when the user asks for a product video, a clip, or to animate a product image, make a photo move or bring a still to life, and the Sloosh tools are connected. Not for a creator-style UGC ad (use ugc-storyboard). Not for a launch film, a named product effect such as an exploded view or a 360 spin, a person speaking to camera, a film of several shots, a change to a clip the user already has, a morph, a Reel with a hook or videos for several store products; those are Sloosh pack skills (see sloosh-router).
 ---
 
 # Product video
 
-Use this skill to plan one Sloosh video clip from a prompt, a start frame or product reference photos. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
+Use this skill to plan one Sloosh video clip from a prompt, a start frame or product reference photos. Tool descriptions and server guides give the exact parameters and limits; use them for those.
 
 Make one clip per request. This skill does not cut several shots into a film, make a person speak a script, make a named product effect, change a clip the user already has or morph between two stills.
 

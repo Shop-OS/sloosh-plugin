@@ -1,6 +1,6 @@
 # Prompt craft for product photos
 
-Use this file when you write a product photo prompt. The model limits from `list_models` decide the prompt length, the reference count and the aspect ratios. If this file differs from a tool description or a server guide, follow the server.
+Use this file when you write a product photo prompt. The model limits from `list_models` decide the prompt length, the reference count and the aspect ratios. Tool descriptions and server guides give the exact parameters and limits; use them for those.
 
 ## Prompt shape
 

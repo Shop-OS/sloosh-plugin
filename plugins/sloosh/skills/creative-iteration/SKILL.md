@@ -5,7 +5,7 @@ description: Improve an image or video that Sloosh already made and the user has
 
 # Creative iteration
 
-Use this skill to improve a Sloosh result the user has already seen. Each round makes one focused change, keeps what worked and gets its own quote. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
+Use this skill to improve a Sloosh result the user has already seen. Each round makes one focused change, keeps what worked and gets its own quote. Tool descriptions and server guides give the exact parameters and limits; use them for those.
 
 ## Before you start
 

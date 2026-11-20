@@ -5,7 +5,7 @@ description: Run one published Sloosh Space over many inputs, such as a list of 
 
 # Batch pipeline
 
-Use this skill to run one published Sloosh Space over a list of items. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
+Use this skill to run one published Sloosh Space over a list of items. Tool descriptions and server guides give the exact parameters and limits; use them for those.
 
 One Space run makes one item's outputs. The Space fixes its own models and steps. This skill does not build or change a Space, and it does not join outputs into one file.
 
@@ -18,6 +18,7 @@ One Space run makes one item's outputs. The Space fixes its own models and steps
 - Note the allowance left from `get_connection`. It is in millicredits. Divide it by 1000 to get credits. It is a daily allowance, and `get_connection` says when it resets.
 - If the user gives a credit budget for the batch, note it too.
 - If a brand kit exists, read it: a sloosh-brand.md file, Project knowledge, memory or pasted brand text. Use its voice in any brief you write.
+- If an input is a photo, clip or voice of a real person, or an image, video, review or music the user did not make, ask the user to confirm they own it or have the right to use it, and that any real person shown or heard agreed to this use. An asset name, a file name, workspace data or the word 'my' is not confirmation. For a batch, ask once for the whole list. Ask before any quote and wait for a clear answer. Do not use a photo, clip or voice of a child or of a public figure. If the user declines or cannot confirm, explain why and stop.
 
 ## Steps
 

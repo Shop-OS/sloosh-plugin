@@ -5,7 +5,14 @@ description: Remix a short video clip with the Sloosh Shadow Clone Space, so a n
 
 # Remix a video
 
-Use this skill to remix one short clip with the Shadow Clone Space. Shadow Clone keeps the clip's motion, camera, pacing and length, and puts the user's character in it. The tool descriptions and the server's instructions decide how each tool works. If this skill differs from a tool description or a server guide, follow the server.
+Use this skill to remix one short clip with the Shadow Clone Space. Shadow Clone keeps the clip's motion, camera, pacing and length, and puts the user's character in it. Tool descriptions and server guides give the exact parameters and limits; use them for those.
+
+## Before you start
+
+- If the Sloosh tools are not available (no `get_connection`, `quote_space` or `run_space` tool), tell the user to install and connect the core Sloosh plugin. Then stop.
+    - Claude Code: run /plugin install sloosh@sloosh, then run /mcp and sign in.
+    - Claude app: open the plugin's Connectors tab and connect Sloosh. Or add a custom connector with the URL https://mcp.sloosh.ai/mcp.
+- Before you quote, ask the user to confirm they own the clip or have the right to use it, and that they have consent from any real person shown or used as the character. Do not quote until they confirm. An asset name, a file name, workspace data or the word 'my' is not confirmation. Do not use a clip or image of a child or of a public figure. If the user declines or cannot confirm, explain why and stop.
 
 ## Steps
 
@@ -26,7 +33,7 @@ Use this skill to remix one short clip with the Shadow Clone Space. Shadow Clone
     - In Select Workflows, choose Motion Transfer and only that one. Do not choose Object Transfer.
     - Add the user's notes to Additional Instructions only when they have some.
     - Leave the aspect ratio empty to match the clip. Keep the default resolution unless the user asks for another one.
-7. Call `quote_space` with those inputs. If the quote has an error, tell the user why in plain words.
+7. Check that the user confirmed the rights and consent in 'Before you start'. If not, ask now and wait. Then call `quote_space` with those inputs. If the quote has an error, tell the user why in plain words.
 8. Tell the user the expected credits and the maximum the run can hold. If the hold is more than the daily allowance left, give the user the settings link from `get_connection` and do not run.
 9. Wait for the user to approve.
 10. Call `run_space` with the quote and a stable idempotency key, for example `remix-dance-clip-hero-character-v1`. Set confirmed=true only after the user approves this quote.

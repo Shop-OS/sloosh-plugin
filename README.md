@@ -158,7 +158,14 @@ In Codex, run `codex plugin add <pack>@sloosh`. Each pack's README lists its ski
 
 ## What the plugin sends
 
-The plugin runs no code on its own and ships no scripts. Claude calls the Sloosh server at https://mcp.sloosh.ai/mcp with the prompts, images and choices you give it, using the access you grant when you connect. Sloosh stores the images and videos it makes in your workspace. Each pack's README says what that pack sends and reads.
+The core plugin runs no code on your computer and ships no scripts. Claude calls the Sloosh server at https://mcp.sloosh.ai/mcp with the prompts, files and choices you give it, using the access you grant when you connect. Sloosh stores the images, videos and audio it makes in your workspace.
+
+- Voice cloning uploads the voice samples you give it. Claude asks you to confirm you are the speaker or have the speaker's consent before it clones. Sloosh stores the cloned voice in your workspace, under My voices in Sloosh Studio's Audio page (https://sloosh.ai/studio/audio), where you can delete it.
+- Calypso runs editing scripts on your files in a private Sloosh sandbox on Sloosh servers, for your session only, and saves the finished video to your library.
+- Importing a social post fetches the public Instagram or X post you paste and saves its media to your workspace.
+- Importing a link fetches the public file at the HTTPS link you give and saves it to your workspace.
+
+Each pack's README says what that pack sends and reads.
 
 ## Example prompts
 
