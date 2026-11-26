@@ -1,0 +1,12 @@
+schema_version: "1.1"
+name: trigger-talking-head-ai-avatar
+description: Making a character photo speak a script in a chosen scene loads talking-head-video (the AI Avatar route).
+tags: [trigger]
+runs: 2
+---
+max_turns: 8
+timeout_seconds: 180
+allowed_tools: [Read, Glob, Grep, Skill]
+---
+
+I have a photo of our brand character, Mira. Can you make a vertical video of her talking in a cafe, saying: "Mornings are better with a real oat latte. Come try ours this week." Use a warm female voice.

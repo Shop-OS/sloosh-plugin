@@ -1,6 +1,6 @@
 ---
 name: talking-head-video
-description: Make a real person on camera say a script with Sloosh. It voices and lip-syncs an existing face clip, dubs a talking clip into another language, recuts one talking clip into several camera angles, or makes a short speaking clip from one photo. It can speak in the person's own cloned voice when a Space takes a voice track. Use when the user wants a spokesperson or founder clip, new words on a face video, a dub with matching lips, a talking clip from a headshot or to make a person say a script, and the Sloosh tools are connected. Not for a creator-style product ad (use ugc-storyboard or the UGC ad skill in the Sloosh Ads pack), a product clip with no person (product-video), captions on a finished clip (captions-subtitles) or a local cut of raw talking footage the user shot (the auto-edit skill of the Sloosh motion pack).
+description: Make a real person on camera say a script with Sloosh. It voices and lip-syncs an existing face clip, dubs a talking clip into another language, recuts one talking clip into several camera angles, makes a short speaking clip from one photo, or has a character from a photo speak a voice track in a scene the user picks (AI Avatar). It can speak in the person's own cloned voice when a Space takes a voice track. Use when the user wants a spokesperson or founder clip, new words on a face video, a dub with matching lips, a talking clip from a headshot, a talking avatar or podcast-style clip, a voice note turned into a talking video, or to make a person say a script, and the Sloosh tools are connected. Not for a creator-style product ad (use ugc-storyboard or the UGC ad skill in the Sloosh Ads pack), a product clip with no person (product-video), captions on a finished clip (captions-subtitles) or a local cut of raw talking footage the user shot (the auto-edit skill of the Sloosh motion pack).
 ---
 
 # Talking head video
@@ -28,7 +28,8 @@ One run makes one clip. This skill does not join clips, mix music or post to a p
 | A face clip and a new script | A Space that voices and lip-syncs a clip |
 | A face clip and a target language | A Space that translates and dubs a clip |
 | One talking clip and wants more angles | A Space that recuts a clip into several camera angles |
-| Only a photo and a script | A Space that makes a talking clip from a photo, or the direct path below if none fits |
+| A photo of a character and a script or a voice track | The AI Avatar Space ("AI Avatar path" below) |
+| Only a photo and a script, and AI Avatar is not listed | A Space that makes a talking clip from a photo, or the direct path below if none fits |
 
 Ask only for what is missing: the clip or photo, the script, the language, the length and the placement. Use 9:16 for Reels, Stories and TikTok.
 
@@ -41,6 +42,34 @@ This step costs nothing. Do it before any quote.
 3. Check the length against the limit in the Space schema or the model's limits. If it is too long, cut it. Say so before you quote.
 4. Show the script to the user. Let the user approve the words. Use only claims the user gives. Do not invent results, reviews or offers.
 5. For a dub, keep the meaning of the original words. Do not add, drop or change a claim. If the Space takes or shows the translated text, let the user check it before the quote.
+
+## AI Avatar path
+
+AI Avatar animates a character from one photo speaking a voice track, with the lips in sync, in a scene the user picks. The voice track is made first, and the video is as long as it. Use this path for any request to make a character or person from a photo talk, such as a script read to camera, a voice note turned into a talking video, a podcast-style clip or a UGC-style recommendation. Use it when the user has a photo of the character, not a clip.
+
+It has two modes, Lite and Pro, set in the mode field. Call them Lite and Pro to the user. The field's values are `light` for Lite and `pro` for Pro: send the value, never the name.
+
+| Mode | When | Voice track | Resolution |
+|---|---|---|---|
+| Lite (`light`) | The default. Use it without asking. | 2 seconds to 2 minutes | 1080p or 2K |
+| Pro (`pro`) | Only when the user asks for a directed or professional look | 2 to 30 seconds | 480p, 720p or 1080p |
+
+1. Call `list_spaces` with the search term `AI Avatar`. Do not filter by output type. If nothing matches, search for `Synora`, its old name. Call `get_space` on the match to confirm it. If no AI Avatar Space is listed, go to the Space path.
+2. Call `get_space_input_schema` for the Space. The steps below name its fields by id. If the schema differs, follow the schema. If the schema has no mode field, skip the mode steps: the Space runs as Pro.
+3. Choose the mode. Do not ask which mode the user wants.
+    - Use Lite by default, and always when the voice track or script runs over 30 seconds.
+    - Choose Pro only when the user asks for a directed or professional look, such as cinematic, camera moves, an ad, a commercial, a brand film, sound effects, specific actions or high-end, and the track is 30 seconds or less. Then quote both modes with the same inputs and let the user choose.
+    - If the user states a preference, such as "always use Pro", keep it for the rest of the conversation.
+4. Get the character photo for character_image, and check it as in Space path steps 4 and 5. One person, face visible.
+5. Get the voice track for audio_url, one audio file of 2 seconds to 2 minutes for Lite, or 2 to 30 seconds for Pro:
+    - If the user has a recording, reuse an audio asset from `list_assets`, call `import_asset` for a public HTTPS URL, or follow the server's upload instruction for a local file. Ask the user for its length if you cannot check it yourself.
+    - Else make it from the approved script with speech_gen. Call `list_models` with type speech. Write the script without audio tags such as [whispers] or [laughs] unless the chosen model's description says it reads them, because another model speaks them aloud. For a stock voice, let the user choose one from that model's voices. For the person's own voice, follow "The person's own voice" below. Then call `quote_generation` with mode speech_gen, the script word for word as the prompt and the voice, get the user's approval of that quote, and call `generate` with a key that starts with audio-. Poll `get_generation` about every 5 seconds until it settles; a voice track has no result card. Use the asset it makes, kind generated, and its length in seconds.
+6. Get the scene for background: one of the schema's options, such as podcast, white studio, cafe, night street, selfie vlog, park bench, golden hour or train window. Default to podcast. For any other place, choose custom. A custom scene takes a photo of the place in background_image. In Lite, custom with no background_image keeps the background of the character photo. In Pro, a custom scene needs background_image, a description of the place in additional_instructions, or both.
+7. Leave additional_instructions empty unless the user describes gestures or expressions, or a Pro custom scene needs the place described. Write gestures and expressions only, such as "leans in and smiles on the last line". Never write turning, walking or looking around: the character can turn away from the camera.
+8. Set aspect_ratio from the placement: 9:16 for Reels, Stories and TikTok, 1:1 or 16:9 otherwise. Set resolution to 1080p. Use 2k only in Lite, and only when the user asks for high resolution, 2K or YouTube quality. In Pro, keep 1080p or use 720p or 480p when the user asks for it.
+9. For Pro only, set duration_seconds to a whole number from 4 to 30, at least the voice track's length rounded up. The price follows this length, so do not add more than the user asks for. A track longer than the video is refused at the quote. Lite ignores duration_seconds: its video is as long as the voice track.
+10. If you made the voice track with speech_gen, add speech_meta, an object with script (the words as sent), voiceId and voiceName. It keeps the spoken words out of the video prompt. Leave it out for an uploaded recording.
+11. Go to Space path step 6 to quote, approve and run. Tell the user the voice track and the video are two charges with two approvals. After the quote, name the other mode in one line, with its credits from its own quote: for Lite, "Pro adds a directed camera and sound design, up to 30 seconds, for about N credits"; for Pro, "Lite keeps the scene simple and runs up to 2 minutes, for about N credits". Never offer Pro for a track over 30 seconds.
 
 ## Space path
 
