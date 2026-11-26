@@ -1,0 +1,4 @@
+---
+type: fixed
+---
+{"space": {"spaceId": "chimera_sloosh", "title": "AI Avatar", "outputTypes": ["video"]}, "formVersion": "1", "form": {"fields": [{"id": "mode", "type": "select", "defaultValue": "light", "options": ["light", "pro"]}, {"id": "character_image", "type": "image-upload", "required": true}, {"id": "audio_url", "type": "multi-file-upload", "required": true, "maxItems": 1}, {"id": "background", "type": "select", "required": true, "options": ["podcast", "white_studio", "cafe", "night_street", "selfie_vlog", "park_bench", "golden_hour", "train_window", "custom"]}, {"id": "background_image", "type": "image-upload"}, {"id": "additional_instructions", "type": "textarea"}, {"id": "aspect_ratio", "type": "select", "options": ["9:16", "1:1", "16:9"]}, {"id": "resolution", "type": "select", "options": ["480p", "720p", "1080p", "2k"], "defaultValue": "1080p"}, {"id": "duration_seconds", "type": "number", "min": 4, "max": 30}]}}

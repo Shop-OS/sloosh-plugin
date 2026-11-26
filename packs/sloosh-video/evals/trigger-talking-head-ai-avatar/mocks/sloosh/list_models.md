@@ -1,0 +1,4 @@
+---
+type: fixed
+---
+{"models": {"defaultModel": "studio-video-1", "models": [{"id": "studio-video-1", "label": "Studio Video", "description": "Makes a short clip from a prompt and an optional reference image, with optional speech audio.", "logo": "", "provider": "studio", "defaults": {"aspectRatio": "9:16", "duration": 8}, "fields": {"aspectRatio": {"label": "Aspect ratio", "options": [{"value": "9:16", "label": "9:16"}, {"value": "16:9", "label": "16:9"}, {"value": "1:1", "label": "1:1"}]}, "duration": {"label": "Duration", "options": [{"value": "5", "label": "5 s"}, {"value": "8", "label": "8 s"}, {"value": "10", "label": "10 s"}]}}, "constraints": {"maxReferenceImages": 1, "maxPromptChars": 2000}, "controls": {"generateAudio": {"state": "optional", "default": false}}}]}, "cameraControls": {"cameras": [], "lenses": [], "apertures": []}}
